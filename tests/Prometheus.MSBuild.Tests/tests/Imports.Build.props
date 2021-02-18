@@ -1,0 +1,22 @@
+<Project>
+  <ItemGroup>
+    <Imports Include="$(SolutionDir)\Test.projitems" />
+  </ItemGroup>
+  <!--<PropertyGroup>
+    <SharedImports>$('@(Imports)')</SharedImports>
+  </PropertyGroup>-->
+
+  <!--<Import Project="$(PrometheusDirectory)\Template2.props" />-->
+
+  <Target Name="PrintImports" Outputs="@(Imports)">
+    <!--<ItemGroup>
+      <Imports Include="$(SolutionDir)\Test.Build.props" />
+    </ItemGroup>-->
+    <PropertyGroup>
+      <SectionSymbol>**</SectionSymbol>
+      <CurrentImport>%(Imports.Identity)</CurrentImport>
+    </PropertyGroup>
+    <Message Importance="high" Text="| $(SectionSymbol) Importing Support projitems ~~~~~~~$" />
+    <Message Importance="high" Text="| $(SectionSymbol) Current File: $(CurrentImport)  ~~~~~~~$" />
+  </Target>
+</Project>

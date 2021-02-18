@@ -1,0 +1,77 @@
+<Project InitialTargets="PrintPrometheus">
+  <PropertyGroup>
+    <PrometheusEnabled Condition="'$(PrometheusEnabled)' == ''" >True</PrometheusEnabled>
+    <PrometheusAutoLoad Condition="'$(PrometheusAutoLoad)' == ''">True</PrometheusAutoLoad>
+    <PrometheusTasksEnabled Condition="'$(PrometheusTasksEnabled)' == ''">True</PrometheusTasksEnabled>
+    <PrometheusPlatformEnabled Condition="'$(PrometheusPlatformEnabled)' == ''">True</PrometheusPlatformEnabled>
+    <!--<PrometheusPlatformEnabled Condition="'$(PrometheusTasksEnabled)' != 'true'">False</PrometheusPlatformEnabled>-->
+    <ProjectImports Condition="'$(ProjectImports)' == ''"></ProjectImports>
+    <!--<PrometheusDirectory>$([System.IO]::GetDirectoryName(`.\`))</PrometheusDirectory>-->
+    <PrometheusGlobalDirectory>$(PrometheusDirectory)\Globals</PrometheusGlobalDirectory>
+    <PrometheusGlobalProps>$(PrometheusGlobalDirectory)\Globals.Build.props</PrometheusGlobalProps>
+    <PrometheusGlobalTargets>$(PrometheusGlobalDirectory)\Globals.Build.targets</PrometheusGlobalTargets>
+    <PrometheusCheckTargets>$(PrometheusDirectory)\Check.Build.targets</PrometheusCheckTargets>
+    <PrometheusCommonDirectory>$(PrometheusDirectory)\Common</PrometheusCommonDirectory>
+    <PrometheusCommonTargets>$(PrometheusCommonDirectory)\Common.Build.targets</PrometheusCommonTargets>
+    <PrometheusCommonProps>$(PrometheusCommonDirectory)\Common.Build.props</PrometheusCommonProps>
+    <PrometheusImportertargets>$(PrometheusCommonDirectory)\Importer.Build.targets</PrometheusImportertargets>
+    <PrometheusPlatformDirectory>$(PrometheusDirectory)\Platform</PrometheusPlatformDirectory>
+    <PrometheusPlatformProps>$(PrometheusPlatformDirectory)\Platform.Build.props</PrometheusPlatformProps>
+    <PrometheusPlatformtargets>$(PrometheusPlatformDirectory)\Platform.Build.targets</PrometheusPlatformtargets>
+    <PrometheusDetectPlatformTargets>$(PrometheusPlatformDirectory)\Detect.Build.targets</PrometheusDetectPlatformTargets>
+    <PrometheusLibDirectory Condition="'$(PrometheusLibDirectory)' == ''">$(PrometheusDirectory)\lib</PrometheusLibDirectory>
+    <!--<PrometheusLibDirectory>lib</PrometheusLibDirectory>-->
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <SectionLength>40</SectionLength>
+    <HeaderLength>40</HeaderLength>
+    <SectionChar>=</SectionChar>
+    <HeaderChar>~</HeaderChar>
+  </PropertyGroup>
+
+  <ImportGroup Condition="'$(PrometheusEnabled)' == 'true'">
+    <Import Project="$(PrometheusGlobalProps)" Condition="Exists('$(PrometheusGlobalProps)')"/>
+    <Import Project="$(PrometheusPlatformProps)" Condition="Exists('$(PrometheusPlatformProps)') And '$(PrometheusPlatformEnabled)' == 'true'" />
+    <Import Project="$(PrometheusCommonProps)" Condition="Exists('$(PrometheusCommonProps)')" />
+  </ImportGroup>
+
+  <Target Name="PrintPrometheus" Condition="'$(PrometheusEnabled)' == 'true'">
+    <ItemGroup>
+      <MSBuildProjectParentDirectory Include="$(MSBuildProjectDirectory)\..\.." />
+    </ItemGroup>
+    <PropertyGroup Condition="$(RootPath) == ''">
+      <RootPath>%(MSBuildProjectParentDirectory.FullPath)</RootPath>
+      <!--<SolutionDir>$(RootPath)</SolutionDir>-->
+    </PropertyGroup>
+    <PropertyGroup>
+      <SectionSymbol>*</SectionSymbol>
+    </PropertyGroup>
+
+    <CreateLogFormattingTask SectionSymbol="$(SectionSymbol)" 
+                             SectionLength="$(SectionLength)" 
+                             HeaderLength="$(HeaderLength)" 
+                             SectionChar="$(SectionChar)" 
+                             HeaderChar="$(HeaderChar)"
+                             Condition="'$(PrometheusTasksEnabled)' == 'true'">
+      <Output TaskParameter="SectionString" PropertyName="SectionString" />
+      <Output TaskParameter="HeaderString" PropertyName="HeaderString" />
+    </CreateLogFormattingTask>
+
+    <Message Text="| $(SectionString)" Importance="high" />
+    <Message Text="| []==~ $(MSBuildThisFile) ~==[]" Importance="high" />
+    <Message Text="| []==~- --Setting up Prometheus for $(MSBuildProjectName)-- -~[]" Importance="high" />
+    <Message Text="| $(HeaderString)" Importance="high" />
+
+    <Message Text="| $(SectionSymbol) RootPath: $(RootPath)" Importance="high" />
+    <Message Text="| $(SectionSymbol) SolutionDir: $(SolutionDir)" Importance="high" />
+
+    <LogPropertyTask ProjectFiles="$(MSBuildThisFileFullPath)"
+                     SectionSymbol="$(SectionSymbol)" 
+                     Condition="'$(PrometheusTasksEnabled)' == 'true'" />
+
+    <Message Text="| $(SectionSymbol) PrometheusDirectory: $(PrometheusDirectory)" Importance="high" />
+    <Message Text="| $(SectionSymbol) PrometheusProps: $(PrometheusProps)" Importance="high" />
+    <Message Text="| $(SectionSymbol) PrometheusTargets: $(PrometheusTargets)" Importance="high" />
+  </Target>
+</Project>

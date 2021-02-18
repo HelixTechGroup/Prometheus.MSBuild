@@ -1,0 +1,23 @@
+<Project Sdk="MSBuild.Sdk.Extras/3.0.22">
+  <!--<Sdk Name="Microsoft.Build.NoTargets" Version="2.0.1" />-->
+  <Import Project="build\Prometheus.MSBuild.props" />
+  <PropertyGroup>
+    <ProductName>Prometheus.MSBuild</ProductName>
+    <PrometheusPlatformEnabled>False</PrometheusPlatformEnabled>
+  </PropertyGroup>
+  
+  <ItemGroup>
+    <!-- pack the props files -->
+    <Content Include="*.props" Pack="True" PackagePath="\" />
+    <Content Include="*.targets" Pack="True" PackagePath="\" />
+    <Content Include="Platform\**" Pack="True" PackagePath="Platform\" />
+    <Content Include="Globals\**" Pack="True" PackagePath="Globals\" />
+    <Content Include="Common\**" Pack="True" PackagePath="Common\" />
+    <!--<Content Include="Sdk\**" Pack="True" PackagePath="Sdk\" />-->
+    <Content Include="build\**" Pack="True" PackagePath="build\" />
+    <Content Include="build\**" Pack="True" PackagePath="buildMultiTargeting\" />
+    <Content Include="build\**" Pack="True" PackagePath="buildTransitive\" />
+    <!--<Content Include="lib\**" Pack="True" PackagePath="lib\" />-->
+  </ItemGroup>
+  <Import Project="build\Prometheus.MSBuild.targets" />
+</Project>

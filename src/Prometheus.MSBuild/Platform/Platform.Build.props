@@ -1,0 +1,127 @@
+<Project InitialTargets="PrintPrometheusPlatform" Condition="'$(PrometheusPlatformEnabled)' == 'true'">
+  <ItemGroup>
+    <PlatformFolders Include="$([System.IO.Directory]::GetDirectories($(PrometheusPlatformDirectory)))" />
+  </ItemGroup>
+  <Import Project="$(PrometheusPlatformDirectory)\*\**\*.targets" />
+
+  <!--<ItemGroup>
+    <PTArray Include="$(PrometheusPlatformDirectory)\**\*.props" Exclude="$(PrometheusPlatformProps)" />
+  </ItemGroup>-->
+  <PropertyGroup>
+    <!--<TargetPlatform Condition=" '$(TargetPlatform)' == '' ">net5.0-none</TargetPlatform>-->
+    <PlatformId Condition=" '$(PlatformId)' == '' ">None</PlatformId>
+    <PlatformType Condition=" '$(PlatformType)' == '' ">None</PlatformType>
+    <UseAndroidX Condition="'$(UseAndroidX)' == ''">False</UseAndroidX>
+    <!--<PlatformPropsPath>$(PrometheusPlatformDirectory)\$(PlatformId)\Platform.Build.Props</PlatformPropsPath>-->
+    <!--<RuntimeId>$(TargetPlatform.Split(`-`)[0])</RuntimeId>
+    <PlatformId>$(TargetPlatform.Split(`-`)[1])</PlatformId>
+    <HasWindows>$(PlatformId.Contains(`windows`))</HasWindows>
+    <HasAndroid>$(PlatformId.Contains(`android`))</HasAndroid>
+    <HasLinux>$(PlatformId.Contains(`linux`))</HasLinux>
+    <HasXamarin>$(RuntimeId.Contains(`xamarin`))</HasXamarin>
+    <PlatformPropsPath>$(PrometheusPlatformDirectory)\$(PlatformId)\Platform.Build.Props</PlatformPropsPath>-->
+  </PropertyGroup>
+
+  <!--<Import Project="$(PlatformPropsPath)" Condition="Exists('$(PlatformPropsPath)')"/>-->
+
+  <!--<PropertyGroup Condition=" '$(RuntimeId.Contains(`netcore`))' == 'true'">
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>-->
+
+  <!--<PropertyGroup Condition="'$(HasWindows)' == 'true'">
+    <PlatformProps>Windows</PlatformProps>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(HasLinux)' == 'true'">
+    <PlatformProps>Linux</PlatformProps>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="$(HasAndroid) == 'true'">
+    <PlatformProps>Android</PlatformProps>
+  </PropertyGroup>-->
+  <Target Name="PrintPrometheusPlatform">
+    <PropertyGroup>
+      <SectionSymbol>@</SectionSymbol>
+      <!--<RuntimeId>@(TFArray)->[0]</RuntimeId>
+      <PlatformId>%(TFArray.Identity)</PlatformId>-->
+    </PropertyGroup>
+
+    <!--<ImportFileTask ImportFiles="@(PTArray)" />-->
+
+    <!--<ItemGroup Condition="'$(TargetPlatforms)' != ''">
+      <TargetPlatform>%(TargetPlatforms.Identity)</TargetPlatform>
+    </ItemGroup>-->
+
+
+    <!--<Error Condition="'$(TargetPlatform)' == ''" Text="TargetPlatform must be set" />-->
+    <!--<DetectPlatformTask TargetPlatform="$(TargetPlatform)"
+                        Condition="'$(PrometheusTasksEnabled)' == 'true'">
+      <Output TaskParameter="RuntimeId" PropertyName="RuntimeId" />
+      <Output TaskParameter="PlatformId" PropertyName="PlatformId" />
+    </DetectPlatformTask>-->
+
+    <PropertyGroup Condition=" '$(TargetPlatform)' != '' ">
+      <HasWindows>$(PlatformId.Contains(`windows`))</HasWindows>
+      <HasAndroid>$(PlatformId.Contains(`android`))</HasAndroid>
+      <HasLinux>$(PlatformId.Contains(`linux`))</HasLinux>
+      <HasXamarin>$(RuntimeId.Contains(`xamarin`))</HasXamarin>
+    </PropertyGroup>
+
+    <!--<PropertyGroup Condition=" '$(RuntimeId.Contains(`netcore`))' == 'true'">
+      <TargetFramework>netcoreapp3.1</TargetFramework>
+    </PropertyGroup>-->
+
+    <PropertyGroup Condition="'$(RuntimeId.Contains(`netstandard`))' == 'true'">
+      <TargetFramework>netstandard2.1</TargetFramework>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(PlatformId)' == 'none'">
+      <TargetFramework>$(RuntimeId)</TargetFramework>
+    </PropertyGroup>
+
+    <ItemGroup Condition="'$(TargetFrameworks)' != ''">
+      <TFramworks Include="$(Targetframeworks.Split(`;`))" />
+    </ItemGroup>
+    <PropertyGroup Condition="'$(PlatformId)' == 'none' And '$(TargetFrameworks)' != ''">
+      <TargetFramework>%(TFramworks.Identity)</TargetFramework>
+    </PropertyGroup>
+
+    <!--<PropertyGroup Condition="'$(HasWindows)' == 'true'">
+      <PlatformProps>Windows</PlatformProps>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(HasLinux)' == 'true'">
+      <PlatformProps>Linux</PlatformProps>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="$(HasAndroid) == 'true'">
+      <PlatformProps>Android</PlatformProps>
+    </PropertyGroup>-->
+
+    <Message Text="| $(SectionString)" Importance="high" />
+    <Message Text="| []==~ $(MSBuildThisFile) ~==[]" Importance="high" />
+    <Message Text="| $(HeaderString)" Importance="high" />
+
+    <!--<CallTarget Targets="$(PlatformId)" Condition="Exists('$(PlatformPropsPath)')" />-->
+    <CallTarget Targets="ExtraPlatformProps" Condition="Exists(ExtraPlatformProps)" />
+
+    <!--<LogPropertyTask ProjectFiles="$(MSBuildThisFileFullPath)" SectionSymbol="$(SectionSymbol)" />-->
+
+    <Message Text="| $(SectionSymbol) IsValidPlatform: $(IsValidPlatform)" Importance="high" />
+    <Message Text="| $(SectionSymbol) RuntimeId: $(RuntimeId)" Importance="high" />
+    <Message Text="| $(SectionSymbol) PlatformId: $(PlatformId)" Importance="high" />
+    <Message Text="| $(SectionSymbol) TargetPlatform: $(TargetPlatform)" Importance="high" />
+    <Message Text="| $(SectionSymbol) TargetFramework: $(TargetFramework)" Importance="high" />
+    <Message Text="| $(SectionSymbol) TargetFrameworks: $(TargetFrameworks)" Importance="high" />
+    <Message Text="| $(SectionSymbol) HasWindows: $(HasWindows)" Importance="high" />
+    <Message Text="| $(SectionSymbol) HasLinux: $(HasLinux)" Importance="high" />
+    <Message Text="| $(SectionSymbol) HasAndroid: $(HasAndroid)" Importance="high" />
+    <Message Text="| $(SectionSymbol) HasXamarin: $(HasXamarin)" Importance="high" />
+    <Message Text="| $(SectionSymbol) UseAndroidX: $(UseAndroidX)" Importance="high" />
+    <Message Text="| $(SectionSymbol) PTArray: @(PTArray)" Importance="high" />
+    <Message Text="| $(SectionSymbol) PTArrayId: %(PTArray.Identity)" Importance="high" />
+    <Message Text="| $(SectionSymbol) ---------------------------------------" Importance="high" />
+
+    <!--<LogPropertyTask ProjectFiles="$(MSBuildThisFileFullPath)"/>-->
+  </Target>
+</Project>

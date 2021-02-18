@@ -1,0 +1,23 @@
+﻿<Project Sdk="MSBuild.Sdk.Extras/3.0.22">
+  <!--<Sdk Name="Microsoft.Build.NoTargets" Version="2.0.1" />-->
+  <Import Project="build\Prometheus.MSBuild.props" />
+  <PropertyGroup>
+    <ProductName>Prometheus.MSBuild.Sdk</ProductName>
+    <PackageType>MSBuildSdk</PackageType>
+  </PropertyGroup>
+  <ItemGroup>
+    <!-- pack the props files -->
+    <Content Include="*.props" Pack="True" PackagePath="\" />
+    <Content Include="*.targets" Pack="True" PackagePath="\" />
+    <Content Include="Platform\**" Pack="True" PackagePath="Platform\" />
+    <Content Include="Globals\**" Pack="True" PackagePath="Globals\" />
+    <Content Include="Common\**" Pack="True" PackagePath="Common\" />
+    <Content Include="Sdk\**" Pack="True" PackagePath="Sdk\" />
+    <!--<Content Include="..\Prometheus.MSBuild.Tasks\bin\$(Configuration)\net48\**" Pack="True" PackagePath="lib\" Exclude="*.nupkg"/>-->
+  </ItemGroup>
+
+  <Import Project="build\Prometheus.MSBuild.targets" />
+  <!--<Target Name="test" AfterTargets="Build">
+    <Message Importance="high" Text="| $(SectionSymbol) Prometheus Directory: $(PrometheusDirectory)" />
+  </Target>-->
+</Project>

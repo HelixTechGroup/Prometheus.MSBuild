@@ -1,0 +1,7 @@
+﻿<Project>
+  <PropertyGroup>
+    <PlatformId>None</PlatformId>
+    <PlatformType>None</PlatformType>
+    <TargetFramework>$(RuntimeId)</TargetFramework>
+  </PropertyGroup>
+</Project>

@@ -1,0 +1,61 @@
+<Project InitialTargets="PrintGitHub" Condition="'$(UseGitHub)' == 'true'">
+  <Choose>
+    <When Condition="'$(RepositoryHttpUrl)' != ''">
+      <PropertyGroup>
+        <GitHubOrg>$([System.Text.RegularExpressions.Regex]::Match($(RepositoryHttpUrl), `https://github.com/([^/]*)/([^/]*)`).Groups[1].Value)</GitHubOrg>
+        <GitHubProject>$([System.Text.RegularExpressions.Regex]::Match($(RepositoryHttpUrl), `https://github.com/([^/]*)/([^/]*)`).Groups[2].Value)</GitHubProject>
+      </PropertyGroup>
+    </When>
+    <Otherwise>
+      <PropertyGroup>
+        <SafeCompanyName>$([System.Text.RegularExpressions.Regex]::Replace($(CompanyName), '[^aA-zZ0-9\\s-]', ''))</SafeCompanyName>
+        <SafeCompanyName>$([System.Text.RegularExpressions.Regex]::Replace($(SafeCompanyName), '[\\s+]', ' '))</SafeCompanyName>
+        <SafeCompanyName>$([System.Text.RegularExpressions.Regex]::Replace($(SafeCompanyName), '[\\s]', '-'))</SafeCompanyName>
+        <SafeProductName>$([System.Text.RegularExpressions.Regex]::Replace($(Productame), '[^aA-zZ0-9\\s-]', ''))</SafeProductName>
+        <SafeProductName>$([System.Text.RegularExpressions.Regex]::Replace($(SafeProductName), '[\\s+]', ' '))</SafeProductName>
+        <SafeProductName>$([System.Text.RegularExpressions.Regex]::Replace($(SafeProductName), '[\\s]', '-'))</SafeProductName>
+        <GitHubOrg>$(SafeCompanyName)</GitHubOrg>
+        <GitHubProject>$(SafeProductName)</GitHubProject>
+      </PropertyGroup>
+    </Otherwise>
+  </Choose>
+
+  <PropertyGroup Label="Enable SourceLink Support">
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <DebugType>portable</DebugType>
+    <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
+  </PropertyGroup>
+
+  <ItemGroup Label="Enable SourceLink GitHub Support">
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="All" />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <RepositoryUrl>https://github.com/$(GitHubOrg)/$(GitHubProject).git</RepositoryUrl>
+    <PackageProjectUrl>https://github.com/$(GitHubOrg)/$(GitHubProject)</PackageProjectUrl>
+    <PackageReleaseNotes>See https://github.com/$(GitHubOrg)/$(GitHubProject)/releases/</PackageReleaseNotes>
+    <RepositoryType>git</RepositoryType>
+  </PropertyGroup>
+
+  <Target Name="PrintGitHub">
+    <PropertyGroup>
+      <SectionSymbol>**</SectionSymbol>
+    </PropertyGroup>
+    <Warning Text="GitHub Repository Url is not set" Condition="$(RepositoryHttpUrl) == ''" />
+
+    <Message Text="| $(SectionString)" Importance="high" />
+    <Message Text="| []==~ $(MSBuildThisFile) ~==[]" Importance="high" />
+    <Message Text="| $(HeaderString)" Importance="high" />
+    <LogPropertyTask ProjectFiles="$(MSBuildThisFileFullPath)" SectionSymbol="$(SectionSymbol)"
+                     Condition="'$(PrometheusTasksEnabled)' == 'true' And $(RepositoryHttpUrl) != ''" />
+    <Message Text="| $(SectionSymbol) RepositoryHttpUrl: $(RepositoryHttpUrl)" Importance="high" />
+    <Message Text="| $(SectionSymbol) RepositoryUrl: $(RepositoryUrl)" Importance="high" />
+    <Message Text="| $(SectionSymbol) GitHubOrg: $(GitHubOrg)" Importance="high" />
+    <Message Text="| $(SectionSymbol) GitHubProject: $(GitHubProject)" Importance="high" />
+    <Message Text="| $(SectionSymbol) CompanyName: $(CompanyName)" Importance="high" />
+    <Message Text="| $(SectionSymbol) ProductName: $(ProductName)" Importance="high" />
+    <Message Text="| $(SectionSymbol) SafeCompanyName: $(SafeCompanyName)" Importance="high" />
+    <Message Text="| $(SectionSymbol) SafeProductName: $(SafeProductName)" Importance="high" />
+    <Message Text="| $(SectionSymbol) ---------------------------------------" Importance="high" />
+  </Target>
+</Project>

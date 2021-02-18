@@ -1,0 +1,12 @@
+<Project>
+  <Target Name="None">
+    <PropertyGroup>
+      <PlatformId>None</PlatformId>
+      <PlatformType>None</PlatformType>
+      <TargetFramework>$(RuntimeId)</TargetFramework>
+    </PropertyGroup>
+    <Message Text="| $(SectionSymbol) > RuntimeId: $(RuntimeId)" Importance="high" />
+    <Message Text="| $(SectionSymbol) > Setting PlatformId for Default::$(PlatformId)" Importance="high" />
+    <Message Text="| $(SectionSymbol) > TargetFramework: $(TargetFramework)" Importance="high" />
+  </Target>
+</Project>

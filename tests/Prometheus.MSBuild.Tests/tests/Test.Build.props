@@ -1,0 +1,11 @@
+<Project InitialTargets="PrintTest">
+  <PropertyGroup>
+    <Configuration>Release</Configuration>
+  </PropertyGroup>
+  <Target Name="PrintTest">
+    <Message Text="| $(SectionString)" Importance="high" />
+    <Message Text="| []==~ $(MSBuildThisFile) ~==[]" Importance="high" />
+    <Message Text="| $(HeaderString)" Importance="high" />
+    <Message Text="| $(SectionSymbol) RootPath: $(RootPath)" Importance="high" />
+  </Target>
+</Project>

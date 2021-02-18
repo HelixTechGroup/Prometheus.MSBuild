@@ -1,0 +1,33 @@
+﻿<Project InitialTargets="PrintNuget2" Condition="'$(IsPackable)' == 'true'">
+  <PropertyGroup>
+    <NugetPackageName>$(ProductName).$(PackageVersion).nupkg</NugetPackageName>
+    <PackageLicenseExpression Condition="'$(PackageLicenseExpression)' == ''">GPL-3.0-or-later</PackageLicenseExpression>
+    <PublishRepositoryUrl Condition="'$(PublishRepositoryUrl)' == ''">true</PublishRepositoryUrl>
+    <EmbedUntrackedSources Condition="'$(EmbedUntrackedSources)' == ''">true</EmbedUntrackedSources>
+    <IncludeSymbols Condition="'$(IncludeSymbols)' == ''">true</IncludeSymbols>
+    <SymbolPackageFormat Condition="'$(SymbolPackageFormat)' == ''">snupkg</SymbolPackageFormat>
+    <Deterministic Condition="'$(Deterministic)' == ''">true</Deterministic>
+    <NuspecDirectory Condition=" '$(NuspecDirectory)' == '' ">$(SolutionDir)nuspecs</NuspecDirectory>
+    <!--<LocalNugetRepo Condition="'$(LocalNugetRepo)' == ''">D:\Users\Bryan\Documents\Projects\HelixTechGroup\local-nuget</LocalNugetRepo>-->
+  </PropertyGroup>
+
+  <Import Project="$(PrometheusGlobalDirectory)\GitHub.Build.targets" Condition="'$(UseGitHub)' == 'true'" />
+
+  <Target Name="PrintNuget2">
+    <PropertyGroup>
+      <SectionSymbol>*^</SectionSymbol>
+    </PropertyGroup>
+
+    <Message Text="| $(SectionString)" Importance="high" />
+    <Message Text="| []==~ $(MSBuildThisFile) ~==[]" Importance="high" />
+    <Message Text="| $(HeaderString)" Importance="high" />
+    <LogPropertyTask ProjectFiles="$(MSBuildThisFileFullPath)" SectionSymbol="$(SectionSymbol)"
+                     Condition="'$(PrometheusTasksEnabled)' == 'true'" />
+    <Message Text="| $(SectionSymbol) NuGetPackageName: $(NugetPackageName)" Importance="high" />
+    <Message Text="| $(SectionSymbol) PackageLicenseExpression: $(PackageLicenseExpression)" Importance="high" />
+    <Message Text="| $(SectionSymbol) PublishRepositoryUrl: $(PublishRepositoryUrl)" Importance="high" />
+    <Message Text="| $(SectionSymbol) EmbedUntrackedSources: $(EmbedUntrackedSources)" Importance="high" />
+    <Message Text="| $(SectionSymbol) UseGitHub: $(UseGitHub)" Importance="high" />
+    <Message Text="| $(SectionSymbol) ---------------------------------------" Importance="high" />
+  </Target>
+</Project>

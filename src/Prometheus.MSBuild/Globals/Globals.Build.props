@@ -1,0 +1,89 @@
+<Project InitialTargets="PrintPrometheusGlobals">
+  <ItemGroup>
+    <MSBuildProjectParentDirectory Include="$(MSBuildProjectDirectory)\.." />
+  </ItemGroup>
+  <PropertyGroup Condition="$(SolutionDir) != ''">
+    <SolutionDir>$(SolutionDir.TrimEnd('\'))</SolutionDir>
+    <SourceDirectory Condition=" '$(SourceDirectory)' == '' ">$(SolutionDir)\src</SourceDirectory>
+    <ThirdPartyDirectory Condition=" '$(ThirdPartyDirectory)' == '' ">$(SolutionDir)\third-party</ThirdPartyDirectory>
+    <!--<PrometheusDirectory Condition=" '$(PrometheusDirectory)' == '' ">$(PrometheusDirectory)\Prometheus</PrometheusDirectory>-->
+    <OutputDirectory Condition="'$(OutputDirectory)' == ''">$(SolutionDir)\build\$(Configuration)\$(AssemblyName)</OutputDirectory>
+    <OutputPath Condition=" '$(OutputPath)' == '' ">$(OutputDirectory)</OutputPath>
+    <!--<BaseIntermediateOutputPath>$(SolutionDir)\build\obj\$(Configuration)\$(AssemblyName)</BaseIntermediateOutputPath>-->
+    <SolutionProps Condition=" '$(SolutionProps)' == '' ">$(SolutionDir)\Solution.Build.props</SolutionProps>
+    <UserProps Condition=" '$(UserProps)' == '' ">$(SolutionDir)\User.Build.props</UserProps>
+    <DefaultImportProps Condition="'$(DefaultImportProps)' == ''">$(SolutionDir)\Imports.Build.props</DefaultImportProps>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ProductName Condition=" '$(ProductName)' == '' ">My Application</ProductName>
+    <CompanyName Condition=" '$(CompanyName)' == '' ">My Company</CompanyName>
+    <AuthorName Condition=" '$(AuthorName)' == '' ">$([System.Environment].CurrentUser)</AuthorName>
+    <ProductVersion Condition=" '$(ProductVersion)' == '' ">0.0.1</ProductVersion>
+    <IsSharedProject Condition=" '$(IsSharedProject)' == '' ">$(MSBuildProjectExtension.Contains('shproj'))</IsSharedProject>
+    <IsTestProject Condition=" '$(IsTestProject)' == '' ">False</IsTestProject>
+    <IsLibraryProject Condition=" '$(IsLibraryProject)' == '' ">False</IsLibraryProject>
+    <MergeBinary Condition=" '$(MergeBinary)' == '' ">True</MergeBinary>
+    <UseGitHub Condition="'$(UseGitHub)' == ''">False</UseGitHub>
+    <FirstTimeLoading Condition=" '$(FirstTimeLoading)' == '' ">True</FirstTimeLoading>
+    <IsPackable Condition="'$(IsPackable)' == ''">False</IsPackable>
+    <EnableNETAnalyzers Condition="'$(EnableNETAnalyzers)' == ''">true</EnableNETAnalyzers>
+    <SetupCompleted Condition=" '$(SetupCompleted)' == '' ">False</SetupCompleted>
+    <TargetPlatform Condition=" '$(TargetPlatform)' == '' ">net5.0-none</TargetPlatform>
+    <PlatformId Condition=" '$(PlatformId)' == '' ">None</PlatformId>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <Description Condition="'$(Description)' == ''">Description</Description>
+    <IsPackageOnlyProject Condition="'$(IsPackageOnlyProject)' == ''">False</IsPackageOnlyProject>
+    <!--<DisableExtraReferences>true</DisableExtraReferences>-->
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(IsPackageOnlyProject)' == 'true'">
+    <EnableDefaultItems>False</EnableDefaultItems>
+    <GenerateAssemblyInfo>False</GenerateAssemblyInfo>
+    <IncludeBuildOutput>False</IncludeBuildOutput>
+    <IncludeSymbols>false</IncludeSymbols>
+    <NoWarn>$(NoWarn);2008;8021</NoWarn>
+    <!--<NuspecFile>$(MSBuildThisFileDirectory)templates.nuspec</NuspecFile>-->
+    <CopyBuildOutputToOutputDirectory>false</CopyBuildOutputToOutputDirectory>
+    <CopyOutputSymbolsToOutputDirectory>false</CopyOutputSymbolsToOutputDirectory>
+    <IsProjectReferenceProvider>false</IsProjectReferenceProvider>
+    <MergeBinary>False</MergeBinary>
+    <IsPackable>True</IsPackable>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(IsPackable)' == 'true'">
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+  </PropertyGroup>
+
+  <Import Project="$(PrometheusGlobalDirectory)\NuGet.Build.props" Condition="'$(IsPackable)' == 'true'" />
+
+  <!--<Import Project="$(SolutionProps)" Condition="Exists($(SolutionProps))"/>
+  <Import Project="$(UserProps)" Condition="Exists($(UserProps))" />-->
+
+  <Target Name="PrintPrometheusGlobals">
+    <PropertyGroup>
+      <SectionSymbol>%</SectionSymbol>
+    </PropertyGroup>
+
+    <Message Text="| $(SectionString)" Importance="high" />
+    <Message Text="| []==~ $(MSBuildThisFile) ~==[]" Importance="high" />
+    <Message Text="| $(HeaderString)" Importance="high" />
+    <Message Text="| $(SectionSymbol) ProductName: $(ProductName)" Importance="high" />
+    <Message Text="| $(SectionSymbol) AssemblyName: $(AssemblyName)" Importance="high" />
+    <Message Text="| $(SectionSymbol) CompanyName: $(CompanyName)" Importance="high" />
+    <Message Text="| $(SectionSymbol) AuthorName: $(AuthorName)" Importance="high" />
+    <Message Text="| $(SectionSymbol) ProductVersion: $(ProductVersion)" Importance="high" />
+    <Message Text="| $(SectionSymbol) Version: $(Version)" Importance="high" />
+    <Message Text="| $(SectionSymbol) PackageVersion: $(PackageVersion)" Importance="high" />
+    <Message Text="| $(SectionSymbol) TargetFramework: $(TargetFramework)" Importance="high" />
+    <Message Text="| $(SectionSymbol) AutoDetectPlatform: $(AutoDetectPlatform)" Importance="high" />
+    <Message Text="| $(SectionSymbol) IsSharedProject: $(IsSharedProject)" Importance="high" />
+    <Message Text="| $(SectionSymbol) IsTestProject: $(IsTestProject)" Importance="high" />
+    <Message Text="| $(SectionSymbol) IsLibraryProject: $(IsLibraryProject)" Importance="high" />
+    <Message Text="| $(SectionSymbol) MSBuildProjectExtension: $(MSBuildProjectExtension)" Importance="high" />
+    <Message Text="| $(SectionSymbol) MSBuildThisFileDirectory: $(MSBuildThisFileDirectory)" Importance="high" />
+    <Message Text="| $(SectionSymbol) PlatformDir: $(PlatformDirectory)" Importance="high" />
+    <Message Text="| $(SectionSymbol) OutputDirectory: $(OutputDirectory)" Importance="high" />
+    <Message Text="| $(SectionSymbol) SharedImports: $(SharedImports)" Importance="high" />
+  </Target>
+</Project>

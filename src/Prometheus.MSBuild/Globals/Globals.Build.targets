@@ -1,0 +1,105 @@
+<Project InitialTargets="PrintPrometheusGlobals2">
+  <ItemGroup>
+    <MSBuildProjectParentDirectory Include="$(MSBuildProjectDirectory)\.." />
+  </ItemGroup>
+  <Import Project="$(SolutionProps)" Condition="Exists($(SolutionProps))"/>
+  <Import Project="$(UserProps)" Condition="Exists($(UserProps))" />
+  <PropertyGroup>
+    <Product>$(ProductName)</Product>
+    <AssemblyName>$(ProductName)</AssemblyName>
+    <Company>$(CompanyName)</Company>
+    <Authors>$(AuthorName)</Authors>
+    <Owners>$(CompanyName)</Owners>
+    <Copyright>copyright © $(CompanyName) 2017-$([System.DateTime]::Now.Year)</Copyright>
+    <Version>$(ProductVersion)</Version>
+    <FileVersion>$(ProductVersion)</FileVersion>
+    <PackageVersion>$(ProductVersion)</PackageVersion>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="$(SolutionDir) != ''">
+    <SourceDirectory>$(SolutionDir)\src</SourceDirectory>
+    <OutputDirectory>$(SolutionDir)\build\$(Configuration)\$(AssemblyName)</OutputDirectory>
+    <ThirdPartyDirectory>$(SolutionDir)\third-party</ThirdPartyDirectory>
+    <OutputPath>$(OutputDirectory)</OutputPath>
+    <!--<BaseIntermediateOutputPath>$(SolutionDir)\build\obj\$(Configuration)\$(AssemblyName)</BaseIntermediateOutputPath>-->
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(IsPackageOnlyProject)' == 'true'">
+    <EnableDefaultItems>False</EnableDefaultItems>
+    <GenerateAssemblyInfo>False</GenerateAssemblyInfo>
+    <IncludeBuildOutput>False</IncludeBuildOutput>
+    <IncludeSymbols>false</IncludeSymbols>
+    <NoWarn>$(NoWarn);2008;8021</NoWarn>
+    <PackageTags>aspnet;templates</PackageTags>
+    <!--<NuspecFile>$(MSBuildThisFileDirectory)templates.nuspec</NuspecFile>-->
+    <CopyBuildOutputToOutputDirectory>false</CopyBuildOutputToOutputDirectory>
+    <CopyOutputSymbolsToOutputDirectory>false</CopyOutputSymbolsToOutputDirectory>
+    <IsProjectReferenceProvider>false</IsProjectReferenceProvider>
+    <MergeBinary>False</MergeBinary>
+    <IsPackable>True</IsPackable>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(IsPackable)' == 'true'">
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+  </PropertyGroup>
+
+  <PropertyGroup Label="Configure assembly names and namespaces" Condition="$(PrometheusPlatformEnabled) == 'true'">
+    <!--<TargetFrameworks>netstandard2.1;net5.0;netcoreapp3.1</TargetFrameworks>-->
+    <RootNamespace>$(AssemblyName)</RootNamespace>
+    <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
+    <!--<PublishSingleFile>True</PublishSingleFile>-->
+    <OutputType>Exe</OutputType>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(IsLibraryProject)' == 'true'">
+    <OutputType>Library</OutputType>
+    <DocumentationFile>$(SolutionDir)\build\$(Configuration)\$(AssemblyName)\$(AssemblyName).xml</DocumentationFile>
+  </PropertyGroup>
+
+  <PropertyGroup Label="Normalize stack trace file locations" Condition="$(BuildingInsideVisualStudio) != 'true'">
+    <PathMap>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)'))=X:\</PathMap>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!--<Compile Include="$(SourceDirectory)\GlobalSuppressions.cs"
+             Link="GlobalSuppressions.cs"
+             Condition="Exists('$(SourceDirectory)\GlobalSuppressions.cs')"/>
+    <Compile Include="$(SourceDirectory)\SharedAssemblyInfo.cs"
+             Link="Properties\SharedAssemblyInfo.cs"
+             Condition="Exists('$(SourceDirectory)\SharedAssemblyInfo.cs')" />-->
+    <!--<Content Include="$(SourceDirectory)\FodyWeavers.xml"
+             Condition="Exists('$(SourceDirectory)\FodyWeavers.xml') And '$(MergeBinary)' == 'true'"/>
+    <None Include="FodyWeavers.xsd" Condition="Exists('$(SourceDirectory)\FodyWeavers.xsd') And '$(MergeBinary)' == 'true'">
+      <SubType>Designer</SubType>
+    </None>-->
+  </ItemGroup>
+
+  <Import Project="$(PrometheusGlobalDirectory)\NuGet.Build.targets" Condition="'$(IsPackable)' == 'true'" />
+
+  <Target Name="PrintPrometheusGlobals2">
+    <PropertyGroup>
+      <SectionSymbol>%</SectionSymbol>
+    </PropertyGroup>
+
+    <Message Text="| $(SectionString)" Importance="high" />
+    <Message Text="| []==~ $(MSBuildThisFile) ~==[]" Importance="high" />
+    <Message Text="| $(HeaderString)" Importance="high" />
+    <Message Text="| $(SectionSymbol) ProductName: $(ProductName)" Importance="high" />
+    <Message Text="| $(SectionSymbol) AssemblyName: $(AssemblyName)" Importance="high" />
+    <Message Text="| $(SectionSymbol) CompanyName: $(CompanyName)" Importance="high" />
+    <Message Text="| $(SectionSymbol) AuthorName: $(AuthorName)" Importance="high" />
+    <Message Text="| $(SectionSymbol) ProductVersion: $(ProductVersion)" Importance="high" />
+    <Message Text="| $(SectionSymbol) Version: $(Version)" Importance="high" />
+    <Message Text="| $(SectionSymbol) PackageVersion: $(PackageVersion)" Importance="high" />
+    <Message Text="| $(SectionSymbol) TargetFramework: $(TargetFramework)" Importance="high" />
+    <Message Text="| $(SectionSymbol) PrometheusPlatformEnabled: $(PrometheusPlatformEnabled)" Importance="high" />
+    <Message Text="| $(SectionSymbol) IsSharedProject: $(IsSharedProject)" Importance="high" />
+    <Message Text="| $(SectionSymbol) IsTestProject: $(IsTestProject)" Importance="high" />
+    <Message Text="| $(SectionSymbol) IsLibraryProject: $(IsLibraryProject)" Importance="high" />
+    <Message Text="| $(SectionSymbol) MSBuildProjectExtension: $(MSBuildProjectExtension)" Importance="high" />
+    <Message Text="| $(SectionSymbol) MSBuildThisFileDirectory: $(MSBuildThisFileDirectory)" Importance="high" />
+    <Message Text="| $(SectionSymbol) MSBuildProjectExtensionsPath: $(MSBuildProjectExtensionsPath)" Importance="high" />
+    <Message Text="| $(SectionSymbol) OutputDirectory: $(OutputDirectory)" Importance="high" />
+    <Message Text="| $(SectionSymbol) SharedImports: $(SharedImports)" Importance="high" />
+  </Target>
+</Project>

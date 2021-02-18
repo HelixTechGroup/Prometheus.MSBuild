@@ -1,0 +1,17 @@
+﻿<Project InitialTargets="Windows">
+  <!--<Import Project=".\Default.build.props" />-->
+  <PropertyGroup>
+    <PlatformId>Windows</PlatformId>
+    <PlatformType>Desktop</PlatformType>
+    <Rendering>True</Rendering>
+    <TargetFramework Condition="'$(TargetPlatform.Contains(`net5.0`))' == 'true'">net5.0-windows</TargetFramework>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Win32.Registry" Version="5.0.0" />
+  </ItemGroup>
+
+  <Target Name="Windows">
+    <Message Text="| $(SectionSymbol) > Setting PlatformId for Windows::$(PlatformId)" Importance="high" />
+    <Message Text="| $(SectionSymbol) > TargetFramework: $(TargetFramework)" Importance="high" />
+  </Target>
+</Project>

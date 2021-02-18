@@ -1,0 +1,12 @@
+<Project>
+  <Target Name="Windows">
+    <PropertyGroup>
+      <PlatformId>Windows</PlatformId>
+      <PlatformType>Desktop</PlatformType>
+      <Rendering>True</Rendering>
+      <TargetFramework Condition="'$(RuntimeId.Contains(`net5.0`))' == 'true'">net5.0-windows</TargetFramework>
+    </PropertyGroup>
+    <Message Text="| $(SectionSymbol) > Setting PlatformId for Windows::$(PlatformId)" Importance="high"/>
+    <Message Text="| $(SectionSymbol) > TargetFramework: $(TargetFramework)" Importance="high" />
+  </Target>
+</Project>

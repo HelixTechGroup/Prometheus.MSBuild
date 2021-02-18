@@ -1,0 +1,19 @@
+<Project>
+  <PropertyGroup>
+    <SectionSymbol>@</SectionSymbol>
+    <LocalNugetRepo>D:\Users\Bryan\Documents\Projects\HelixTechGroup\local-nuget</LocalNugetRepo>
+    <IsLibraryProject>true</IsLibraryProject>
+    <IsPackable>true</IsPackable>
+    <RepositoryHttpUrl>https://github.com/HelixTechGroup/Prometheus.MSBuild</RepositoryHttpUrl>
+    <UseGitHub>True</UseGitHub>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Remove="obj\\**\*" />
+    <PackageReference Update="@(PackageReference)" PrivateAssets="All" />
+  </ItemGroup>
+  <PropertyGroup>
+    <CompanyName>HelixTechGroup,llc</CompanyName>
+    <AuthorName>Bryan M. Longacre</AuthorName>
+    <ProductVersion>0.0.1</ProductVersion>
+  </PropertyGroup>
+</Project>
