@@ -40,9 +40,9 @@
     <ItemGroup>
       <MSBuildProjectParentDirectory Include="$(MSBuildProjectDirectory)\..\.." />
     </ItemGroup>
-    <PropertyGroup Condition="$(RootPath) == ''">
-      <RootPath>%(MSBuildProjectParentDirectory.FullPath)</RootPath>
-      <!--<SolutionDir>$(RootPath)</SolutionDir>-->
+    <PropertyGroup Condition="$(RootPath) == '' Or '$(SolutionDir)' == ''">
+      <RootPath Condition="$(RootPath) == ''">%(MSBuildProjectParentDirectory.FullPath)"</RootPath>
+      <SolutionDir Condition="'$(SolutionDir)' == ''">$(RootPath)</SolutionDir>
     </PropertyGroup>
     <PropertyGroup>
       <SectionSymbol>*</SectionSymbol>

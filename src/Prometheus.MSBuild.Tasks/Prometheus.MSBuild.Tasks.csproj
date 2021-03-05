@@ -6,11 +6,11 @@
   <Import Project="..\..\src\Prometheus.MSBuild\build\Prometheus.MSBuild.props" />
   <PropertyGroup>
     <ProductName>Prometheus.MSBuild.Tasks</ProductName>
-    <TargetPlatform>net5.0</TargetPlatform>
+    <TargetPlatform>net48</TargetPlatform>
     <IncludeBuildOutput>true</IncludeBuildOutput>
     <IsLibrary>True</IsLibrary>
-    <IsTool>True</IsTool>
-    <!--<MergeBinary>False</MergeBinary>-->
+    <MergeBinary>False</MergeBinary>
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
 
   <ItemGroup>
@@ -19,7 +19,10 @@
     <PackageReference Include="Microsoft.Build.Tasks.Core" Version="16.8.0" />
     <PackageReference Include="Microsoft.Build.Utilities.Core" Version="16.8.0" />
     <PackageReference Include="Shin.Framework" Version="0.0.1" />
-    <!--<Content Include="bin\$(Configuration)\**" Pack="True" PackagePath="lib\" Exclude="$(NugetPackageName)" />-->
+    <PackageReference Include="System.Text.Json" Version="5.0.1" />
+    <!--<PackageReference Update="@(PackageReference)" PrivateAssets="All" 
+                      IncludeAssets="lib; runtime; build; native; contentfiles; analyzers; buildtransitive; buildmultitargeting" />-->
+      <!--<Content Include="bin\$(Configuration)\**" Pack="True" PackagePath="lib\" Exclude="$(NugetPackageName)" />-->
   </ItemGroup>
 
   <Import Project="..\..\src\Prometheus.MSBuild\build\Prometheus.MSBuild.targets" />

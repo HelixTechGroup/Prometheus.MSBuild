@@ -1,6 +1,6 @@
 <Project>
   <ItemGroup>
-    <Imports Include="$(SolutionDir)\Test.projitems" />
+    <Imports Include="$(SolutionDir)Test.projitems" />
   </ItemGroup>
   <!--<PropertyGroup>
     <SharedImports>$('@(Imports)')</SharedImports>

@@ -23,6 +23,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\src\Prometheus.MSBuild.Tasks\Prometheus.MSBuild.Tasks.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Update="tests\Imports.Build.props">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

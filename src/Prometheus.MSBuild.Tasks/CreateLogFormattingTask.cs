@@ -11,6 +11,7 @@ using System.Reflection;
 using System.Security;
 using Microsoft.Build.Construction;
 using Microsoft.Build.Execution;
+using Prometheus.MSBuild.Tasks.Extension;
 
 namespace Prometheus.MSBuild.Tasks
 {

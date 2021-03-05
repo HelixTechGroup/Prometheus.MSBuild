@@ -13,6 +13,7 @@ using Microsoft.Build.Evaluation;
 using Microsoft.Build.Execution;
 using Microsoft.Build.Framework;
 using Microsoft.Build.Tasks;
+using Prometheus.MSBuild.Tasks;
 using Project = Microsoft.Build.Evaluation.Project;
 
 namespace Prometheus.MSBuild.Tests
@@ -29,6 +30,7 @@ namespace Prometheus.MSBuild.Tests
             var prometheusDirectory = $@"{currentDirectory}\..\..\..\..\..\src\Prometheus.MSBuild";
             var prometheusLibraryDirectory = $@"{currentDirectory}\..\..\..\..\..\build\Debug\Prometheus.MSBuild.Tasks\net48";
             var prometheusTasksLibrary = $@"{prometheusLibraryDirectory}\Prometheus.MSBuild.Tasks.dll";
+            var configuration = "Debug";
 
             //var props = new Dictionary<string, string>() {{"Configuration", "Debug"}, {"Platform", "AnyCPU" } };
 
@@ -43,7 +45,7 @@ namespace Prometheus.MSBuild.Tests
             //xmlStream.Seek(0L, SeekOrigin.Begin);
             //var reader = XmlReader.Create(xmlStream);
 
-            var fileName = $@"{testsDirectory}\Template.csproj";
+            var fileName = $@"{testsDirectory}Template.csproj";
             //var collection = new ProjectCollection(props);
             //var project = collection.LoadProject(fileName);
             //var instance = new ProjectInstance(ProjectRootElement.Create(fileName, collection));
@@ -79,8 +81,9 @@ namespace Prometheus.MSBuild.Tests
 
             //instance.ToProjectRootElement().AddImport(@$"{prometheusDirectory}\build\Prometheus.MSBuild.props");
             //Console.WriteLine($"Default Configuration: {project.GetPropertyValue("Configuration")}");
-            Console.WriteLine($"Active Configuration: {instance.GetPropertyValue("Configuration")}");
-            Console.WriteLine($"Active PlatformId: {instance.GetPropertyValue("PlatformId")}");
+            
+            //Console.WriteLine($"Active Configuration: {instance.GlobalProperties["Configuration"]}");
+            //Console.WriteLine($"Active PlatformId: {instance.GlobalProperties["PlatformId"]}");
 
             //instance.ToProjectRootElement().InitialTargets = "ImportTest";
             //instance.InitialTargets.Add("ImportTest");
@@ -134,14 +137,31 @@ namespace Prometheus.MSBuild.Tests
             prometheusProperties.AddProperty("IsPackable", "false");
             prometheusProperties.AddProperty("DisableWarnForInvalidRestoreProjects", "true");
             prometheusProperties.AddProperty("FirstTimeLoading", "false");
+            prometheusProperties.AddProperty("BaseIntermediateOutputPath", Path.Combine(testsDirectory, @$"obj"));
+            prometheusProperties.AddProperty("Configuration", configuration);
+            prometheusProperties.AddProperty("Platform", "AnyCpu");
+            prometheusProperties.AddProperty("RootPath", testsDirectory);
+            prometheusProperties.AddProperty("SolutionDir", $@"{testsDirectory}\");
+            prometheusProperties.AddProperty(
+                                             "MSBuildExtensionsPath", instance.GetPropertyValue("MSBuildExtensionsPath"));
+            prometheusProperties.AddProperty(
+                                             "MSBuildSDKsPath",
+                                             instance.GetPropertyValue("MSBuildSDKsPath"));
+            prometheusProperties.AddProperty(
+                                             "RoslynTargetsPath",
+                                             instance.GetPropertyValue("RoslynTargetsPath"));
+            prometheusProperties.AddProperty("DesignTimeBuild","true");
+            prometheusProperties.AddProperty("BuildProjectReferences","false");
+            prometheusProperties.AddProperty("SkipCompilerExecution","true");
+            prometheusProperties.AddProperty("ProvideCommandLineArgs","true");
+            prometheusProperties.AddProperty("UseImportCache", "false");
 
             ProjectInstance testInstance = null;
-            var pTask = new Task(() =>
-            {
-                testInstance = MSBuildHelper.CreateProjectInstance(root);
-            });
+            var pTask = new Task<ProjectInstance>(() => MSBuildHelper.CreateProjectInstance(root));
             pTask.ConfigureAwait(false);
             pTask.Start();
+            // ReSharper disable once AsyncConverter.AsyncWait
+            testInstance = pTask.Result;
             var i = 0;
             while (!pTask.IsCompleted)
             {
@@ -150,12 +170,16 @@ namespace Prometheus.MSBuild.Tests
                 i++;
             }
 
+            if (testInstance is null)
+                throw new InvalidOperationException($"Could not create {nameof(testInstance)}");
+
             var target = "";
             if (args.Length >= 2)
                 target = args[1];
 
             Console.WriteLine();
             Console.WriteLine("--------------------");
+
             //Copy copy = new Copy();
             //NuGet.Common.PathUtility.GetStringComparerBasedOnOS();
             //NuGet.Build.Tasks.WarnForInvalidProjectsTask warn = new NuGet.Build.Tasks.WarnForInvalidProjectsTask();
@@ -164,11 +188,14 @@ namespace Prometheus.MSBuild.Tests
             //Assembly.Load(@"System.Runtime, Version=4.2.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a");
             var libTask = new Task(() =>
             {
-                Assembly.Load(@"Microsoft.Build.Tasks.Core");
-                Assembly.Load(@"NuGet.Frameworks");
-                Assembly.Load(@"NuGet.ProjectModel");
-                Assembly.LoadFile(Path.GetFullPath(Path.Combine(MSBuildHelper.GetGlobalProperties()["RoslynTargetsPath"],
-                                                                "Microsoft.Build.Tasks.CodeAnalysis.dll")));
+                lock(target)
+                {
+                    Assembly.Load(@"Microsoft.Build.Tasks.Core");
+                    Assembly.Load(@"NuGet.Frameworks");
+                    Assembly.Load(@"NuGet.ProjectModel");
+                    Assembly.LoadFile(Path.GetFullPath(Path.Combine(MSBuildHelper.GetGlobalProperties()["RoslynTargetsPath"],
+                                                                    "Microsoft.Build.Tasks.CodeAnalysis.dll")));
+                }
             });
             libTask.ConfigureAwait(false);
             libTask.Start();

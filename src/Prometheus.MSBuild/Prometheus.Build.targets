@@ -58,8 +58,8 @@
     <ItemGroup>
       <MSBuildProjectParentDirectory Include="$(MSBuildProjectDirectory)\..\.." />
     </ItemGroup>
-    <PropertyGroup Condition="$(RootPath) == ''">
-      <RootPath>%(MSBuildProjectParentDirectory.FullPath)</RootPath>
+    <PropertyGroup Condition="$(RootPath) == '' Or '$(SolutionDir)' == ''">
+      <RootPath Condition="$(RootPath) == ''">%(MSBuildProjectParentDirectory.FullPath)"</RootPath>
       <SolutionDir>$(RootPath)</SolutionDir>
     </PropertyGroup>
     <PropertyGroup>
@@ -80,6 +80,7 @@
     <Message Text="| $(SectionSymbol) PrometheusProps: $(PrometheusProps)" Importance="high" />
     <Message Text="| $(SectionSymbol) PrometheusTargets: $(PrometheusTargets)" Importance="high" />
     <Message Text="| $(SectionSymbol) SharedImports: $(SharedImports)" Importance="high" />
-    <!--<Message Text="| $(SectionSymbol) Compile ItemGroup: %(Compile.Identity)" Importance="high" />-->
+    <Message Text="| $(SectionSymbol) Imports: %(Imports.Identity)" Importance="high" />
+    <Message Text="| $(SectionSymbol) Compile ItemGroup: %(Compile.Identity)" Importance="high" />
   </Target>
 </Project>

@@ -1,17 +1,15 @@
 ﻿using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Text;
 using Microsoft.Build.Construction;
 using Microsoft.Build.Evaluation;
 using Microsoft.Build.Execution;
 using Microsoft.Build.Utilities;
 
-namespace Prometheus.MSBuild.Tests
+namespace Prometheus.MSBuild.Tasks
 {
     public class MSBuildHelper
     {

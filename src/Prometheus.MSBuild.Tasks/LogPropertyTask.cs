@@ -9,6 +9,7 @@ using System.IO;
 using System.Reflection;
 using Microsoft.Build.Construction;
 using Microsoft.Build.Execution;
+using Prometheus.MSBuild.Tasks.Extension;
 
 namespace Prometheus.MSBuild.Tasks
 {

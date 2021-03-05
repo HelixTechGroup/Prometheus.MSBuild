@@ -1,23 +1,15 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Runtime.CompilerServices;
-using System.Text;
-using BuildUtil = Microsoft.Build.Utilities;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-using Microsoft.Build.Construction;
 using Microsoft.Build.Evaluation;
 using Microsoft.Build.Execution;
 using Microsoft.Build.Framework;
-using Microsoft.Build.ObjectModelRemoting;
+using Prometheus.MSBuild.Tasks.Caching;
+using BuildUtil = Microsoft.Build.Utilities;
 
-namespace Prometheus.MSBuild.Tasks
+namespace Prometheus.MSBuild.Tasks.Extension
 {
     internal static class BuildTaskExtensions
     {
@@ -130,7 +122,7 @@ namespace Prometheus.MSBuild.Tasks
             return (ProjectInstance)projectProperty.GetValue(requestConfig);
         }
 
-        public static void AddImports(this BuildUtil.Task task, ProjectInstance instance, ImportFileOptions options)
+        public static void AddImports(this BuildUtil.Task task, ref ProjectInstance instance, ImportFileOptions options)
         {
             try 
             { 
@@ -146,72 +138,32 @@ namespace Prometheus.MSBuild.Tasks
                 var addConfig = bm.GetType().GetMethod("AddNewConfiguration", BindingFlags.NonPublic | BindingFlags.Instance);
                 var cloneMethod = requestConfig.GetType().GetMethod("ShallowCloneWithNewId", BindingFlags.NonPublic | BindingFlags.Instance);
 
-                var root = instance.ToProjectRootElement();
-                var project = new Project(root);
-                var group = root.AddImportGroup();
-                foreach (var f in options.ImportFiles)
+                if (options.Cache.NewItems.Count > 0)
                 {
-                    task.Log.LogMessage(MessageImportance.High, $"| {options.SectionSymbol} Importing File: {f}");
-                    var ie = group.AddImport(f.ItemSpec);
-                    ie.Label = "Shared";
-
-                    var p = new Project(root);
-                    //p.FullPath = MSBuildHelper.AssemblyDirectory;
-                    var pathsField = instance.GetType().GetField("_importPaths", BindingFlags.NonPublic | BindingFlags.Instance);
-                    //var pathDupField = instance.GetType().GetField("_importPathsIncludingDuplicates", BindingFlags.NonPublic | BindingFlags.Instance);
-                    var paths = pathsField.GetValue(instance) as List<string>;
-                    //var dupPath = pathDupField.GetValue(instance) as List<string>;
-
-
-                    //foreach (var di in p.ImportsIncludingDuplicates)
-                    //{
-                    //    if (!dupPath.Any(ps => ps == di.ImportedProject.FullPath))
-                    //        dupPath.Add(di.ImportedProject.FullPath);
-                    //}
-
-                    //task.Log.LogMessage(MessageImportance.High, $"| {options.SectionSymbol} {p.FullPath}");
-                    foreach (var i in p.Imports)
+                    var root = instance.ToProjectRootElement();
+                    var group = root.AddImportGroup();
+                    foreach (var f in options.Cache.NewItems)
                     {
-                        if (!paths.Any(ps => ps == i.ImportedProject.FullPath))
-                        {
-                            task.Log.LogMessage(MessageImportance.High, $"| {options.SectionSymbol} Import Path Added: {i.ImportedProject.FullPath}");
-                            paths.Add(i.ImportedProject.FullPath);
-                        }
+                        task.Log.LogMessage(MessageImportance.High, $"| {options.SectionSymbol} Importing File: {f}");
+                        var ie = group.AddImport(f.ItemSpec);
+                        ie.Label = "Shared";
 
-                        foreach (var pp in i.ImportedProject.Properties)
-                        {
-                            instance.SetProperty(pp.Name, pp.Value);
-                        }
+                        //p.FullPath = MSBuildHelper.AssemblyDirectory;
+                        //var pathDupField = instance.GetType().GetField("_importPathsIncludingDuplicates", BindingFlags.NonPublic | BindingFlags.Instance);
+                        //var dupPath = pathDupField.GetValue(instance) as List<string>;
 
-                        //task.Log.LogMessage(MessageImportance.High, $"| {options.SectionSymbol} {i.ImportingElement.Project}: {i.ImportedProject.FullPath}");
-                        foreach (var pi in i.ImportedProject.Items)
-                        {
-                            var dir = Directory.GetParent(pi.IncludeLocation.File);
-                            var v = pi.Include;
-                            v = v.Replace("$(MSBuildThisFileDirectory)", dir.FullName + @"\").Replace(@"\\", @"\");
 
-                            if (!instance.Items.Any(ei => ei.EvaluatedInclude == v))
-                                instance.AddItem(pi.ItemType, v);
-                        }
+                        //foreach (var di in p.ImportsIncludingDuplicates)
+                        //{
+                        //    if (!dupPath.Any(ps => ps == di.ImportedProject.FullPath))
+                        //        dupPath.Add(di.ImportedProject.FullPath);
+                        //}
+
+                        //task.Log.LogMessage(MessageImportance.High, $"| {options.SectionSymbol} {p.FullPath}");
                     }
 
-                    pathsField.SetValue(instance, paths);
-
-                    var newConfig = cloneMethod?.Invoke(requestConfig, new object[] {int.MaxValue});
-                    var projectProp = newConfig.GetType().GetProperty("Project", BindingFlags.Public | BindingFlags.Instance);
-                    var configIdField = newConfig.GetType().GetField("_configId", BindingFlags.NonPublic | BindingFlags.Instance);
-                    configIdField?.SetValue(newConfig, int.MinValue);
-                    projectProp?.SetValue(newConfig, instance);
-
-                    try
-                    {
-                        replaceMethod?.Invoke(bm, new[] {newConfig, requestConfig});
-                    }
-                    catch (TargetInvocationException tie)
-                    {
-                        Console.WriteLine(tie.InnerException.Message);
-                        task.Log.LogMessage(MessageImportance.High, tie.InnerException.Message);
-                    }
+                    var project = new Project(root);
+                    instance = instance.MergeProject(project);
                 }
             }
             catch (TargetInvocationException tie)
@@ -227,7 +179,7 @@ namespace Prometheus.MSBuild.Tasks
                 if (e.InnerException != null)
                 {
                     Console.WriteLine(e.InnerException);
-                    task.LogError(e.InnerException);
+                    task.Log.LogErrorFromException(e.InnerException, true, true, e.InnerException.Source);
                 }
             }
         }

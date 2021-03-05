@@ -3,21 +3,21 @@
     <MSBuildProjectParentDirectory Include="$(MSBuildProjectDirectory)\.." />
   </ItemGroup>
   <PropertyGroup Condition="$(SolutionDir) != ''">
-    <SolutionDir>$(SolutionDir.TrimEnd('\'))</SolutionDir>
-    <SourceDirectory Condition=" '$(SourceDirectory)' == '' ">$(SolutionDir)\src</SourceDirectory>
-    <ThirdPartyDirectory Condition=" '$(ThirdPartyDirectory)' == '' ">$(SolutionDir)\third-party</ThirdPartyDirectory>
+    <!--<SolutionDir>$(SolutionDir.TrimEnd('\'))</SolutionDir>-->
+    <SourceDirectory Condition=" '$(SourceDirectory)' == '' ">$(SolutionDir)src</SourceDirectory>
+    <ThirdPartyDirectory Condition=" '$(ThirdPartyDirectory)' == '' ">$(SolutionDir)third-party</ThirdPartyDirectory>
     <!--<PrometheusDirectory Condition=" '$(PrometheusDirectory)' == '' ">$(PrometheusDirectory)\Prometheus</PrometheusDirectory>-->
-    <OutputDirectory Condition="'$(OutputDirectory)' == ''">$(SolutionDir)\build\$(Configuration)\$(AssemblyName)</OutputDirectory>
+    <OutputDirectory Condition="'$(OutputDirectory)' == ''">$(SolutionDir)build\$(Configuration)\$(AssemblyName)</OutputDirectory>
     <OutputPath Condition=" '$(OutputPath)' == '' ">$(OutputDirectory)</OutputPath>
     <!--<BaseIntermediateOutputPath>$(SolutionDir)\build\obj\$(Configuration)\$(AssemblyName)</BaseIntermediateOutputPath>-->
-    <SolutionProps Condition=" '$(SolutionProps)' == '' ">$(SolutionDir)\Solution.Build.props</SolutionProps>
-    <UserProps Condition=" '$(UserProps)' == '' ">$(SolutionDir)\User.Build.props</UserProps>
-    <DefaultImportProps Condition="'$(DefaultImportProps)' == ''">$(SolutionDir)\Imports.Build.props</DefaultImportProps>
+    <SolutionProps Condition=" '$(SolutionProps)' == '' ">$(SolutionDir)Solution.Build.props</SolutionProps>
+    <UserProps Condition=" '$(UserProps)' == '' ">$(SolutionDir)User.Build.props</UserProps>
+    <DefaultImportProps Condition="'$(DefaultImportProps)' == ''">$(SolutionDir)Imports.Build.props</DefaultImportProps>
   </PropertyGroup>
   <PropertyGroup>
     <ProductName Condition=" '$(ProductName)' == '' ">My Application</ProductName>
     <CompanyName Condition=" '$(CompanyName)' == '' ">My Company</CompanyName>
-    <AuthorName Condition=" '$(AuthorName)' == '' ">$([System.Environment].CurrentUser)</AuthorName>
+    <AuthorName Condition=" '$(AuthorName)' == '' ">$(UserName)</AuthorName>
     <ProductVersion Condition=" '$(ProductVersion)' == '' ">0.0.1</ProductVersion>
     <IsSharedProject Condition=" '$(IsSharedProject)' == '' ">$(MSBuildProjectExtension.Contains('shproj'))</IsSharedProject>
     <IsTestProject Condition=" '$(IsTestProject)' == '' ">False</IsTestProject>
@@ -34,6 +34,7 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <Description Condition="'$(Description)' == ''">Description</Description>
     <IsPackageOnlyProject Condition="'$(IsPackageOnlyProject)' == ''">False</IsPackageOnlyProject>
+    <UseImportCache Condition="'$(UseImportCache)' == ''">True</UseImportCache>
     <!--<DisableExtraReferences>true</DisableExtraReferences>-->
   </PropertyGroup>
 
@@ -68,6 +69,10 @@
     <Message Text="| $(SectionString)" Importance="high" />
     <Message Text="| []==~ $(MSBuildThisFile) ~==[]" Importance="high" />
     <Message Text="| $(HeaderString)" Importance="high" />
+
+    <LogPropertyTask ProjectFiles="$(MSBuildThisFileFullPath)" SectionSymbol="$(SectionSymbol)"
+                     Condition="'$(PrometheusTasksEnabled)' == 'true'" />
+
     <Message Text="| $(SectionSymbol) ProductName: $(ProductName)" Importance="high" />
     <Message Text="| $(SectionSymbol) AssemblyName: $(AssemblyName)" Importance="high" />
     <Message Text="| $(SectionSymbol) CompanyName: $(CompanyName)" Importance="high" />
@@ -82,7 +87,6 @@
     <Message Text="| $(SectionSymbol) IsLibraryProject: $(IsLibraryProject)" Importance="high" />
     <Message Text="| $(SectionSymbol) MSBuildProjectExtension: $(MSBuildProjectExtension)" Importance="high" />
     <Message Text="| $(SectionSymbol) MSBuildThisFileDirectory: $(MSBuildThisFileDirectory)" Importance="high" />
-    <Message Text="| $(SectionSymbol) PlatformDir: $(PlatformDirectory)" Importance="high" />
     <Message Text="| $(SectionSymbol) OutputDirectory: $(OutputDirectory)" Importance="high" />
     <Message Text="| $(SectionSymbol) SharedImports: $(SharedImports)" Importance="high" />
   </Target>

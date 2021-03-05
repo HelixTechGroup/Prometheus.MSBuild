@@ -1,20 +1,14 @@
 ﻿using System;
-using System.CodeDom;
-using System.Collections.Generic;
-using System.Diagnostics.Contracts;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Prometheus.MSBuild.Tasks
+namespace Prometheus.MSBuild.Tasks.Extension
 {
     public class StringExtensions
     {
         private readonly string realString = String.Empty;
 
-        public StringExtensions(string @string)
+        public StringExtensions(string value)
         {
-            realString = @string;
+            realString = value;
         }
 
         public static implicit operator string(StringExtensions d) => d.realString;

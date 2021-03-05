@@ -69,15 +69,19 @@
     <Message Text="| $(SectionSymbol) PrometheusDirectory: $(PrometheusDirectory)" Importance="high" />
     <Message Text="| $(SectionSymbol) PrometheusProps: $(PrometheusProps)" Importance="high" />
     <Message Text="| $(SectionSymbol) PrometheusTargets: $(PrometheusTargets)" Importance="high" />
+    <Message Text="| $(SectionSymbol) UseImportCache: $(UseImportCache)" Importance="high" />
 
-    <!--<CallTarget Targets="PrintImports">
-      <Output TaskParameter="TargetOutputs" ItemName="Imports" />
-    </CallTarget>-->
-    <ImportFileTask ImportFiles="@(Imports)" SectionSymbol="$(SectionSymbol)"
+    <CallTarget Targets="PrintImports"/>
+
+    <ImportFileTask ImportFiles="@(Imports)" 
+                    SectionSymbol="$(SectionSymbol)"
+                    UseCache="$(UseImportCache)"
                     Condition="'$(PrometheusTasksEnabled)' == 'true'" />
 
-    <LogPropertyTask ProjectFiles="$(MSBuildThisFileFullPath)" SectionSymbol="$(SectionSymbol)"
+    <LogPropertyTask ProjectFiles="$(MSBuildThisFileFullPath)" 
+                     SectionSymbol="$(SectionSymbol)"
                      Condition="'$(PrometheusTasksEnabled)' == 'true'" />
+
     <Message Text="| $(SectionSymbol) SharedImports: $(SharedImports)" Importance="high" />
     <Message Text="| $(SectionSymbol) Import: %(Imports.Identity)" Importance="high" />
     <Message Text="| $(SectionSymbol) Import Found: $(Found)" Importance="high" />
@@ -95,6 +99,6 @@
     <!--<MSBuild Projects="$(MSBuildThisFileFullPath)" Properties="SharedImports=$(@(Imports))" Targets="TemplateName" />-->
     <!--<ImportFileTask ImportFiles="$(SharedImports)"
                     Condition="'$(PrometheusPlatformEnabled)' == 'true'" />-->
-    <!--<Message Text="| $(SectionSymbol) Compile ItemGroup: %(Compile.Identity)" Importance="high" />-->
+    <Message Text="| $(SectionSymbol) Compile ItemGroup: %(Compile.Identity)" Importance="high" />
   </Target>
 </Project>

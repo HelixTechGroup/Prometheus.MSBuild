@@ -17,9 +17,10 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="$(SolutionDir) != ''">
-    <SourceDirectory>$(SolutionDir)\src</SourceDirectory>
-    <OutputDirectory>$(SolutionDir)\build\$(Configuration)\$(AssemblyName)</OutputDirectory>
-    <ThirdPartyDirectory>$(SolutionDir)\third-party</ThirdPartyDirectory>
+    <!--<SolutionDir>$(SolutionDir.TrimEnd('\'))</SolutionDir>-->
+    <SourceDirectory>$(SolutionDir)src</SourceDirectory>
+    <OutputDirectory>$(SolutionDir)build\$(Configuration)\$(AssemblyName)</OutputDirectory>
+    <ThirdPartyDirectory>$(SolutionDir)third-party</ThirdPartyDirectory>
     <OutputPath>$(OutputDirectory)</OutputPath>
     <!--<BaseIntermediateOutputPath>$(SolutionDir)\build\obj\$(Configuration)\$(AssemblyName)</BaseIntermediateOutputPath>-->
   </PropertyGroup>
@@ -53,7 +54,7 @@
 
   <PropertyGroup Condition="'$(IsLibraryProject)' == 'true'">
     <OutputType>Library</OutputType>
-    <DocumentationFile>$(SolutionDir)\build\$(Configuration)\$(AssemblyName)\$(AssemblyName).xml</DocumentationFile>
+    <DocumentationFile>$(SolutionDir)build\$(Configuration)\$(AssemblyName)\$(AssemblyName).xml</DocumentationFile>
   </PropertyGroup>
 
   <PropertyGroup Label="Normalize stack trace file locations" Condition="$(BuildingInsideVisualStudio) != 'true'">
@@ -84,6 +85,10 @@
     <Message Text="| $(SectionString)" Importance="high" />
     <Message Text="| []==~ $(MSBuildThisFile) ~==[]" Importance="high" />
     <Message Text="| $(HeaderString)" Importance="high" />
+
+    <LogPropertyTask ProjectFiles="$(MSBuildThisFileFullPath)" SectionSymbol="$(SectionSymbol)"
+                     Condition="'$(PrometheusTasksEnabled)' == 'true'" />
+
     <Message Text="| $(SectionSymbol) ProductName: $(ProductName)" Importance="high" />
     <Message Text="| $(SectionSymbol) AssemblyName: $(AssemblyName)" Importance="high" />
     <Message Text="| $(SectionSymbol) CompanyName: $(CompanyName)" Importance="high" />

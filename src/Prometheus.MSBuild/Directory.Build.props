@@ -1,8 +1,8 @@
 <Project InitialTargets="CopyTasksToLib">
   <PropertyGroup>
     <SectionSymbol>@</SectionSymbol>
-
     <TargetFrameworks>net40;net5.0;netcoreapp3.1;netstandard2.1;monoandroid90</TargetFrameworks>
+    <!--<TargetFramework>net5.0</TargetFramework>-->
     <IsProjectReferenceProvider>false</IsProjectReferenceProvider>
     <LocalNugetRepo>D:\Users\Bryan\Documents\Projects\HelixTechGroup\local-nuget</LocalNugetRepo>
     <PackageOnlyBuild>true</PackageOnlyBuild>
@@ -35,8 +35,7 @@
   <ItemGroup>
     <Content Include="..\..\build\$(Configuration)\Prometheus.MSBuild.Tasks\net48\**" 
              Pack="True" 
-             PackagePath="lib\"
-             Exclude="$(NugetPackageName)">
+             PackagePath="lib\">
       <Link>lib\%(Filename)%(Extension)</Link>
     </Content>
   </ItemGroup>

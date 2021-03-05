@@ -1,0 +1,56 @@
+<Project InitialTargets="TemplateName2">
+  <!--<PropertyGroup>
+    <SharedImportsString>@(Imports->'%(Identity)')</SharedImportsString>
+  </PropertyGroup>-->
+  <Choose>
+    <When Condition="'$(SharedImportsString)' != ''">
+      <PropertyGroup>
+        <Found>True</Found>
+      </PropertyGroup>
+    </When>
+    <Otherwise>
+      <PropertyGroup>
+        <Found>False</Found>
+      </PropertyGroup>
+    </Otherwise>
+  </Choose>
+  <!--<ItemGroup>
+    <Imports Include="$(SolutionDir)\Test.Build.props" />
+  </ItemGroup>-->
+  <!--<PropertyGroup>
+    <SharedImports>$(SolutionDir)\Test.Build.props</SharedImports>
+  </PropertyGroup>-->
+  <Import Project="$(SharedImportsString)" Label="Shared" Condition="'$(SharedImportsString)' != ''" />
+
+  <Target Name="TemplateName2" BeforeTargets="Compile">
+    <PropertyGroup>
+      <SectionSymbol>*</SectionSymbol>
+      <!--<SharedImports Condition="'$(SharedImports)' == ''">@(Imports->'%(Identity)')</SharedImports>-->
+      <!--<SharedImports>$(SharedImports);test;</SharedImports>-->
+    </PropertyGroup>
+
+    <!--<PropertyGroup>
+      <SharedImports>@(Imports)</SharedImports>
+    </PropertyGroup>-->
+
+    <Message Text="| $(SectionString)" Importance="high" />
+    <Message Text="| []==~ $(MSBuildThisFile) ~==[]" Importance="high" />
+    <Message Text="| $(HeaderString)" Importance="high" />
+    <Message Text="| $(SectionSymbol) RootPath: $(RootPath)" Importance="high" />
+    <Message Text="| $(SectionSymbol) SolutionDir: $(SolutionDir)" Importance="high" />
+    <Message Text="| $(SectionSymbol) PrometheusEnabled: $(PrometheusEnabled)" Importance="high" />
+    <Message Text="| $(SectionSymbol) PrometheusAutoLoad: $(PrometheusAutoLoad)" Importance="high" />
+    <Message Text="| $(SectionSymbol) PrometheusPlatformEnabled: $(PrometheusPlatformEnabled)" Importance="high" />
+    <Message Text="| $(SectionSymbol) PrometheusDirectory: $(PrometheusDirectory)" Importance="high" />
+    <Message Text="| $(SectionSymbol) PrometheusProps: $(PrometheusProps)" Importance="high" />
+    <Message Text="| $(SectionSymbol) PrometheusTargets: $(PrometheusTargets)" Importance="high" />
+    <Message Text="| $(SectionSymbol) SharedImports: $(SharedImports)" Importance="high" />
+    <Message Text="| $(SectionSymbol) SharedImportsString: $(SharedImportsString)" Importance="high" />
+    <Message Text="| $(SectionSymbol) Import: %(Imports.Identity)" Importance="high" />
+    <Message Text="| $(SectionSymbol) Import Found: $(Found)" Importance="high" />
+    <Message Text="| $(SectionSymbol) Import Found Target: $(Found2)" Importance="high" />
+
+    <ImportFileTask ImportFiles="@(Imports)"
+                    Condition="'$(PrometheusPlatformEnabled)' == 'true'" />
+  </Target>
+</Project>

@@ -92,7 +92,7 @@ namespace Prometheus.MSBuild.Tests
                        {"Configuration", "Debug"},
                        {"Platform", "AnyCpu"},
                        {"RootPath", solutionDir},
-                       {"SolutionDir", solutionDir},
+                       {"SolutionDir", @$"{solutionDir}\"},
                        {"MSBuildExtensionsPath", extensionsPath},
                        {"MSBuildSDKsPath", sdksPath},
                        {"RoslynTargetsPath", roslynTargetsPath}

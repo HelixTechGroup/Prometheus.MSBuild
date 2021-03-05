@@ -4,6 +4,7 @@
   <PropertyGroup>
     <ProductName>Prometheus.MSBuild.Sdk</ProductName>
     <PackageType>MSBuildSdk</PackageType>
+    <TargetFramework>net5.0</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
     <!-- pack the props files -->
