@@ -5,8 +5,8 @@
 
   <PropertyGroup>
     <ResolveReferencesDependsOn>
-      _SetFirstTimeLoading
       $(ResolveReferencesDependsOn);
+      _SetPrometheusFirstTimeLoading
     </ResolveReferencesDependsOn>
   </PropertyGroup>
   <PropertyGroup>
@@ -41,7 +41,7 @@
     </None>-->
   </ItemGroup>
 
-  <Target Name="_SetFirstTimeLoading">
+  <Target Name="_SetPrometheusFirstTimeLoading">
     <PropertyGroup>
       <FirstTimeLoading>false</FirstTimeLoading>
     </PropertyGroup>
@@ -85,7 +85,7 @@
     <CallTarget Targets="PrintPlatform;PrintPlatformProps;" />
   </Target>
 
-  <Target Name="CopyToLocalNuGetRepo" AfterTargets="Pack" Condition="Exists('$(LocalNugetRepo)')">
+  <Target Name="CopyToLocalNuGetRepo" AfterTargets="Pack" Condition="Exists('$(LocalNugetRepo)') And '$(IsPackable)' == 'true'">
     <PropertyGroup>
       <SectionSymbol>$$</SectionSymbol>
     </PropertyGroup>
@@ -93,6 +93,7 @@
     <Message Text="$~------ Copying NuGet packages to local repo $(LocalNugetRepo) for $(MSBuildProjectName) ------~$" Importance="high" />
     <Message Text="| $(SectionString)" Importance="high" />
 
+    <Error Condition="'$(NugetPackageName)' == ''" Text="NugetPackageName is not set." />
     <Warning Condition="Exists('$(OutputDirectory)\$(NugetPackageName)')  == 'false'" Text="| $(SectionSymbol) Package Does not exist: '$(OutputDirectory)\$(NugetPackageName)'"/>
     <Message Condition="Exists('$(OutputDirectory)\$(NugetPackageName)')" Text="| $(SectionSymbol) Package Location: $(OutputDirectory)\$(NugetPackageName)" Importance="high" />
     <Copy Condition="Exists('$(OutputDirectory)\$(NugetPackageName)') And Exists('$(LocalNugetRepo)')" DestinationFolder="$(LocalNugetRepo)" SourceFiles="$(OutputDirectory)\$(NugetPackageName)"/>
