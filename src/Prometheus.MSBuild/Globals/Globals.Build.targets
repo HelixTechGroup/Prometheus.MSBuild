@@ -19,8 +19,10 @@
   <PropertyGroup Condition="$(SolutionDir) != ''">
     <!--<SolutionDir>$(SolutionDir.TrimEnd('\'))</SolutionDir>-->
     <SourceDirectory>$(SolutionDir)src</SourceDirectory>
-    <OutputDirectory>$(SolutionDir)build\$(Configuration)\$(AssemblyName)</OutputDirectory>
+    <BuildDirectory>$(SolutionDir)build</BuildDirectory>
+    <OutputDirectory>$(BuildDirectory)\$(Configuration)\$(AssemblyName)</OutputDirectory>
     <ThirdPartyDirectory>$(SolutionDir)third-party</ThirdPartyDirectory>
+
     <OutputPath>$(OutputDirectory)</OutputPath>
     <!--<BaseIntermediateOutputPath>$(SolutionDir)\build\obj\$(Configuration)\$(AssemblyName)</BaseIntermediateOutputPath>-->
   </PropertyGroup>

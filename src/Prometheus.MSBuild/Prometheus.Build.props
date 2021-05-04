@@ -4,9 +4,10 @@
     <PrometheusAutoLoad Condition="'$(PrometheusAutoLoad)' == ''">True</PrometheusAutoLoad>
     <PrometheusTasksEnabled Condition="'$(PrometheusTasksEnabled)' == ''">True</PrometheusTasksEnabled>
     <PrometheusPlatformEnabled Condition="'$(PrometheusPlatformEnabled)' == ''">True</PrometheusPlatformEnabled>
+    <PrometheusImporterEnabled Condition="'$(PrometheusImporterEnabled)' == ''">True</PrometheusImporterEnabled>
     <!--<PrometheusPlatformEnabled Condition="'$(PrometheusTasksEnabled)' != 'true'">False</PrometheusPlatformEnabled>-->
-    <ProjectImports Condition="'$(ProjectImports)' == ''"></ProjectImports>
-    <!--<PrometheusDirectory>$([System.IO]::GetDirectoryName(`.\`))</PrometheusDirectory>-->
+    <SourceImportProps Condition="'$(SourceImportProps)' == ''"></SourceImportProps>
+    <PrometheusDirectory Condition="'$(PrometheusDirectory)' == ''">$(MSBuildThisFileDirectory)</PrometheusDirectory>
     <PrometheusGlobalDirectory>$(PrometheusDirectory)\Globals</PrometheusGlobalDirectory>
     <PrometheusGlobalProps>$(PrometheusGlobalDirectory)\Globals.Build.props</PrometheusGlobalProps>
     <PrometheusGlobalTargets>$(PrometheusGlobalDirectory)\Globals.Build.targets</PrometheusGlobalTargets>
@@ -16,8 +17,11 @@
     <PrometheusCommonProps>$(PrometheusCommonDirectory)\Common.Build.props</PrometheusCommonProps>
     <PrometheusImportertargets>$(PrometheusCommonDirectory)\Importer.Build.targets</PrometheusImportertargets>
     <PrometheusPlatformDirectory>$(PrometheusDirectory)\Platform</PrometheusPlatformDirectory>
+    <PrometheusRuntimeProps>$(PrometheusPlatformDirectory)\Runtime.Build.props</PrometheusRuntimeProps>
+    <PrometheusRuntimetargets>$(PrometheusPlatformDirectory)\Runtime.Build.targets</PrometheusRuntimetargets>
     <PrometheusPlatformProps>$(PrometheusPlatformDirectory)\Platform.Build.props</PrometheusPlatformProps>
     <PrometheusPlatformtargets>$(PrometheusPlatformDirectory)\Platform.Build.targets</PrometheusPlatformtargets>
+    <PrometheusDetectPlatformProps>$(PrometheusPlatformDirectory)\Detect.Build.props</PrometheusDetectPlatformProps>
     <PrometheusDetectPlatformTargets>$(PrometheusPlatformDirectory)\Detect.Build.targets</PrometheusDetectPlatformTargets>
     <PrometheusLibDirectory Condition="'$(PrometheusLibDirectory)' == ''">$(PrometheusDirectory)\lib</PrometheusLibDirectory>
     <!--<PrometheusLibDirectory>lib</PrometheusLibDirectory>-->
@@ -32,6 +36,8 @@
 
   <ImportGroup Condition="'$(PrometheusEnabled)' == 'true'">
     <Import Project="$(PrometheusGlobalProps)" Condition="Exists('$(PrometheusGlobalProps)')"/>
+    <Import Project="$(PrometheusDetectPlatformProps)" />
+    <Import Project="$(PrometheusRuntimeProps)" Condition="Exists('$(PrometheusRuntimeProps)')" />
     <Import Project="$(PrometheusPlatformProps)" Condition="Exists('$(PrometheusPlatformProps)') And '$(PrometheusPlatformEnabled)' == 'true'" />
     <Import Project="$(PrometheusCommonProps)" Condition="Exists('$(PrometheusCommonProps)')" />
   </ImportGroup>

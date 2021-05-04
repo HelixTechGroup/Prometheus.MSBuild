@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="..\..\src\Prometheus.MSBuild\Sdk\Sdk.props" />
+  <PropertyGroup>
+    <!--<PrometheusLibDirectory>$(MSBuildProjectDirectory)\lib\Debug\Prometheus.MSBuild.Tasks\net48</PrometheusLibDirectory>-->
+    <PrometheusLibDirectory>D:\Users\Bryan\Documents\Projects\HelixTechGroup\Design\Prometheus\msbuild\tests\lib\Debug\Prometheus.MSBuild.Tasks\net48</PrometheusLibDirectory>
+    <ProductName>Net5.Android.Tests</ProductName>
+    <TargetPlatform>net5.0-android</TargetPlatform>
+    <IsTestProject>True</IsTestProject>
+    <IsLibraryProject>True</IsLibraryProject>
+    <IsPackable>False</IsPackable>
+  </PropertyGroup>
+  <Import Project="..\..\src\Prometheus.MSBuild\Sdk\Sdk.targets" />
+</Project>

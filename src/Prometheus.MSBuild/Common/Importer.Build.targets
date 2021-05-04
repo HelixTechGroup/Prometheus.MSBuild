@@ -1,4 +1,4 @@
-<Project InitialTargets="_RunImporter">
+<Project InitialTargets="_RunImporter" Condition="'$(PrometheusImporterEnabled)' == 'true'">
   <Choose>
     <When Condition="'$(SharedImports)' != ''">
       <PropertyGroup>
@@ -15,7 +15,7 @@
   <!--<Import Project="$(SharedImportsString)" Label="Shared" Condition="'$(SharedImportsString)' != ''"/>-->
   <!--<Import Project="D:\Users\Bryan\Documents\Projects\HelixTechGroup\Design\Prometheus\msbuild\tests\Prometheus.MSBuild.Tests\bin\Debug\netcoreapp3.1\Test.projitems" Label="Shared" />-->
 
-  <PropertyGroup>
+  <PropertyGroup Condition="'$(PrometheusImporterEnabled)' == 'true'">
     <ResolveReferencesDependsOn>
       Import;
       $(ResolveReferencesDependsOn);
@@ -30,7 +30,8 @@
     </CompileDependsOn>
   </PropertyGroup>
 
-  <Target Name="_BeforeReferences" BeforeTargets="ResolveProjectReferences">
+  <Target Name="_BeforeReferences" BeforeTargets="ResolveProjectReferences"
+          Condition="'$(PrometheusImporterEnabled)' == 'true'">
     <CallTarget Targets="_RunImporter" />
   </Target>
 
@@ -38,7 +39,7 @@
     <CallTarget Targets="_RunImporter" />
   </Target>
 
-  <Target Name="_RunImporter">
+  <Target Name="_RunImporter" Condition="'$(PrometheusImporterEnabled)' == 'true'">
     <!--Condition=" '$(FirstTimeLoading)' == 'false' ">-->
     <PropertyGroup>
       <SectionSymbol>*</SectionSymbol>
@@ -65,7 +66,7 @@
     <Message Text="| $(SectionSymbol) SolutionDir: $(SolutionDir)" Importance="high" />
     <Message Text="| $(SectionSymbol) PrometheusEnabled: $(PrometheusEnabled)" Importance="high" />
     <Message Text="| $(SectionSymbol) PrometheusAutoLoad: $(PrometheusAutoLoad)" Importance="high" />
-    <Message Text="| $(SectionSymbol) PrometheusPlatformEnabled: $(PrometheusPlatformEnabled)" Importance="high" />
+    <Message Text="| $(SectionSymbol) PrometheusImporterEnabled: $(PrometheusImporterEnabled)" Importance="high" />
     <Message Text="| $(SectionSymbol) PrometheusDirectory: $(PrometheusDirectory)" Importance="high" />
     <Message Text="| $(SectionSymbol) PrometheusProps: $(PrometheusProps)" Importance="high" />
     <Message Text="| $(SectionSymbol) PrometheusTargets: $(PrometheusTargets)" Importance="high" />

@@ -1,0 +1,34 @@
+<Project InitialTargets="DetectPlatform">
+  <PropertyGroup>
+    <Array>$(TargetPlatform.Split(`-`))</Array>
+    <RuntimeId>$(TargetPlatform.Split(`-`)[0])</RuntimeId>
+    <PlatformId Condition="$(Array.Contains(`;`))">$(TargetPlatform.Split(`-`)[1])</PlatformId>
+  </PropertyGroup>
+
+  <!--<PropertyGroup Condition=" '$(TargetPlatform)' != '' ">
+    <HasWindows>$(PlatformId.Contains(`windows`))</HasWindows>
+    <HasAndroid>$(PlatformId.Contains(`android`))</HasAndroid>
+    <HasLinux>$(PlatformId.Contains(`linux`))</HasLinux>
+    <HasXamarin>$(RuntimeId.Contains(`xamarin`))</HasXamarin>
+  </PropertyGroup>-->
+
+  <!--<PropertyGroup>
+    <PlatformPropsPath>$(PrometheusPlatformDirectory)\$(PlatformId)\Platform.Build.props</PlatformPropsPath>
+    <PlatformTargetsPath>$(PrometheusPlatformDirectory)\$(PlatformId)\Platform.Build.targets</PlatformTargetsPath>
+  </PropertyGroup>-->
+
+  <!--<Import Project="$(PlatformPropsPath)" />-->
+
+  <Target Name="DetectPlatform">
+    <PropertyGroup>
+      <SectionSymbol>%</SectionSymbol>
+    </PropertyGroup>
+
+    <Message Text="| $(SectionString)" Importance="high" />
+    <Message Text="| []==~ $(MSBuildThisFile) ~==[]" Importance="high" />
+    <Message Text="| $(HeaderString)" Importance="high" />
+
+    <LogPropertyTask ProjectFiles="$(MSBuildThisFileFullPath)" SectionSymbol="$(SectionSymbol)"
+                     Condition="'$(PrometheusTasksEnabled)' == 'true'" />
+  </Target>
+</Project>

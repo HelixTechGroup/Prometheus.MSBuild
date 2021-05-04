@@ -5,6 +5,15 @@
       <PlatformType>None</PlatformType>
       <TargetFramework>$(RuntimeId)</TargetFramework>
     </PropertyGroup>
+
+    <PropertyGroup Condition=" '$(RuntimeId.Contains(`netcore`))' == 'true'">
+      <TargetFramework>netcoreapp3.1</TargetFramework>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(RuntimeId.Contains(`netstandard`))' == 'true'">
+      <TargetFramework>netstandard2.1</TargetFramework>
+    </PropertyGroup>
+
     <Message Text="| $(SectionSymbol) > RuntimeId: $(RuntimeId)" Importance="high" />
     <Message Text="| $(SectionSymbol) > Setting PlatformId for Default::$(PlatformId)" Importance="high" />
     <Message Text="| $(SectionSymbol) > TargetFramework: $(TargetFramework)" Importance="high" />

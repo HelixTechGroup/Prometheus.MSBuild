@@ -61,23 +61,13 @@
     </DetectPlatformTask>-->
 
     <PropertyGroup Condition=" '$(TargetPlatform)' != '' ">
-      <HasWindows>$(PlatformId.Contains(`windows`))</HasWindows>
-      <HasAndroid>$(PlatformId.Contains(`android`))</HasAndroid>
-      <HasLinux>$(PlatformId.Contains(`linux`))</HasLinux>
-      <HasXamarin>$(RuntimeId.Contains(`xamarin`))</HasXamarin>
+      <HasWindows>$(TargetPlatform.Contains(`windows`))</HasWindows>
+      <HasAndroid>$(TargetPlatform.Contains(`android`))</HasAndroid>
+      <HasLinux>$(TargetPlatform.Contains(`linux`))</HasLinux>
+      <HasXamarin>$(TargetPlatform.Contains(`xamarin`))</HasXamarin>
     </PropertyGroup>
 
-    <!--<PropertyGroup Condition=" '$(RuntimeId.Contains(`netcore`))' == 'true'">
-      <TargetFramework>netcoreapp3.1</TargetFramework>
-    </PropertyGroup>-->
-
-    <PropertyGroup Condition="'$(RuntimeId.Contains(`netstandard`))' == 'true'">
-      <TargetFramework>netstandard2.1</TargetFramework>
-    </PropertyGroup>
-
-    <PropertyGroup Condition="'$(PlatformId)' == 'none'">
-      <TargetFramework>$(RuntimeId)</TargetFramework>
-    </PropertyGroup>
+    
 
     <ItemGroup Condition="'$(TargetFrameworks)' != ''">
       <TFramworks Include="$(Targetframeworks.Split(`;`))" />

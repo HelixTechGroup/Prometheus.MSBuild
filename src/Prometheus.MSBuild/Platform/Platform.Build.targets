@@ -8,6 +8,12 @@
 
   <!--$(MSBuildProjectFullPath)-->
 
+  <PropertyGroup>
+    <PlatformPropsPath>$(PrometheusPlatformDirectory)\$(PlatformId)\Platform.Build.Props</PlatformPropsPath>
+    <PlatformTargetsPath>$(PrometheusPlatformDirectory)\$(PlatformId)\Platform.Build.Targets</PlatformTargetsPath>
+  </PropertyGroup>
+  <Import Project="$(PlatformPropsPath)" />
+
   <Target Name="PrintPrometheusPlatform2">
     <PropertyGroup>
       <SectionSymbol>@</SectionSymbol>
@@ -15,24 +21,20 @@
       <PlatformId>%(TFArray.Identity)</PlatformId>-->
     </PropertyGroup>
 
-    <!--<PropertyGroup Condition=" '$(TargetPlatform)' != '' ">
+    <PropertyGroup Condition=" '$(TargetPlatform)' != '' ">
       <HasWindows>$(PlatformId.Contains(`windows`))</HasWindows>
       <HasAndroid>$(PlatformId.Contains(`android`))</HasAndroid>
       <HasLinux>$(PlatformId.Contains(`linux`))</HasLinux>
       <HasXamarin>$(RuntimeId.Contains(`xamarin`))</HasXamarin>
-    </PropertyGroup>-->
+    </PropertyGroup>
 
-    <PropertyGroup Condition=" '$(RuntimeId.Contains(`netcore`))' == 'true'">
+    <!--<PropertyGroup Condition=" '$(RuntimeId.Contains(`netcore`))' == 'true'">
       <TargetFramework>netcoreapp3.1</TargetFramework>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(RuntimeId.Contains(`netstandard`))' == 'true'">
       <TargetFramework>netstandard2.1</TargetFramework>
-    </PropertyGroup>
-
-    <PropertyGroup Condition="'$(PlatformId)' == 'none'">
-      <TargetFramework>$(RuntimeId)</TargetFramework>
-    </PropertyGroup>
+    </PropertyGroup>-->
 
     <ItemGroup Condition="'$(TargetFrameworks)' != ''">
       <TFramworks Include="$(Targetframeworks.Split(`;`))"/>
@@ -47,6 +49,7 @@
       <PlatformTargetsPath>$(PrometheusPlatformDirectory)\$(PlatformId)\Platform.Build.Targets</PlatformTargetsPath>
     </PropertyGroup>
 
+    <CallTarget Targets="$(PlatformId)" Condition="Exists('$(PlatformPropsPath)')" />
     <!--<PropertyGroup Condition="'$(HasWindows)' == 'true'">
       <PlatformProps>Windows</PlatformProps>
     </PropertyGroup>

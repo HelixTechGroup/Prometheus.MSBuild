@@ -6,13 +6,14 @@
     <!--<SolutionDir>$(SolutionDir.TrimEnd('\'))</SolutionDir>-->
     <SourceDirectory Condition=" '$(SourceDirectory)' == '' ">$(SolutionDir)src</SourceDirectory>
     <ThirdPartyDirectory Condition=" '$(ThirdPartyDirectory)' == '' ">$(SolutionDir)third-party</ThirdPartyDirectory>
+    <BuildDirectory Condition="'$(BuildDirectory)' == ''">$(SolutionDir)build</BuildDirectory>
     <!--<PrometheusDirectory Condition=" '$(PrometheusDirectory)' == '' ">$(PrometheusDirectory)\Prometheus</PrometheusDirectory>-->
-    <OutputDirectory Condition="'$(OutputDirectory)' == ''">$(SolutionDir)build\$(Configuration)\$(AssemblyName)</OutputDirectory>
+    <OutputDirectory Condition="'$(OutputDirectory)' == ''">$(BuildDirectory)\$(Configuration)\$(AssemblyName)</OutputDirectory>
     <OutputPath Condition=" '$(OutputPath)' == '' ">$(OutputDirectory)</OutputPath>
     <!--<BaseIntermediateOutputPath>$(SolutionDir)\build\obj\$(Configuration)\$(AssemblyName)</BaseIntermediateOutputPath>-->
     <SolutionProps Condition=" '$(SolutionProps)' == '' ">$(SolutionDir)Solution.Build.props</SolutionProps>
     <UserProps Condition=" '$(UserProps)' == '' ">$(SolutionDir)User.Build.props</UserProps>
-    <DefaultImportProps Condition="'$(DefaultImportProps)' == ''">$(SolutionDir)Imports.Build.props</DefaultImportProps>
+    <SolutionImportProps Condition="'$(SolutionImportProps)' == ''">$(SolutionDir)Imports.Build.props</SolutionImportProps>
   </PropertyGroup>
   <PropertyGroup>
     <ProductName Condition=" '$(ProductName)' == '' ">My Application</ProductName>
@@ -28,7 +29,7 @@
     <IsPackable Condition="'$(IsPackable)' == ''">False</IsPackable>
     <EnableNETAnalyzers Condition="'$(EnableNETAnalyzers)' == ''">true</EnableNETAnalyzers>
     <SetupCompleted Condition=" '$(SetupCompleted)' == '' ">False</SetupCompleted>
-    <TargetPlatform Condition=" '$(TargetPlatform)' == '' ">net5.0-none</TargetPlatform>
+    <TargetPlatform Condition=" '$(TargetPlatform)' == '' ">net5.0</TargetPlatform>
     <PlatformId Condition=" '$(PlatformId)' == '' ">None</PlatformId>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>

@@ -6,9 +6,9 @@
     <Rendering>True</Rendering>
     <TargetFramework Condition="'$(TargetPlatform.Contains(`net5.0`))' == 'true'">net5.0-windows</TargetFramework>
   </PropertyGroup>
-  <ItemGroup>
+  <!--<ItemGroup>
     <PackageReference Include="Microsoft.Win32.Registry" Version="5.0.0" />
-  </ItemGroup>
+  </ItemGroup>-->
 
   <Target Name="Windows">
     <Message Text="| $(SectionSymbol) > Setting PlatformId for Windows::$(PlatformId)" Importance="high" />

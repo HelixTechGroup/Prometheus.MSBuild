@@ -1,25 +1,25 @@
-<Project InitialTargets="DetectPlatform">
+<Project InitialTargets="DetectPlatform2">
   <PropertyGroup>
     <Array>$(TargetPlatform.Split(`-`))</Array>
     <RuntimeId>$(TargetPlatform.Split(`-`)[0])</RuntimeId>
     <PlatformId Condition="$(Array.Contains(`;`))">$(TargetPlatform.Split(`-`)[1])</PlatformId>
   </PropertyGroup>
 
-  <PropertyGroup Condition=" '$(TargetPlatform)' != '' ">
+  <!--<PropertyGroup Condition=" '$(TargetPlatform)' != '' ">
     <HasWindows>$(PlatformId.Contains(`windows`))</HasWindows>
     <HasAndroid>$(PlatformId.Contains(`android`))</HasAndroid>
     <HasLinux>$(PlatformId.Contains(`linux`))</HasLinux>
     <HasXamarin>$(RuntimeId.Contains(`xamarin`))</HasXamarin>
-  </PropertyGroup>
+  </PropertyGroup>-->
 
-  <PropertyGroup>
-    <PlatformPropsPath>$(PrometheusPlatformDirectory)\$(PlatformId)\Platform.Build.Props</PlatformPropsPath>
-    <PlatformTargetsPath>$(PrometheusPlatformDirectory)\$(PlatformId)\Platform.Build.Targets</PlatformTargetsPath>
-  </PropertyGroup>
+  <!--<PropertyGroup>
+    <PlatformPropsPath>$(PrometheusPlatformDirectory)\$(PlatformId)\Platform.Build.props</PlatformPropsPath>
+    <PlatformTargetsPath>$(PrometheusPlatformDirectory)\$(PlatformId)\Platform.Build.targets</PlatformTargetsPath>
+  </PropertyGroup>-->
 
-  <Import Project="$(PlatformPropsPath)" />
+  <!--<Import Project="$(PlatformPropsPath)" />-->
 
-  <Target Name="DetectPlatform">
+  <Target Name="DetectPlatform2">
     <Message Text="| $(SectionString)" Importance="high" />
     <Message Text="| []==~ $(MSBuildThisFile) ~==[]" Importance="high" />
     <Message Text="| $(HeaderString)" Importance="high" />
@@ -37,13 +37,21 @@
       <Output TaskParameter="PlatformId" PropertyName="PlatformId" />
     </DetectPlatformTask>
 
-    <PropertyGroup Condition=" '$(TargetPlatform)' != '' ">
+    <!--<PropertyGroup Condition=" '$(TargetPlatform)' != '' ">
       <HasWindows>$(PlatformId.Contains(`windows`))</HasWindows>
       <HasAndroid>$(PlatformId.Contains(`android`))</HasAndroid>
       <HasLinux>$(PlatformId.Contains(`linux`))</HasLinux>
       <HasXamarin>$(RuntimeId.Contains(`xamarin`))</HasXamarin>
     </PropertyGroup>
 
-    <CallTarget Targets="$(PlatformId)" Condition="Exists('$(PlatformPropsPath)')" />
+    <CallTarget Targets="$(PlatformId)" Condition="Exists('$(PlatformPropsPath)')" />-->
+
+    <!--<PropertyGroup Condition=" '$(RuntimeId.Contains(`netcore`))' == 'true'">
+      <TargetFramework>netcoreapp3.1</TargetFramework>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(RuntimeId.Contains(`netstandard`))' == 'true'">
+      <TargetFramework>netstandard2.1</TargetFramework>
+    </PropertyGroup>-->
   </Target>
 </Project>

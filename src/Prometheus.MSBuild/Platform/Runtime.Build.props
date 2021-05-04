@@ -1,0 +1,17 @@
+<Project InitialTargets="PrintPrometheusRuntime">
+  <PropertyGroup Condition=" '$(RuntimeId.Contains(`netcore`))' == 'true'">
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(RuntimeId.Contains(`netstandard`))' == 'true'">
+    <TargetFramework>netstandard2.1</TargetFramework>
+  </PropertyGroup>
+
+  <Target Name="PrintPrometheusRuntime">
+    <Message Text="| $(SectionString)" Importance="high" />
+    <Message Text="| []==~ $(MSBuildThisFile) ~==[]" Importance="high" />
+    <Message Text="| $(HeaderString)" Importance="high" />
+
+    <Message Text="| $(SectionSymbol) RuntimeId: $(RuntimeId)" Importance="high" />
+  </Target>
+</Project>

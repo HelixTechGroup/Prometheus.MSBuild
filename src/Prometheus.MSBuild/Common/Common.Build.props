@@ -12,12 +12,12 @@
   </Target>-->
 
   <!--<PropertyGroup>
-    <DefaultImportProps Condition="'$(DefaultImportProps)' == ''">$(SolutionDir)\Imports.Build.props</DefaultImportProps>
-    <ProjectImports Condition="'$(ProjectImports)' == ''">$(SourceDirectory)\Imports.Build.props</ProjectImports>
+    <SolutionImportProps Condition="'$(SolutionImportProps)' == ''">$(SolutionDir)\Imports.Build.props</SolutionImportProps>
+    <SourceImportProps Condition="'$(SourceImportProps)' == ''">$(SourceDirectory)\Imports.Build.props</SourceImportProps>
   </PropertyGroup>-->
 
-  <!--<Import Project="$(DefaultImportProps)" Condition="Exists($(DefaultImportProps))" />
-  <Import Project="$(ProjectImports)" Condition="Exists('$(ProjectImports)')" />-->
+  <!--<Import Project="$(SolutionImportProps)" Condition="Exists($(SolutionImportProps))" />
+  <Import Project="$(SourceImportProps)" Condition="Exists('$(SourceImportProps)')" />-->
 
   <PropertyGroup>
     <PropsImported>True</PropsImported>
@@ -30,7 +30,7 @@
     <Message Text="| $(SectionString)" Importance="high" />
     <Message Text="| []==~ $(MSBuildThisFile) ~==[]" Importance="high" />
     <Message Text="| $(HeaderString)" Importance="high" />
-    <Message Text="| $(SectionSymbol) DefaultImportProps: $(DefaultImportProps)" Importance="high" />
-    <Message Text="| $(SectionSymbol) ProjectImports: $(ProjectImports)" Importance="high" />
+    <Message Text="| $(SectionSymbol) SolutionImportProps: $(SolutionImportProps)" Importance="high" />
+    <Message Text="| $(SectionSymbol) SourceImportProps: $(SourceImportProps)" Importance="high" />
   </Target>
 </Project>

@@ -10,12 +10,12 @@
     </ResolveReferencesDependsOn>
   </PropertyGroup>
   <PropertyGroup>
-    <DefaultImportProps>$(SolutionDir)\Imports.Build.props</DefaultImportProps>
-    <ProjectImports>$(SourceDirectory)\Imports.Build.props</ProjectImports>
+    <SolutionImportProps>$(SolutionDir)\Imports.Build.props</SolutionImportProps>
+    <SourceImportProps>$(SourceDirectory)\Imports.Build.props</SourceImportProps>
   </PropertyGroup>
 
-  <Import Project="$(DefaultImportProps)" Condition="Exists('$(DefaultImportProps)')" />
-  <Import Project="$(ProjectImports)" Condition="Exists('$(ProjectImports)')" />
+  <Import Project="$(SolutionImportProps)" Condition="Exists('$(SolutionImportProps)')" />
+  <Import Project="$(SourceImportProps)" Condition="Exists('$(SourceImportProps)') And $(MSBuildProjectFullPath.Contains('$(SourceDirectory)'))" />
   <!--<Import Project="$(SharedImports)" Condition="'$(SharedImports)' != ''" Label="Shared" />-->
 
   <ItemGroup Condition="$(MergeBinary) == 'true'">
@@ -229,7 +229,7 @@
   </Target>-->
 
   <Target Name="ImportsNotExist">
-    <Message Text="| $(SectionSymbol) > !!!PrintProjectImports!!!" />
+    <Message Text="| $(SectionSymbol) > !!!PrintSourceImportProps!!!" />
   </Target>
 
   <Choose>
@@ -253,7 +253,7 @@
     <CallTarget Targets="Register" />
   </Target>
 
-  <!--<Target Name="PrintProjectImports">
+  <!--<Target Name="PrintSourceImportProps">
     <Message Importance="high" Text="$~~~~~~~ | $(SectionSymbol) Importing Support projitems ~~~~~~~$" />
   </Target>-->
   <Target Name="PrintPrometheusCommon2" Outputs="$(Imports)">
@@ -263,8 +263,8 @@
 
     <Message Text="| $(SectionSymbol) []==~ $(MSBuildThisFile) ~==[]" Importance="high" />
     <Message Text="| $(SectionSymbol) ---------------------------------------" Importance="high" />
-    <Message Text="| $(SectionSymbol) DefaultImportProps: $(DefaultImportProps)" Importance="high" />
-    <Message Text="| $(SectionSymbol) ProjectImports: $(ProjectImports)" Importance="high" />
+    <Message Text="| $(SectionSymbol) SolutionImportProps: $(SolutionImportProps)" Importance="high" />
+    <Message Text="| $(SectionSymbol) SourceImportProps: $(SourceImportProps)" Importance="high" />
 
     <!--<PropertyGroup>
       <SharedImports>@(Imports->'%(Identity)')</SharedImports>
