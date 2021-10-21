@@ -1,16 +1,16 @@
 <Project InitialTargets="CopyTasksToLib">
   <PropertyGroup>
     <SectionSymbol>@</SectionSymbol>
-    <TargetFrameworks>net40;net5.0;netcoreapp3.1;netstandard2.1</TargetFrameworks>
-    <!--<TargetFramework>net5.0;monoandroid90</TargetFramework>-->
+    <TargetFrameworks>net6.0;net5.0;netcoreapp3.1;netstandard2.1;net40;</TargetFrameworks>
+    <!--<TargetFramework>net5.0;monoandroid90;net40;net5.0;netcoreapp3.1;netstandard2.1;</TargetFramework>-->
     <IsProjectReferenceProvider>false</IsProjectReferenceProvider>
     <LocalNugetRepo>D:\Users\Bryan\Documents\Projects\HelixTechGroup\local-nuget</LocalNugetRepo>
     <PackageOnlyBuild>true</PackageOnlyBuild>
     <IsLibraryProject>true</IsLibraryProject>
     <IsPackageOnlyProject>true</IsPackageOnlyProject>
     <DevelopmentDependency>true</DevelopmentDependency>
-    <Description>Provides the ability to centrally manage your NuGet package versions when using PackageReference.</Description>
-    <PackageTags>MSBuild MSBuildSdk</PackageTags>
+    <Description>The Prometheus Framework is a set of msbuild targets and properties that automate the creation of creation of cross-platform or platform specific projects</Description>
+    <PackageTags>MSBuild MSBuildSdk android windows linux cross-platform dotnet build-tool build-tools crossplatform msbuild-sdk msbuild-tasks</PackageTags>
     <ArtifactsPath>$(BaseArtifactsPath)\$(MSBuildProjectName)\</ArtifactsPath>
     <IncludeBuildOutput>false</IncludeBuildOutput>
     <BuildPackage>true</BuildPackage>
@@ -24,7 +24,7 @@
   <PropertyGroup>
     <CompanyName>HelixTechGroup,llc</CompanyName>
     <AuthorName>Bryan M. Longacre</AuthorName>
-    <ProductVersion>0.0.1</ProductVersion>
+    <ProductVersion>0.1.0</ProductVersion>
   </PropertyGroup>
 
   <ItemGroup>

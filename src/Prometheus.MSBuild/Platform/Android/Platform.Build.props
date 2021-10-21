@@ -6,7 +6,7 @@
     <TargetFramework></TargetFramework>
   </PropertyGroup>
   <PropertyGroup Condition="'$(HasXamarin)' != 'true'">
-    <TargetFramework>net5.0-android</TargetFramework>
+    <TargetFramework>$(RuntimeId)-android</TargetFramework>
   </PropertyGroup>
   <PropertyGroup>
     <PlatformId>Android</PlatformId>
@@ -39,13 +39,13 @@
     <PackageReference Include="Xamarin.AndroidX.Migration" Version="1.0.8" Condition="'$(UseAndroidX)' == 'true'"/>
   </ItemGroup>
   <!--<Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />-->
-  <ItemGroup>
+  <ItemGroup Condition="'$(RuntimeId)' == 'net5.0'">
     <None Include="packages.config" />
     <None Include="Resources\AboutResources.txt" />
     <None Include="Properties\AndroidManifest.xml" />
     <None Include="Assets\AboutAssets.txt" />
   </ItemGroup>
-  <ItemGroup>
+  <ItemGroup Condition="'$(RuntimeId)' == 'net5.0'">
     <AndroidResource Include="Resources\values\strings.xml" />
     <Folder Include="Resources\drawable\" />
   </ItemGroup>

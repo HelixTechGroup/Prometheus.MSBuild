@@ -1,6 +1,6 @@
 
 <p align="center">
-    <img src="https://placeholder.pics/svg/500x200/DEDEDE/555555/Project%20Name"
+    <img src="https://placeholder.pics/svg/500x200/DEDEDE/555555/Prometheus%20Framework"
         height="130">
 </p>
 <p align="center">
@@ -19,6 +19,8 @@
       <a href="#">
 	      <img src="https://img.shields.io/github/release-date/%USER%/%ProjectName%?label=last release date"></a>
 </p>
+
+The Prometheus Framework is a set of msbuild targets and properties that automate the creation of creation of cross-platform or platform specific projects
 
  * [Build Status](#build-status)
  * [Supported Platforms](#supported-platforms)
@@ -40,44 +42,26 @@
  
  ## Build Status
 
-Our [build server](%BUILDSERVER%) builds, tests, and packages the latest MonoGame changes.  The table below shows the current build status for the develop branch.
+Our [build server](%BUILDSERVER%) builds, tests, and packages the latest Prometheus Framework changes.  The table below shows the current build status for the develop branch.
 
 | Name  | Status |
 |:---|--------|
-| Build Windows, Web, and Android | [![Build Status](http://teamcity.monogame.net/app/rest/builds/buildType:MonoGame_DevelopWin/statusIcon)](http://teamcity.monogame.net/viewType.html?buildTypeId=MonoGame_DevelopWin&guest=1) |
-| Build Mac, iOS, and Linux | [![Build Status](http://teamcity.monogame.net/app/rest/builds/buildType:MonoGame_DevelopMac/statusIcon)](http://teamcity.monogame.net/viewType.html?buildTypeId=MonoGame_DevelopMac&guest=1) |
-| Generate Documentation | [![Build Status](http://teamcity.monogame.net/app/rest/builds/buildType:MonoGame_GenerateDocumentation/statusIcon)](http://teamcity.monogame.net/viewType.html?buildTypeId=MonoGame_GenerateDocumentation&guest=1) |
-| Windows Tests | [![Build Status](http://teamcity.monogame.net/app/rest/builds/buildType:MonoGame_TestWindows/statusIcon)](http://teamcity.monogame.net/viewType.html?buildTypeId=MonoGame_TestWindows&guest=1) |
-| Package NuGet | [![Build Status](http://teamcity.monogame.net/app/rest/builds/buildType:MonoGame_PackageNuGet/statusIcon)](http://teamcity.monogame.net/viewType.html?buildTypeId=MonoGame_PackageNuGet&guest=1) |
-| Package Mac and Linux | [![Build Status](http://teamcity.monogame.net/app/rest/builds/buildType:MonoGame_PackageMacAndLinux/statusIcon)](http://teamcity.monogame.net/viewType.html?buildTypeId=MonoGame_PackageMacAndLinux&guest=1) |
-| Package Windows | [![Build Status](http://teamcity.monogame.net/app/rest/builds/buildType:MonoGame_PackagingWindows/statusIcon)](http://teamcity.monogame.net/viewType.html?buildTypeId=MonoGame_PackagingWindows&guest=1) |
-
 
 ## Supported Platforms
 
 We support a growing list of platforms across the desktop, mobile, and console space.  If there is a platform we don't support, please [make a request](https://github.com/MonoGame/MonoGame/issues) or [come help us](CONTRIBUTING.md) add it.
 
  * Desktop PCs
-   * Windows 10 Store Apps (UWP)
-   * Windows Win32 (OpenGL & DirectX)
-   * Linux (OpenGL)
-   * Mac OS X (OpenGL)
+   * Windows Win32 (.Net4.8, .Netstandard2.1, .Netcore3.1, .Net5.0)
+   * Linux (.Netstandard2.1, .Netcore3.1, .Net5.0)
  * Mobile/Tablet Devices
-   * Android (OpenGL)
-   * iPhone/iPad (OpenGL)
-   * Windows Phone 10 (UWP)
- * Consoles (for registered developers)
-   * PlayStation 4
-   * PlayStation Vita
-   * Xbox One (both UWP and XDK)
-   * Nintendo Switch
- * Other
-   * tvOS (OpenGL)
+   * Android (Xamarin, .Net5.0)
 
 The included sandboxes show a default/empty application for each platform
 
 ### Prerequisites
-* To-do
+* MSBuild >= 16.0
+* .Net == 4.8
 
 ## Installation
 

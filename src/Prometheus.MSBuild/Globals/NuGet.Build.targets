@@ -28,6 +28,7 @@
     <Message Text="| $(SectionSymbol) PublishRepositoryUrl: $(PublishRepositoryUrl)" Importance="high" />
     <Message Text="| $(SectionSymbol) EmbedUntrackedSources: $(EmbedUntrackedSources)" Importance="high" />
     <Message Text="| $(SectionSymbol) UseGitHub: $(UseGitHub)" Importance="high" />
+    <Message Text="| $(SectionSymbol) PackageTags: $(PackageTags)" Importance="high" />
     <Message Text="| $(SectionSymbol) ---------------------------------------" Importance="high" />
   </Target>
 </Project>

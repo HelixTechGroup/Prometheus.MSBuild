@@ -14,7 +14,7 @@ namespace Net5.Android.Tests
 {
 	
 	
-	[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Xamarin.Android.Build.Tasks", "1.0.0.0")]
+	[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Xamarin.Android.Build.Tasks", "12.1.0.10")]
 	public partial class Resource
 	{
 		
@@ -40,10 +40,10 @@ namespace Net5.Android.Tests
 		{
 			
 			// aapt resource value: 0x7F010000
-			public static int app_name = 2130771968;
+			public static int action_settings = 2130771968;
 			
 			// aapt resource value: 0x7F010001
-			public static int hello = 2130771969;
+			public static int app_name = 2130771969;
 			
 			static String()
 			{

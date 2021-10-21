@@ -8,6 +8,7 @@
     <SymbolPackageFormat Condition="'$(SymbolPackageFormat)' == ''">snupkg</SymbolPackageFormat>
     <Deterministic Condition="'$(Deterministic)' == ''">true</Deterministic>
     <NuspecDirectory Condition=" '$(NuspecDirectory)' == '' ">$(SolutionDir)nuspecs</NuspecDirectory>
+    <!--<PackageTags></PackageTags>-->
   </PropertyGroup>
 
   <Import Project="$(PrometheusGlobalDirectory)\GitHub.Build.props" Condition="'$(UseGitHub)' == 'true'" />
@@ -27,6 +28,7 @@
     <Message Text="| $(SectionSymbol) PublishRepositoryUrl: $(PublishRepositoryUrl)" Importance="high" />
     <Message Text="| $(SectionSymbol) EmbedUntrackedSources: $(EmbedUntrackedSources)" Importance="high" />
     <Message Text="| $(SectionSymbol) UseGitHub: $(UseGitHub)" Importance="high" />
+    <Message Text="| $(SectionSymbol) PackageTags: $(PackageTags)" Importance="high" />
     <Message Text="| $(SectionSymbol) ---------------------------------------" Importance="high" />
   </Target>
 </Project>

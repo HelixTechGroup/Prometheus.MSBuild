@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.30717.126
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31815.197
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Source", "Source", "{1728676C-93E2-4709-9457-F6C7F598CF4C}"
 	ProjectSection(SolutionItems) = preProject
@@ -48,7 +48,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Packages", "Packages", "{A0
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Net5.Android.Tests", "tests\Net5.Android.Tests\Net5.Android.Tests.csproj", "{94D18088-490B-41E6-A40A-FE1217D8C5A2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetCore.Windows.Tests", "tests\NetCore.Windows.Tests\NetCore.Windows.Tests.csproj", "{42CB1054-35A6-46E2-8A78-6590FEBBFEA5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NetCore.Windows.Tests", "tests\NetCore.Windows.Tests\NetCore.Windows.Tests.csproj", "{42CB1054-35A6-46E2-8A78-6590FEBBFEA5}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Net6.Android.Tests", "tests\Net6.Android.Tests\Net6.Android.Tests.csproj", "{6CFBC760-02CB-46C3-901B-1BB4626E49B2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -202,6 +204,26 @@ Global
 		{42CB1054-35A6-46E2-8A78-6590FEBBFEA5}.Release-MONO|Any CPU.Build.0 = Release|Any CPU
 		{42CB1054-35A6-46E2-8A78-6590FEBBFEA5}.Release-MONO|x64.ActiveCfg = Release|Any CPU
 		{42CB1054-35A6-46E2-8A78-6590FEBBFEA5}.Release-MONO|x64.Build.0 = Release|Any CPU
+		{6CFBC760-02CB-46C3-901B-1BB4626E49B2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6CFBC760-02CB-46C3-901B-1BB4626E49B2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6CFBC760-02CB-46C3-901B-1BB4626E49B2}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{6CFBC760-02CB-46C3-901B-1BB4626E49B2}.Debug|x64.Build.0 = Debug|Any CPU
+		{6CFBC760-02CB-46C3-901B-1BB4626E49B2}.Debug-MONO|Any CPU.ActiveCfg = Debug|Any CPU
+		{6CFBC760-02CB-46C3-901B-1BB4626E49B2}.Debug-MONO|Any CPU.Build.0 = Debug|Any CPU
+		{6CFBC760-02CB-46C3-901B-1BB4626E49B2}.Debug-MONO|x64.ActiveCfg = Debug|Any CPU
+		{6CFBC760-02CB-46C3-901B-1BB4626E49B2}.Debug-MONO|x64.Build.0 = Debug|Any CPU
+		{6CFBC760-02CB-46C3-901B-1BB4626E49B2}.MachineIndependent|Any CPU.ActiveCfg = Debug|Any CPU
+		{6CFBC760-02CB-46C3-901B-1BB4626E49B2}.MachineIndependent|Any CPU.Build.0 = Debug|Any CPU
+		{6CFBC760-02CB-46C3-901B-1BB4626E49B2}.MachineIndependent|x64.ActiveCfg = Debug|Any CPU
+		{6CFBC760-02CB-46C3-901B-1BB4626E49B2}.MachineIndependent|x64.Build.0 = Debug|Any CPU
+		{6CFBC760-02CB-46C3-901B-1BB4626E49B2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6CFBC760-02CB-46C3-901B-1BB4626E49B2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6CFBC760-02CB-46C3-901B-1BB4626E49B2}.Release|x64.ActiveCfg = Release|Any CPU
+		{6CFBC760-02CB-46C3-901B-1BB4626E49B2}.Release|x64.Build.0 = Release|Any CPU
+		{6CFBC760-02CB-46C3-901B-1BB4626E49B2}.Release-MONO|Any CPU.ActiveCfg = Release|Any CPU
+		{6CFBC760-02CB-46C3-901B-1BB4626E49B2}.Release-MONO|Any CPU.Build.0 = Release|Any CPU
+		{6CFBC760-02CB-46C3-901B-1BB4626E49B2}.Release-MONO|x64.ActiveCfg = Release|Any CPU
+		{6CFBC760-02CB-46C3-901B-1BB4626E49B2}.Release-MONO|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -214,6 +236,7 @@ Global
 		{0237A653-1DF4-40B6-B407-972C01D79127} = {201ABF3E-4DEE-430F-A115-B6FF5ACA85AC}
 		{94D18088-490B-41E6-A40A-FE1217D8C5A2} = {201ABF3E-4DEE-430F-A115-B6FF5ACA85AC}
 		{42CB1054-35A6-46E2-8A78-6590FEBBFEA5} = {201ABF3E-4DEE-430F-A115-B6FF5ACA85AC}
+		{6CFBC760-02CB-46C3-901B-1BB4626E49B2} = {201ABF3E-4DEE-430F-A115-B6FF5ACA85AC}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {1C3B7AFA-2A1C-4272-B7BE-E97A117839FE}
