@@ -10,11 +10,13 @@
     <!--<PrometheusDirectory Condition=" '$(PrometheusDirectory)' == '' ">$(PrometheusDirectory)\Prometheus</PrometheusDirectory>-->
     <OutputDirectory Condition="'$(OutputDirectory)' == ''">$(BuildDirectory)\$(Configuration)\$(AssemblyName)</OutputDirectory>
     <OutputPath Condition=" '$(OutputPath)' == '' ">$(OutputDirectory)</OutputPath>
+    <TestsDirectory Condition="'$(TestsDirectory)' == ''">$(SolutionDir)tests</TestsDirectory>
     <!--<BaseIntermediateOutputPath>$(SolutionDir)\build\obj\$(Configuration)\$(AssemblyName)</BaseIntermediateOutputPath>-->
     <SolutionProps Condition=" '$(SolutionProps)' == '' ">$(SolutionDir)Solution.Build.props</SolutionProps>
     <UserProps Condition=" '$(UserProps)' == '' ">$(SolutionDir)User.Build.props</UserProps>
     <SolutionImportProps Condition="'$(SolutionImportProps)' == ''">$(SolutionDir)Imports.Build.props</SolutionImportProps>
   </PropertyGroup>
+  
   <PropertyGroup>
     <ProductName Condition=" '$(ProductName)' == '' ">My Application</ProductName>
     <CompanyName Condition=" '$(CompanyName)' == '' ">My Company</CompanyName>
@@ -27,15 +29,16 @@
     <UseGitHub Condition="'$(UseGitHub)' == ''">False</UseGitHub>
     <FirstTimeLoading Condition=" '$(FirstTimeLoading)' == '' ">True</FirstTimeLoading>
     <IsPackable Condition="'$(IsPackable)' == ''">False</IsPackable>
-    <EnableNETAnalyzers Condition="'$(EnableNETAnalyzers)' == ''">true</EnableNETAnalyzers>
+    <EnableNETAnalyzers Condition="'$(EnableNETAnalyzers)' == ''">True</EnableNETAnalyzers>
     <SetupCompleted Condition=" '$(SetupCompleted)' == '' ">False</SetupCompleted>
-    <TargetPlatform Condition=" '$(TargetPlatform)' == '' ">net5.0</TargetPlatform>
+    <TargetPlatform Condition=" '$(TargetPlatform)' == '' And '$(TargetPlatforms)' != ''">net6.0</TargetPlatform>
     <PlatformId Condition=" '$(PlatformId)' == '' ">None</PlatformId>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <Description Condition="'$(Description)' == ''">Description</Description>
     <IsPackageOnlyProject Condition="'$(IsPackageOnlyProject)' == ''">False</IsPackageOnlyProject>
     <UseImportCache Condition="'$(UseImportCache)' == ''">True</UseImportCache>
+    <HasTests Condition="'$(HasTests)' == ''">False</HasTests>
     <!--<DisableExtraReferences>true</DisableExtraReferences>-->
   </PropertyGroup>
 
@@ -71,6 +74,14 @@
     <Message Text="| []==~ $(MSBuildThisFile) ~==[]" Importance="high" />
     <Message Text="| $(HeaderString)" Importance="high" />
 
+    <!--<ItemGroup Condition="'$(TargetPlatforms)' != ''">
+      <TPlatforms Include="$(TargetPlatforms.Split(`;`))" />
+    </ItemGroup>
+    <PropertyGroup Condition="'$(TargetPlatforms)' != ''">
+      <TargetPlatform>%(TPlatforms.Identity)</TargetPlatform>
+      <TargetFramework>%(TPlatforms.Identity)</TargetFramework>
+    </PropertyGroup>-->
+    
     <LogPropertyTask ProjectFiles="$(MSBuildThisFileFullPath)" SectionSymbol="$(SectionSymbol)"
                      Condition="'$(PrometheusTasksEnabled)' == 'true'" />
 
@@ -81,6 +92,8 @@
     <Message Text="| $(SectionSymbol) ProductVersion: $(ProductVersion)" Importance="high" />
     <Message Text="| $(SectionSymbol) Version: $(Version)" Importance="high" />
     <Message Text="| $(SectionSymbol) PackageVersion: $(PackageVersion)" Importance="high" />
+    <Message Text="| $(SectionSymbol) TargetPlatform: $(TargetPlatform)" Importance="high" />
+    <Message Text="| $(SectionSymbol) TargetPlatforms: $(TargetPlatforms)" Importance="high" />
     <Message Text="| $(SectionSymbol) TargetFramework: $(TargetFramework)" Importance="high" />
     <Message Text="| $(SectionSymbol) AutoDetectPlatform: $(AutoDetectPlatform)" Importance="high" />
     <Message Text="| $(SectionSymbol) IsSharedProject: $(IsSharedProject)" Importance="high" />
@@ -89,6 +102,7 @@
     <Message Text="| $(SectionSymbol) MSBuildProjectExtension: $(MSBuildProjectExtension)" Importance="high" />
     <Message Text="| $(SectionSymbol) MSBuildThisFileDirectory: $(MSBuildThisFileDirectory)" Importance="high" />
     <Message Text="| $(SectionSymbol) OutputDirectory: $(OutputDirectory)" Importance="high" />
+    <Message Text="| $(SectionSymbol) TestsDirectory: $(TestsDirectory)" Importance="high" />
     <Message Text="| $(SectionSymbol) SharedImports: $(SharedImports)" Importance="high" />
   </Target>
 </Project>

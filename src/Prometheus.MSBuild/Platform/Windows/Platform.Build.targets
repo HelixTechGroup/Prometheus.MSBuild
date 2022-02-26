@@ -4,7 +4,7 @@
       <PlatformId>Windows</PlatformId>
       <PlatformType>Desktop</PlatformType>
       <Rendering>True</Rendering>
-      <TargetFramework Condition="'$(RuntimeId.Contains(`net5.0`))' == 'true'">net5.0-windows</TargetFramework>
+      <TargetFramework Condition="'$(IsCoreRuntime)' == 'true' And '$(RuntimeVersion)' &gt; '5.0'">$(RuntimeId)-windows</TargetFramework>
     </PropertyGroup>
     <Message Text="| $(SectionSymbol) > Setting PlatformId for Windows::$(PlatformId)" Importance="high"/>
     <Message Text="| $(SectionSymbol) > TargetFramework: $(TargetFramework)" Importance="high" />

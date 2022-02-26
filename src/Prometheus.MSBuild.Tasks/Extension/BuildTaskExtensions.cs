@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
@@ -18,6 +20,7 @@ namespace Prometheus.MSBuild.Tasks.Extension
             var props = new HashSet<ProjectPropertyInstance>();
             try
             {
+                Debugger.Break();
                 var currentProperties = instance.Properties;
                 var preFiltered = new HashSet<ProjectProperty>();
                 var total = 0;
@@ -36,7 +39,7 @@ namespace Prometheus.MSBuild.Tasks.Extension
 
                         preFiltered.Add(p);
                     }
-                    
+
 
                     total += preFiltered.Count;
 
@@ -51,11 +54,11 @@ namespace Prometheus.MSBuild.Tasks.Extension
                     {
                         //if (options.PropertyName.StartsWith(@"r\"))
                         //{
-                            //Regex.Escape();
-                            var eString = options.PropertyName/*.Remove(0, 2)*/;
-                            var regex = new Regex(eString);
-                            task.Log.LogMessage(MessageImportance.High, $"| {options.SectionSymbol} Using Regex: {options.PropertyName} : {eString}");
-                            properties = properties.Where(p => regex.IsMatch(p.Name)).ToArray();
+                        //Regex.Escape();
+                        var eString = options.PropertyName/*.Remove(0, 2)*/;
+                        var regex = new Regex(eString);
+                        task.Log.LogMessage(MessageImportance.High, $"| {options.SectionSymbol} Using Regex: {options.PropertyName} : {eString}");
+                        properties = properties.Where(p => regex.IsMatch(p.Name)).ToArray();
                         //}
                         //else
                         //    properties = properties.Where(p => p.Name == options.PropertyName).ToArray();
@@ -69,7 +72,7 @@ namespace Prometheus.MSBuild.Tasks.Extension
                 }
 
                 task.Log.LogMessage(MessageImportance.High, $"| {options.SectionSymbol} Total: {total}");
-                 
+
                 if (!props.Any())
                 {
                     //task.Log.LogMessage(MessageImportance.High, $"| {options.SectionSymbol} ---------------------------------------");
@@ -111,22 +114,115 @@ namespace Prometheus.MSBuild.Tasks.Extension
             return project;
         }
 
+        const BindingFlags bindingFlags = BindingFlags.NonPublic | BindingFlags.FlattenHierarchy | BindingFlags.Instance | BindingFlags.Public;
+
+        public static IEnumerable GetEnvironmentVariable(this BuildUtil.Task task, string key, bool throwIfNotFound)
+        {
+            var projectInstance = GetProjectInstance(task);
+
+            var items = projectInstance.Items
+                .Where(x => string.Equals(x.ItemType, key, StringComparison.InvariantCultureIgnoreCase)).ToList();
+            if (items.Count > 0)
+            {
+                return items.Select(x => x.EvaluatedInclude);
+            }
+
+
+            var properties = projectInstance.Properties
+                .Where(x => string.Equals(x.Name, key, StringComparison.InvariantCultureIgnoreCase)).ToList();
+            if (properties.Count > 0)
+            {
+                return properties.Select(x => x.EvaluatedValue);
+            }
+
+            if (throwIfNotFound)
+            {
+                throw new Exception(string.Format("Could not extract from '{0}' environmental variables.", key));
+            }
+
+            return Enumerable.Empty<string>();
+        }
+
+        //public static ProjectInstance GetProjectInstance(this BuildUtil.Task task)
+        //{
+        //    string projectFile = Microsoft.Build.BuildEngine.ProjectFile;
+
+        //    //Engine buildEngine = new Engine(System.Runtime.InteropServices.RuntimeEnvironment.GetRuntimeDirectory());
+
+        //    Project project = new Project(buildEngine);
+        //    project.(projectFile);
+        //    foreach (var o in project.EvaluatedProperties)
+        //    {
+        //        // Use properties
+        //    }
+
+        //    // Do what you want
+
+        //    return project.CreateProjectInstance();
+        //}
+        //public static ProjectInstance GetProjectInstance(this BuildUtil.Task task)
+        //{
+        //    var buildEngine = task.BuildEngine as IBuildEngine10 ;
+        //    var buildEngineType = buildEngine.GetType();
+        //    var targetBuilderCallbackField = buildEngineType.GetField("targetBuilderCallback", bindingFlags);
+        //    if (targetBuilderCallbackField == null)
+        //    {
+        //        throw new Exception("Could not extract targetBuilderCallback from " + buildEngineType.FullName);
+        //    }
+        //    var targetBuilderCallback = targetBuilderCallbackField.GetValue(buildEngine);
+        //    var targetCallbackType = targetBuilderCallback.GetType();
+        //    var projectInstanceField = targetCallbackType.GetField("projectInstance", bindingFlags);
+        //    if (projectInstanceField == null)
+        //    {
+        //        throw new Exception("Could not extract projectInstance from " + targetCallbackType.FullName);
+        //    }
+        //    return (ProjectInstance)projectInstanceField.GetValue(targetBuilderCallback);
+        //}
+
         public static ProjectInstance GetProjectInstance(this BuildUtil.Task task)
         {
-            var buildEngine = ((IBuildEngine6)task.BuildEngine);
-            var requestEntryField = buildEngine.GetType().GetField("_requestEntry", BindingFlags.NonPublic | BindingFlags.Instance);
-            var requestEntry = requestEntryField.GetValue(buildEngine);
-            var requestConfigProperty = requestEntry.GetType().GetProperty("RequestConfiguration", BindingFlags.Instance | BindingFlags.Public);
-            var requestConfig = requestConfigProperty.GetValue(requestEntry);
-            var projectProperty = requestConfig.GetType().GetProperty("Project", BindingFlags.Public | BindingFlags.Instance);
-            return (ProjectInstance)projectProperty.GetValue(requestConfig);
+            //if (!Debugger.IsAttached)
+            //    Debugger.Launch();
+            //else
+            //    Debugger.Break();
+
+            var buildEngine = ((IBuildEngine10)task.BuildEngine);
+            //var buildEngineType = buildEngine as OutOfProcNode;
+            //return new ProjectInstance(task.GetFileInstance(task.BuildEngine.));
+
+            var taskHost = buildEngine.GetType();
+
+            var projectInstance = new ProjectInstance(task.BuildEngine.ProjectFileOfTaskNode);
+
+            if (taskHost.FullName.Contains("Microsoft.Build.BackEnd.TaskHost"))
+            {
+                Debugger.Break();
+                var requestEntryField = taskHost.GetField("_requestEntry", bindingFlags);
+                var requestEntry = requestEntryField?.GetValue(buildEngine);
+
+                var requestConfigProperty = requestEntry?.GetType().GetProperty("RequestConfiguration", bindingFlags);
+                var requestConfig = requestConfigProperty?.GetValue(requestEntry);
+
+                var projectProperty = requestConfig?.GetType().GetProperty("Project", bindingFlags);
+                projectInstance = (ProjectInstance)projectProperty?.GetValue(requestConfig);
+            }
+            else
+            {
+                Debugger.Break();
+                var currentConfigField = taskHost.GetField("_currentConfiguration", bindingFlags);
+                var currentConfig = currentConfigField?.GetValue(buildEngine);
+                var buildEngineMember = taskHost.GetProperty("EngineServices", bindingFlags);
+                var buildEngineService = buildEngineMember?.GetValue(buildEngine);
+            }
+
+            return projectInstance;
         }
 
         public static void AddImports(this BuildUtil.Task task, ref ProjectInstance instance, ImportFileOptions options)
         {
             try 
             { 
-                var buildEngine = ((IBuildEngine6)task.BuildEngine);
+                var buildEngine = /*((IBuildEngine6)*/task.BuildEngine/*)*/;
                 var bm = BuildManager.DefaultBuildManager;
                 var requestEntryField = buildEngine.GetType().GetField("_requestEntry", BindingFlags.NonPublic | BindingFlags.Instance);
                 var requestEntry = requestEntryField.GetValue(buildEngine);

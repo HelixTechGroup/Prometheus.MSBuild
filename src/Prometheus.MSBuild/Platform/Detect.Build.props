@@ -1,8 +1,37 @@
 <Project InitialTargets="DetectPlatform">
+  <ItemGroup Condition="'$(TargetPlatforms)' != ''">
+    <TPlatforms Include="$(TargetPlatforms.Split(`;`))" />
+  </ItemGroup>
+
   <PropertyGroup>
+    <SdkVersionTest>^net\d+(?:\.\d+)+(?:\-\S+)*</SdkVersionTest>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(TargetPlatforms)' != ''">
+    <TargetPlatform>%(TPlatforms.Identity)</TargetPlatform>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(TargetPlatform)' != '' And '$(PrometheusTasksEnabled)' != 'true'">
     <Array>$(TargetPlatform.Split(`-`))</Array>
     <RuntimeId>$(TargetPlatform.Split(`-`)[0])</RuntimeId>
+    <TargetFramework>$(TargetPlatform.Split(`-`)[0])</TargetFramework>
     <PlatformId Condition="$(Array.Contains(`;`))">$(TargetPlatform.Split(`-`)[1])</PlatformId>
+    <TargetFrameworks Condition="'$(TargetPlatforms)' != ''">$(TargetPlatforms)</TargetFrameworks>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(TargetPlatform)' == ''">
+    <RuntimeId>$(TargetFramework)</RuntimeId>
+    <PlatformId>None</PlatformId>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <IsSdkVersion Condition="'$([System.Text.RegularExpressions.Regex]::IsMatch($(TargetPlatform), $(SdkVersionTest)))' == 'true'">True</IsSdkVersion>
+    <IsCoreRuntime>$(IsSdkVersion)</IsCoreRuntime>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(IsSdkVersion)' == 'true'">
+    <RuntimeTargetFramework>$(TargetPlatform)</RuntimeTargetFramework>
+    <TargetFramework>$(TargetPlatform)</TargetFramework>
   </PropertyGroup>
 
   <!--<PropertyGroup Condition=" '$(TargetPlatform)' != '' ">
@@ -19,7 +48,7 @@
 
   <!--<Import Project="$(PlatformPropsPath)" />-->
 
-  <Target Name="DetectPlatform">
+  <Target Name="DetectPlatform" Condition="'$(PrometheusDetectionEnabled)' == 'true'">
     <PropertyGroup>
       <SectionSymbol>%</SectionSymbol>
     </PropertyGroup>
@@ -28,7 +57,39 @@
     <Message Text="| []==~ $(MSBuildThisFile) ~==[]" Importance="high" />
     <Message Text="| $(HeaderString)" Importance="high" />
 
-    <LogPropertyTask ProjectFiles="$(MSBuildThisFileFullPath)" SectionSymbol="$(SectionSymbol)"
-                     Condition="'$(PrometheusTasksEnabled)' == 'true'" />
+    <!--<PropertyGroup Condition="'$(PrometheusTasksEnabled)' != 'true'">
+      <RuntimeId>$(TargetFramework)</RuntimeId>
+      <PlatformId>None</PlatformId>
+    </PropertyGroup>
+
+    <PropertyGroup>
+      <IsSdkVersion Condition="'$([System.Text.RegularExpressions.Regex]::IsMatch($(TargetPlatform), $(SdkVersionTest)))' == 'true'">True</IsSdkVersion>
+      <IsCoreRuntime>$(IsSdkVersion)</IsCoreRuntime>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(IsSdkVersion)' == 'true'">
+      <RuntimeTargetFramework>$(TargetPlatform)</RuntimeTargetFramework>
+      <TargetFramework>$(TargetPlatform)</TargetFramework>
+    </PropertyGroup>-->
+
+    <!--<PropertyGroup Condition="'$(PrometheusTasksEnabled)' != 'true'">
+      <TPlatforms>$(TargetPlatform.Split(`-`))</TPlatforms>
+      <RuntimeId>$(TargetFramework)</RuntimeId>
+      <PlatformId Condition="$(TPlatforms.Contains(`;`))">$(TargetPlatform.Split(`-`)[1])</PlatformId>
+      --><!--<TargetFramework>%(TPlatforms.Identity)</TargetFramework>--><!--
+      <TargetFrameworks Condition="'$(TargetPlatforms)' != ''">$(TargetPlatforms)</TargetFrameworks>
+    </PropertyGroup>-->
+    
+    <!--<LogPropertyTask ProjectFiles="$(MSBuildThisFileFullPath)" SectionSymbol="$(SectionSymbol)"
+                     Condition="'$(PrometheusTasksEnabled)' == 'true'" />-->
+
+    <Message Text="| $(SectionSymbol) RuntimeId: $(RuntimeId)" Importance="high" />
+    <Message Text="| $(SectionSymbol) RuntimeVersion: $(RuntimeVersion)" Importance="high" />
+    <Message Text="| $(SectionSymbol) PlatformId: $(PlatformId)" Importance="high" />
+    <Message Text="| $(SectionSymbol) PlatformVersion: $(PlatformVersion)" Importance="high" />
+    <Message Text="| $(SectionSymbol) TargetPlatform: $(TargetPlatform)" Importance="high" />
+    <Message Text="| $(SectionSymbol) TargetPlatforms: $(TargetPlatforms)" Importance="high" />
+    <Message Text="| $(SectionSymbol) TargetFramework: $(TargetFramework)" Importance="high" />
+    <Message Text="| $(SectionSymbol) TargetFrameworks: $(TargetFrameworks)" Importance="high" />
   </Target>
 </Project>

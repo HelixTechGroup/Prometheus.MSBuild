@@ -1,4 +1,8 @@
 <Project InitialTargets="PrintPrometheusRuntime2">
+  <PropertyGroup>
+    <SdkVersionTest>^net\d+(?:\.\d+)+(?:\-\S+)*</SdkVersionTest>
+  </PropertyGroup>
+
   <PropertyGroup Condition=" '$(RuntimeId.Contains(`netcore`))' == 'true'">
     <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
@@ -7,19 +11,38 @@
     <TargetFramework>netstandard2.1</TargetFramework>
   </PropertyGroup>
 
+  <PropertyGroup>
+    <IsSdkVersion Condition="'$([System.Text.RegularExpressions.Regex]::IsMatch($(TargetPlatform), $(SdkVersionTest)))' == 'true'">True</IsSdkVersion>
+    <IsCoreRuntime>$(IsSdkVersion)</IsCoreRuntime>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(IsSdkVersion)' == 'true' 
+                 And '$(PrometheusDetectionEnabled)' != 'true'">
+    <RuntimeTargetFramework>$(TargetPlatform)</RuntimeTargetFramework>
+    <TargetFramework>$(TargetPlatform)</TargetFramework>
+  </PropertyGroup>
+
   <Target Name="PrintPrometheusRuntime2">
     <Message Text="| $(SectionString)" Importance="high" />
     <Message Text="| []==~ $(MSBuildThisFile) ~==[]" Importance="high" />
     <Message Text="| $(HeaderString)" Importance="high" />
 
-    <PropertyGroup Condition=" '$(RuntimeId.Contains(`netcore`))' == 'true'">
-      <TargetFramework>netcoreapp3.1</TargetFramework>
+    <!--<PropertyGroup>
+      <IsSdkVersion Condition="'$([System.Text.RegularExpressions.Regex]::IsMatch($(TargetPlatform), $(SdkVersionTest)))' == 'true'">True</IsSdkVersion>
+      <IsCoreRuntime>$(IsSdkVersion)</IsCoreRuntime>
     </PropertyGroup>
 
-    <PropertyGroup Condition="'$(RuntimeId.Contains(`netstandard`))' == 'true'">
-      <TargetFramework>netstandard2.1</TargetFramework>
-    </PropertyGroup>
+    <PropertyGroup Condition="'$(IsSdkVersion)' == 'true'">
+      <RuntimeTargetFramework>$(TargetPlatform)</RuntimeTargetFramework>
+      <TargetFramework>$(TargetPlatform)</TargetFramework>
+    </PropertyGroup>-->
 
+    <Message Text="| $(SectionSymbol) SdkVersionTest: $(SdkVersionTest)" Importance="high" />
+    <Message Text="| $(SectionSymbol) TargetFramework: $(TargetFramework)" Importance="high" />
     <Message Text="| $(SectionSymbol) RuntimeId: $(RuntimeId)" Importance="high" />
+    <Message Text="| $(SectionSymbol) RuntimeVersion: $(RuntimeVersion)" Importance="high" />
+    <Message Text="| $(SectionSymbol) RuntimeTargetFramework: $(RuntimeTargetFramework)" Importance="high" />
+    <Message Text="| $(SectionSymbol) IsCoreVersion: $(IsCoreRuntime)" Importance="high" />
+    <Message Text="| $(SectionSymbol) IsSdkVersion: $(IsSdkVersion)" Importance="high" />
   </Target>
 </Project>

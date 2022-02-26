@@ -12,7 +12,7 @@
     <PlatformPropsPath>$(PrometheusPlatformDirectory)\$(PlatformId)\Platform.Build.Props</PlatformPropsPath>
     <PlatformTargetsPath>$(PrometheusPlatformDirectory)\$(PlatformId)\Platform.Build.Targets</PlatformTargetsPath>
   </PropertyGroup>
-  <Import Project="$(PlatformPropsPath)" />
+  <Import Project="$(PlatformTargetsPath)" />
 
   <Target Name="PrintPrometheusPlatform2">
     <PropertyGroup>
@@ -26,6 +26,7 @@
       <HasAndroid>$(PlatformId.Contains(`android`))</HasAndroid>
       <HasLinux>$(PlatformId.Contains(`linux`))</HasLinux>
       <HasXamarin>$(RuntimeId.Contains(`xamarin`))</HasXamarin>
+      <!--<TargetFramework Condition="'$(IsCoreRuntime)' == 'true' And '$(RuntimeVersion)' &gt; '5.0'">$(RuntimeId)-$(PlatformId)</TargetFramework>-->
     </PropertyGroup>
 
     <!--<PropertyGroup Condition=" '$(RuntimeId.Contains(`netcore`))' == 'true'">
@@ -39,7 +40,7 @@
     <ItemGroup Condition="'$(TargetFrameworks)' != ''">
       <TFramworks Include="$(Targetframeworks.Split(`;`))"/>
     </ItemGroup>
-    <PropertyGroup Condition="'$(PlatformId)' == 'none' And '$(TargetFrameworks)' != ''">
+    <PropertyGroup Condition="'$(TargetFrameworks)' != ''">
       <TargetFramework>%(TFramworks.Identity)</TargetFramework>
       <RuntimeId>%(TFramworks.Identity)</RuntimeId>
     </PropertyGroup>

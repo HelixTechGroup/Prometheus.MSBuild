@@ -1,16 +1,16 @@
 <Project>
-  <Import Project="Sdk.props" Sdk="Microsoft.NET.Sdk" />
+  <!--<Import Project="Sdk.props" Sdk="Microsoft.NET.Sdk" />-->
   <ItemGroup>
     <MSBuildProjectParentDirectory Include="$(MSBuildThisFileDirectory)\..\" />
   </ItemGroup>
   <PropertyGroup>
-    <PrometheusEnabled Condition="'$(PrometheusEnabled)' == ''">True</PrometheusEnabled>
-    <PrometheusAutoLoad Condition="'$(PrometheusAutoLoad)' == ''">True</PrometheusAutoLoad>
-    <PrometheusPlatformEnabled Condition="'$(PrometheusPlatformEnabled)' == ''">True</PrometheusPlatformEnabled>
     <PrometheusDirectory>$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), Prometheus.Build.props))</PrometheusDirectory>
     <PrometheusProps>$(PrometheusDirectory)\Prometheus.Build.props</PrometheusProps>
     <PrometheusTargets>$(PrometheusDirectory)\Prometheus.Build.targets</PrometheusTargets>
   </PropertyGroup>
   <!--Condition="'$(PrometheusEnabled)' == 'true' And '$(PrometheusAutoLoad)' == 'true' And Exists('$(PrometheusProps)')"-->
   <Import Project="$(PrometheusProps)"  />
+  <ImportGroup Condition="'$(PrometheusLoadType)' != 'lite'">
+    <Import Project="Sdk.props" Sdk="Microsoft.NET.Sdk" />
+  </ImportGroup>
 </Project>

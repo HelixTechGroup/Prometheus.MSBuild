@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">Net6.Android.App.Baseline</string>
+    <string name="app_text">Hello, Android!</string>
+</resources>

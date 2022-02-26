@@ -63,7 +63,7 @@ namespace Prometheus.MSBuild.Tasks.Extension
         {
 
             using var bufferedStream = new BufferedStream(stream, 1024 * 32);
-            using var sha = new SHA256Managed();
+            using var sha = SHA256Managed.Create();
             var checksum = sha.ComputeHash(bufferedStream);
             return BitConverter.ToString(checksum).Replace("-", String.Empty);
         }

@@ -72,9 +72,9 @@
     <ItemGroup Condition="'$(TargetFrameworks)' != ''">
       <TFramworks Include="$(Targetframeworks.Split(`;`))" />
     </ItemGroup>
-    <PropertyGroup Condition="'$(PlatformId)' == 'none' And '$(TargetFrameworks)' != ''">
+    <!--<PropertyGroup Condition="'$(PlatformId)' == 'none' And '$(TargetFrameworks)' != ''">
       <TargetFramework>%(TFramworks.Identity)</TargetFramework>
-    </PropertyGroup>
+    </PropertyGroup>-->
 
     <!--<PropertyGroup Condition="'$(HasWindows)' == 'true'">
       <PlatformProps>Windows</PlatformProps>

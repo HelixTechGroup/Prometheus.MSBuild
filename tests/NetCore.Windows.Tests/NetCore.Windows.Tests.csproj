@@ -1,11 +1,9 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <Import Project="..\..\src\Prometheus.MSBuild\Sdk\Sdk.props" />
   <PropertyGroup>
-    <!--<PrometheusLibDirectory>$(MSBuildProjectDirectory)\lib\Debug\Prometheus.MSBuild.Tasks\net48</PrometheusLibDirectory>-->
-    <PrometheusLibDirectory>D:\Users\Bryan\Documents\Projects\HelixTechGroup\Design\Prometheus\msbuild\tests\lib\Debug\Prometheus.MSBuild.Tasks\net48</PrometheusLibDirectory>
     <ProductName>NetCore.Windows.Tests</ProductName>
     <TargetPlatform>netcore-windows</TargetPlatform>
-    <!--<TargetFramework>netcoreapp3.1</TargetFramework>-->
+    <TargetFramework>netcoreapp3.1</TargetFramework>
     <IsTestProject>True</IsTestProject>
     <IsLibraryProject>True</IsLibraryProject>
     <IsPackable>False</IsPackable>

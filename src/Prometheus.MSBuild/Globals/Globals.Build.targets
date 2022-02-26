@@ -22,7 +22,7 @@
     <BuildDirectory>$(SolutionDir)build</BuildDirectory>
     <OutputDirectory>$(BuildDirectory)\$(Configuration)\$(AssemblyName)</OutputDirectory>
     <ThirdPartyDirectory>$(SolutionDir)third-party</ThirdPartyDirectory>
-
+    <TestsDirectory>$(SolutionDir)tests</TestsDirectory>
     <OutputPath>$(OutputDirectory)</OutputPath>
     <!--<BaseIntermediateOutputPath>$(SolutionDir)\build\obj\$(Configuration)\$(AssemblyName)</BaseIntermediateOutputPath>-->
   </PropertyGroup>
@@ -51,6 +51,7 @@
     <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
     <!--<PublishSingleFile>True</PublishSingleFile>-->
     <OutputType>Exe</OutputType>
+    <!--<IsSdkVersion>False</IsSdkVersion>-->
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(IsLibraryProject)' == 'true'">
@@ -87,6 +88,14 @@
     <Message Text="| []==~ $(MSBuildThisFile) ~==[]" Importance="high" />
     <Message Text="| $(HeaderString)" Importance="high" />
 
+    <!--<ItemGroup Condition="'$(TargetPlatforms)' != ''">
+      <TPlatforms Include="$(TargetPlatforms.Split(`;`))" />
+    </ItemGroup>
+    <PropertyGroup Condition="'$(TargetPlatforms)' != ''">
+      <TargetPlatform>%(TPlatforms.Identity)</TargetPlatform>
+      <TargetFramework>%(TPlatforms.Identity)</TargetFramework>
+    </PropertyGroup>-->
+    
     <LogPropertyTask ProjectFiles="$(MSBuildThisFileFullPath)" SectionSymbol="$(SectionSymbol)"
                      Condition="'$(PrometheusTasksEnabled)' == 'true'" />
 
@@ -97,15 +106,19 @@
     <Message Text="| $(SectionSymbol) ProductVersion: $(ProductVersion)" Importance="high" />
     <Message Text="| $(SectionSymbol) Version: $(Version)" Importance="high" />
     <Message Text="| $(SectionSymbol) PackageVersion: $(PackageVersion)" Importance="high" />
+    <Message Text="| $(SectionSymbol) TargetPlatform: $(TargetPlatform)" Importance="high" />
+    <Message Text="| $(SectionSymbol) TargetPlatforms: $(TargetPlatforms)" Importance="high" />
     <Message Text="| $(SectionSymbol) TargetFramework: $(TargetFramework)" Importance="high" />
     <Message Text="| $(SectionSymbol) PrometheusPlatformEnabled: $(PrometheusPlatformEnabled)" Importance="high" />
     <Message Text="| $(SectionSymbol) IsSharedProject: $(IsSharedProject)" Importance="high" />
     <Message Text="| $(SectionSymbol) IsTestProject: $(IsTestProject)" Importance="high" />
     <Message Text="| $(SectionSymbol) IsLibraryProject: $(IsLibraryProject)" Importance="high" />
+    <Message Text="| $(SectionSymbol) IsSdkVersion: $(IsSdkVersion)" Importance="high" />
     <Message Text="| $(SectionSymbol) MSBuildProjectExtension: $(MSBuildProjectExtension)" Importance="high" />
     <Message Text="| $(SectionSymbol) MSBuildThisFileDirectory: $(MSBuildThisFileDirectory)" Importance="high" />
     <Message Text="| $(SectionSymbol) MSBuildProjectExtensionsPath: $(MSBuildProjectExtensionsPath)" Importance="high" />
     <Message Text="| $(SectionSymbol) OutputDirectory: $(OutputDirectory)" Importance="high" />
+    <Message Text="| $(SectionSymbol) TestsDirectory: $(TestsDirectory)" Importance="high" />
     <Message Text="| $(SectionSymbol) SharedImports: $(SharedImports)" Importance="high" />
   </Target>
 </Project>

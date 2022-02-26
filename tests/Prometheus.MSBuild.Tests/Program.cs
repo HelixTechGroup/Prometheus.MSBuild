@@ -12,8 +12,11 @@ using Microsoft.Build.Construction;
 using Microsoft.Build.Evaluation;
 using Microsoft.Build.Execution;
 using Microsoft.Build.Framework;
+using Microsoft.Build.Locator;
 using Microsoft.Build.Tasks;
 using Prometheus.MSBuild.Tasks;
+using Shin.Framework.Logging.Native;
+using Loggers = Shin.Framework.Logging.Loggers;
 using Project = Microsoft.Build.Evaluation.Project;
 
 namespace Prometheus.MSBuild.Tests
@@ -22,13 +25,37 @@ namespace Prometheus.MSBuild.Tests
     {
         static void Main(string[] args)
         {
+            MSBuildHelper.InitializeMSBuild();
+            //MSBuildLocator.RegisterDefaults();
             //Console.WriteLine("Please hit any key to continue....");
             //Console.ReadKey();
+            var ctx = new CancellationToken();
+            using var logger = new Logger();
+            logger.Initialize(ctx);
+            logger.AddLogProvider(new Loggers.ConsoleLogger());
+            logger.LogDebug("Test");
+
+            //while(true)
+            //{
+            //    try
+            //    {
+            //        var r = MSBuildLocator.RegisterDefaults();
+            //        break;
+            //    }
+            //    catch (Exception ex)
+            //    {
+            //        logger.LogException(ex);
+            //        Console.WriteLine("Please hit any key to continue....");
+            //        Console.ReadKey();
+            //        return;
+            //    }
+            //}
+
 
             var currentDirectory = MSBuildHelper.AssemblyDirectory;
-            var testsDirectory = Path.Combine(MSBuildHelper.AssemblyDirectory, "tests");
+            var testsDirectory = Path.Combine(MSBuildHelper.AssemblyDirectory, "resources");
             var prometheusDirectory = $@"{currentDirectory}\..\..\..\..\..\src\Prometheus.MSBuild";
-            var prometheusLibraryDirectory = $@"{currentDirectory}\..\..\..\..\..\build\Debug\Prometheus.MSBuild.Tasks\net48";
+            var prometheusLibraryDirectory = $@"{currentDirectory}\..\..\..\lib\Debug\Prometheus.MSBuild.Tasks\net48";
             var prometheusTasksLibrary = $@"{prometheusLibraryDirectory}\Prometheus.MSBuild.Tasks.dll";
             var configuration = "Debug";
 
@@ -45,7 +72,7 @@ namespace Prometheus.MSBuild.Tests
             //xmlStream.Seek(0L, SeekOrigin.Begin);
             //var reader = XmlReader.Create(xmlStream);
 
-            var fileName = $@"{testsDirectory}Template.csproj";
+            var fileName = $@"{testsDirectory}\Template.csproj";
             //var collection = new ProjectCollection(props);
             //var project = collection.LoadProject(fileName);
             //var instance = new ProjectInstance(ProjectRootElement.Create(fileName, collection));
@@ -72,10 +99,11 @@ namespace Prometheus.MSBuild.Tests
             }
             catch (Exception ex)
             {
-                var c = Console.ForegroundColor;
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine(ex.Message);
-                Console.ForegroundColor = c;
+                //var c = Console.ForegroundColor;
+                //Console.ForegroundColor = ConsoleColor.Red;
+                //Console.WriteLine(ex.Message);
+                //Console.ForegroundColor = c;
+                logger.LogException(ex);
                 return;
             }
 
@@ -109,7 +137,7 @@ namespace Prometheus.MSBuild.Tests
             //    .AddTask("ImportFileTask")
             //    .SetParameter("ImportFiles", @$"{prometheusDirectory}\Platform\Windows\Platform.Build.props");
 
-            root.AddTarget("CoreCompile");
+            //root.AddTarget("CoreCompile");
             var prometheusProps = root.CreateImportElement(@$"{prometheusDirectory}\build\Prometheus.MSBuild.props");
             var prometheusTargets = root.CreateImportElement(@$"{prometheusDirectory}\build\Prometheus.MSBuild.targets");
 
@@ -122,15 +150,15 @@ namespace Prometheus.MSBuild.Tests
             root.InsertAfterChild(prometheusTargets, root.LastChild);
             root.InsertAfterChild(prometheusProperties, root.FirstChild);
 
-            var plat = "net5.0-none";
+            var plat = "net6.0-none";
             if (args.Length >= 1)
                 plat = args[0];
             prometheusProperties.AddProperty("TargetPlatform", plat);
             prometheusProperties.AddProperty("TargetPlatformIdentifier", "windows");
             prometheusProperties.AddProperty("TargetPlatformVersion", "7.0");
             prometheusProperties.AddProperty("TargetFrameworkIdentifier", ".NETCoreApp");
-            prometheusProperties.AddProperty("TargetFrameworkVersion", "5.0");
-            prometheusProperties.AddProperty("TargetFramework", "net5.0");
+            prometheusProperties.AddProperty("TargetFrameworkVersion", "6.0");
+            prometheusProperties.AddProperty("TargetFramework", "net6.0");
             prometheusProperties.AddProperty("IsLibraryProject", "true");
             prometheusProperties.AddProperty("PrometheusLibDirectory", prometheusLibraryDirectory);
             prometheusProperties.AddProperty("EnableDefaultCompileItems", "false");
@@ -143,10 +171,12 @@ namespace Prometheus.MSBuild.Tests
             prometheusProperties.AddProperty("RootPath", testsDirectory);
             prometheusProperties.AddProperty("SolutionDir", $@"{testsDirectory}\");
             prometheusProperties.AddProperty(
-                                             "MSBuildExtensionsPath", instance.GetPropertyValue("MSBuildExtensionsPath"));
+                                             "MSBuildExtensionsPath", 
+                                             instance.GetPropertyValue("MSBuildExtensionsPath"));
             prometheusProperties.AddProperty(
                                              "MSBuildSDKsPath",
                                              instance.GetPropertyValue("MSBuildSDKsPath"));
+            var sdkpath = instance.GetPropertyValue("MSBuildSDKsPath");
             prometheusProperties.AddProperty(
                                              "RoslynTargetsPath",
                                              instance.GetPropertyValue("RoslynTargetsPath"));
@@ -157,7 +187,18 @@ namespace Prometheus.MSBuild.Tests
             prometheusProperties.AddProperty("UseImportCache", "false");
 
             ProjectInstance testInstance = null;
-            var pTask = new Task<ProjectInstance>(() => MSBuildHelper.CreateProjectInstance(root));
+            var pTask = new Task<ProjectInstance>(() =>
+                                                  {
+                                                      try
+                                                      {
+                                                          return MSBuildHelper.CreateProjectInstance(fileName);
+                                                      }
+                                                      catch (Exception ex)
+                                                      {
+                                                          logger.LogException(ex);
+                                                          return null;
+                                                      }
+                                                  });
             pTask.ConfigureAwait(false);
             pTask.Start();
             // ReSharper disable once AsyncConverter.AsyncWait
@@ -186,26 +227,27 @@ namespace Prometheus.MSBuild.Tests
             //NuGetMessageTask
             // @"C:\Program Files\dotnet\packs\Microsoft.NETCore.App.Ref\3.1.0\ref\netcoreapp3.1\System.Runtime.dll"
             //Assembly.Load(@"System.Runtime, Version=4.2.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a");
-            var libTask = new Task(() =>
-            {
-                lock(target)
-                {
-                    Assembly.Load(@"Microsoft.Build.Tasks.Core");
-                    Assembly.Load(@"NuGet.Frameworks");
-                    Assembly.Load(@"NuGet.ProjectModel");
-                    Assembly.LoadFile(Path.GetFullPath(Path.Combine(MSBuildHelper.GetGlobalProperties()["RoslynTargetsPath"],
-                                                                    "Microsoft.Build.Tasks.CodeAnalysis.dll")));
-                }
-            });
-            libTask.ConfigureAwait(false);
-            libTask.Start();
-            i = 0;
-            while (!libTask.IsCompleted)
-            {
-                drawTextProgressBar(i, 10000);
-                Thread.Sleep(500);
-                i++;
-            }
+
+            //var libTask = new Task(() =>
+            //{
+            //    lock(target)
+            //    {
+            //        Assembly.Load(@"Microsoft.Build.Tasks.Core");
+            //        Assembly.Load(@"NuGet.Frameworks");
+            //        Assembly.Load(@"NuGet.ProjectModel");
+            //        Assembly.LoadFile(Path.GetFullPath(Path.Combine(MSBuildHelper.GetGlobalProperties()["RoslynTargetsPath"],
+            //                                                        "Microsoft.Build.Tasks.CodeAnalysis.dll")));
+            //    }
+            //});
+            //libTask.ConfigureAwait(false);
+            //libTask.Start();
+            //i = 0;
+            //while (!libTask.IsCompleted)
+            //{
+            //    drawTextProgressBar(i, 10000);
+            //    Thread.Sleep(500);
+            //    i++;
+            //}
             
             var buildTask = new Task(() =>
                                        {
@@ -242,8 +284,8 @@ namespace Prometheus.MSBuild.Tests
             Console.WriteLine();
             Console.WriteLine(root.RawXml);
 
-            //Console.WriteLine("Please hit any key to continue....");
-            //Console.ReadKey();
+            Console.WriteLine("Please hit any key to continue....");
+            Console.ReadKey();
         }
 
         private static void drawTextProgressBar(int progress, int total)

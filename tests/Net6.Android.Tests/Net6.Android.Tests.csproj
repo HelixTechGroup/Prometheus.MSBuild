@@ -1,8 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <Import Project="..\..\src\Prometheus.MSBuild\Sdk\Sdk.props" />
   <PropertyGroup>
-    <!--<PrometheusLibDirectory>$(MSBuildProjectDirectory)\lib\Debug\Prometheus.MSBuild.Tasks\net48</PrometheusLibDirectory>-->
-    <PrometheusLibDirectory>D:\Users\Bryan\Documents\Projects\HelixTechGroup\Design\Prometheus\msbuild\tests\lib\Debug\Prometheus.MSBuild.Tasks\net48</PrometheusLibDirectory>
     <ProductName>Net6.Android.Tests</ProductName>
     <TargetPlatform>net6.0-android</TargetPlatform>
     <IsTestProject>True</IsTestProject>

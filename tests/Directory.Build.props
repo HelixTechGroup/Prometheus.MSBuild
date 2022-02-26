@@ -1,0 +1,16 @@
+<Project>
+  <PropertyGroup>
+    <RootDirectory>$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), README.md))</RootDirectory>
+    <PrometheusDirectory>$(RootDirectory)\src\Prometheus.MSBuild</PrometheusDirectory>
+    <!--<PrometheusLibDirectory>$(RootDirectory)\build\Debug\Prometheus.MSBuild.Tasks</PrometheusLibDirectory>-->
+    <!--<PrometheusLibDirectory>$(MSBuildProjectDirectory)\lib\Debug\Prometheus.MSBuild.Tasks\net48</PrometheusLibDirectory>-->
+    <PrometheusLibDirectory>D:\Users\Bryan\Documents\Projects\HelixTechGroup\Design\Prometheus\msbuild\tests\lib\Debug\Prometheus.MSBuild.Tasks</PrometheusLibDirectory>
+    <IsTestProject>True</IsTestProject>
+    <IsLibraryProject>True</IsLibraryProject>
+    <PrometheusLoadType>Full</PrometheusLoadType>
+    <PrometheusPlatformEnabled>True</PrometheusPlatformEnabled>
+    <PrometheusTasksEnabled>True</PrometheusTasksEnabled>
+    <PrometheusEnabled>True</PrometheusEnabled>
+    <IsPackable>False</IsPackable>
+  </PropertyGroup>
+</Project>

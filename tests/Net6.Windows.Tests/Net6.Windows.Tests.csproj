@@ -1,0 +1,15 @@
+﻿<Project Sdk="Microsoft.Build.NoTargets/3.3.0">
+  <Import Project="..\..\src\Prometheus.MSBuild\Sdk\Sdk.props" />
+  <PropertyGroup>
+    <ProductName>Net6.Windows.Tests</ProductName>
+    <TargetPlatform>net6.0-windows</TargetPlatform>
+    <!--<TargetFramework>net6.0</TargetFramework>-->
+    <IsTestProject>True</IsTestProject>
+    <IsLibraryProject>True</IsLibraryProject>
+    <IsPackable>False</IsPackable>
+  </PropertyGroup>
+  <Import Project="..\..\src\Prometheus.MSBuild\Sdk\Sdk.targets" />
+  <ItemGroup>
+    <Compile Include="Class1.cs" />
+  </ItemGroup>
+</Project>

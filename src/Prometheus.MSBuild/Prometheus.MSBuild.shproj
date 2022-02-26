@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>825f8d5d-ed23-401d-ba04-6a9200dc3f9f</ProjectGuid>
+    <MinimumVisualStudioVersion>14.0</MinimumVisualStudioVersion>
+  </PropertyGroup>
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\CodeSharing\Microsoft.CodeSharing.Common.Default.props" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\CodeSharing\Microsoft.CodeSharing.Common.props" />
+  <PropertyGroup />
+  <ItemGroup>
+    <None Include="build\Prometheus.MSBuild.props" />
+    <None Include="build\Prometheus.MSBuild.targets" />
+    <None Include="Check.Build.targets" />
+    <None Include="Common\Common.Build.props" />
+    <None Include="Common\Common.Build.targets" />
+    <None Include="Common\Importer.Build.targets" />
+    <None Include="Globals\GitHub.Build.props" />
+    <None Include="Globals\GitHub.Build.targets" />
+    <None Include="Globals\Globals.Build.props" />
+    <None Include="Globals\Globals.Build.targets" />
+    <None Include="Globals\NuGet.Build.props" />
+    <None Include="Globals\NuGet.Build.targets" />
+    <None Include="Platform\Android\Platform.Build.props" />
+    <None Include="Platform\Android\Platform.Build.targets" />
+    <None Include="Platform\Detect.Build.props" />
+    <None Include="Platform\Detect.Build.targets" />
+    <None Include="Platform\Linux\Platform.Build.props" />
+    <None Include="Platform\Linux\Platform.Build.targets" />
+    <None Include="Platform\None\Platform.Build.props" />
+    <None Include="Platform\None\Platform.Build.targets" />
+    <None Include="Platform\Platform.Build.props" />
+    <None Include="Platform\Platform.Build.targets" />
+    <None Include="Platform\Runtime.Build.props" />
+    <None Include="Platform\Runtime.Build.targets" />
+    <None Include="Platform\Windows\Platform.Build.props" />
+    <None Include="Platform\Windows\Platform.Build.targets" />
+    <None Include="Prometheus.Build.props" />
+    <None Include="Prometheus.Build.targets" />
+    <None Include="Sdk\Sdk.props" />
+    <None Include="Sdk\Sdk.targets" />
+    <None Include="Template2.props" />
+    <None Include="Usings.Build.props" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Properties\PublishProfiles\" />
+  </ItemGroup>
+  <Import Project="Prometheus.MSBuild.1.projitems" Label="Shared" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\CodeSharing\Microsoft.CodeSharing.CSharp.targets" />
+</Project>

@@ -1,0 +1,25 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="..\..\src\Prometheus.MSBuild\Sdk\Sdk.props" />
+  <!--<ItemGroup>
+    <None Include="..\resources\*">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>-->
+  <!--<Import Project="..\resources\Imports.Build.props" />-->
+  <ItemGroup>
+    <Imports Include="$(SolutionDir)tests\resources\Test.projitems" />
+  </ItemGroup>
+  <PropertyGroup>
+    <UseHostCompilerIfAvailable>False</UseHostCompilerIfAvailable>
+    <PrometheusTasksEnabled>True</PrometheusTasksEnabled>
+    <ProductName>Net6.Import.Tests</ProductName>
+    <TargetPlatform>net6.0</TargetPlatform>
+    <TargetFramework>net6.0</TargetFramework>
+    <IsTestProject>True</IsTestProject>
+    <IsLibraryProject>True</IsLibraryProject>
+    <IsPackable>False</IsPackable>
+    <PrometheusImporterEnabled>True</PrometheusImporterEnabled>  
+  </PropertyGroup>
+  <!--<Import Project="$(SolutionDir)tests\resources\Test.projitems" Label="Shared"/>-->
+  <Import Project="..\..\src\Prometheus.MSBuild\Sdk\Sdk.targets" />
+</Project>

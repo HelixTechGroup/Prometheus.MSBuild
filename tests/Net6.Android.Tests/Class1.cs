@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Net5.Android.Tests
+namespace Net6.Android.Tests
 {
     public class Class1
     {

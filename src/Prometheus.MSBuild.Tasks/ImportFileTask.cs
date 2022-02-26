@@ -3,6 +3,7 @@ using System.Buffers;
 using System.Collections.Concurrent;
 using BuildUtil = Microsoft.Build.Utilities;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Microsoft.Build.Evaluation;
@@ -29,12 +30,12 @@ namespace Prometheus.MSBuild.Tasks
     public class ImportFileTask : PrometheusTask
     {
         protected string m_cacheFileName = "project.prometheus.import.cache";
-        protected ImportFileOptions m_options = new ImportFileOptions();
+        protected new ImportFileOptions m_options = new ImportFileOptions();
 
         [Required]
         public ITaskItem[] ImportFiles
         {
-            get { return m_options.ImportFiles.ToArray(); }
+            get { return m_options.ImportFiles?.ToArray(); }
             set { m_options.ImportFiles = value; }
         }
 
@@ -52,13 +53,26 @@ namespace Prometheus.MSBuild.Tasks
 
         public override bool Execute()
         {
-            var fileName = Path.Combine(this.GetProjectInstance().GetPropertyValue("BaseIntermediateOutputPath"), m_cacheFileName);
+            //if (!Debugger.IsAttached)
+            //    Debugger.Launch();
+            //else
+            //    Debugger.Break();
+
+            var objPath = this.GetProjectInstance()?.GetPropertyValue("BaseIntermediateOutputPath");
+            if (objPath == null)
+                return true;
+
+            var fileName = Path.Combine(objPath, m_cacheFileName);
             Log.LogMessage(MessageImportance.High, $"| {m_options.SectionSymbol} Importing Files.");
             if (m_options.ImportFiles.Count == 0)
             {
                 Log.LogWarning($"ImportFiles parameter is empty.");
                 return true;
             }
+
+            //System.Type type = System.Type.GetTypeFromProgID("VisualStudio.DTE.10.0");
+            //Object obj = System.Activator.CreateInstance(type, true);
+            //EnvDTE80.DTE2 dte = (EnvDTE100.DTE2)obj;
 
             //if (m_options.ImportFiles.Any(f => !File.Exists(f)))
             foreach (var f in m_options.ImportFiles)
@@ -92,7 +106,7 @@ namespace Prometheus.MSBuild.Tasks
                     //var newRoot = XmlReader.Create(sReader);
                     //var p = new Project(newRoot);
                     var p = new Project(cItem.Contents);
-                    project = project.MergeProject(p);
+                    project = project.MergeProject(p);                
                 }
             }
 
@@ -116,7 +130,7 @@ namespace Prometheus.MSBuild.Tasks
             projectProp?.SetValue(newConfig, project);
 
             try
-            {
+            {              
                 replaceMethod?.Invoke(bm, new[] {newConfig, requestConfig});
             }
             catch (TargetInvocationException tie)

@@ -16,6 +16,7 @@
   <!--<Import Project="D:\Users\Bryan\Documents\Projects\HelixTechGroup\Design\Prometheus\msbuild\tests\Prometheus.MSBuild.Tests\bin\Debug\netcoreapp3.1\Test.projitems" Label="Shared" />-->
 
   <PropertyGroup Condition="'$(PrometheusImporterEnabled)' == 'true'">
+    <UseHostCompilerIfAvailable>False</UseHostCompilerIfAvailable>
     <ResolveReferencesDependsOn>
       Import;
       $(ResolveReferencesDependsOn);
@@ -49,7 +50,7 @@
 
     <PropertyGroup>
       <SharedImports>@(Imports->'%(Identity)')</SharedImports>
-      <ImportCache>$(BaseIntermediateOutputPath)\imports.pcache</ImportCache>
+      <!--<ImportCache>$(BaseIntermediateOutputPath)\imports.pcache</ImportCache>-->
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(SharedImports)' != ''">

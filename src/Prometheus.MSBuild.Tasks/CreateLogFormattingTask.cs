@@ -2,6 +2,7 @@
 using BuildUtil = Microsoft.Build.Utilities;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Microsoft.Build.Evaluation;
@@ -93,11 +94,19 @@ namespace Prometheus.MSBuild.Tasks
         /// <inheritdoc />
         public override bool Execute()
         {
+            //if (!Debugger.IsAttached)
+            //    Debugger.Launch();
+            //else
+            //    Debugger.Break();
+
             m_sectionString = m_sectionPrefix + (m_sectionChar * SectionLength);
             m_headerString = m_headerPrefix + (m_headerChar * HeaderLength) + m_headerPostfix;
             //m_sectionPrefix = m_headerPrefix = @"[]";
 
             var project = this.GetProjectInstance();
+            if (project == null)
+                return true;
+
             var name = project.GetPropertyValue("MSBuildProjectName");
             Log.LogMessage(MessageImportance.High, $"| {m_sectionPrefix}{m_sectionString}");
             Log.LogMessage(MessageImportance.High, $"| {m_headerPrefix}==~- --Setting Prometheus Log Format for {name}-- -~=={m_headerPostfix}");

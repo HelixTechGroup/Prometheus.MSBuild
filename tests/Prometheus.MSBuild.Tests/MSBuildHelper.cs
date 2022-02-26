@@ -9,24 +9,36 @@ using System.Text;
 using Microsoft.Build.Construction;
 using Microsoft.Build.Evaluation;
 using Microsoft.Build.Execution;
+using Microsoft.Build.Locator;
 using Microsoft.Build.Utilities;
+using Shin.Framework.Collections.Concurrent;
 
 namespace Prometheus.MSBuild.Tests
 {
     public class MSBuildHelper
     {
+        public static void InitializeMSBuild()
+        {
+            //if (!MSBuildLocator.IsRegistered) 
+            //   MSBuildLocator.RegisterDefaults();
+
+            //MSBuildLocator.RegisterDefaults();
+        }
         public static ProjectCollection CreateProjectCollection(string projectPath = "", string toolsPath = "", bool isSdkStyle = true, IDictionary<string, string> globalProperties = null)
         {
+            //MSBuildLocator.RegisterDefaults();
             var tools = string.IsNullOrWhiteSpace(toolsPath) ? GetToolsPath(isSdkStyle) : toolsPath;
             var props = globalProperties ?? GetGlobalProperties(projectPath, tools);
             var collection = new ProjectCollection(props);
-            collection.AddToolset(new Toolset(ToolLocationHelper.CurrentToolsVersion, tools, collection, string.Empty));
+            var toolSet = new Toolset(ToolLocationHelper.CurrentToolsVersion, tools, collection, null);
+            //collection.AddToolset(toolSet);
 
             return collection;
         }
 
         public static Project CreateProject(string projectPath, bool isSdkStyle = true)
         {
+            //MSBuildLocator.RegisterDefaults();
             var tools = GetToolsPath(isSdkStyle);
             var collection = CreateProjectCollection(projectPath, tools);
             return collection.LoadProject(projectPath);
@@ -34,13 +46,17 @@ namespace Prometheus.MSBuild.Tests
 
         public static ProjectInstance CreateProjectInstance(string projectPath, bool isSdkStyle = true)
         {
+            //MSBuildLocator.RegisterDefaults();
             var tools = GetToolsPath(isSdkStyle);
-            var collection = CreateProjectCollection(projectPath, tools);
-            return new ProjectInstance(ProjectRootElement.Create(projectPath, collection));
+            var collection = CreateProjectCollection("", tools);
+            var root = ProjectRootElement.Create();
+            //root.
+            return new ProjectInstance(root);
         }
 
         public static ProjectInstance CreateProjectInstance(ProjectRootElement root, bool isSdkStyle = true)
         {
+            //MSBuildLocator.RegisterDefaults();
             var tools = GetToolsPath(isSdkStyle);
             var props = GetGlobalProperties(toolsPath: tools);
             var collection = CreateProjectCollection(toolsPath: tools, globalProperties: props);
@@ -49,10 +65,18 @@ namespace Prometheus.MSBuild.Tests
 
         public static string GetToolsPath(bool isSdkStyle = true)
         {
+            //MSBuildLocator.RegisterDefaults();
+            string toolsPath;
             if (isSdkStyle)
-                return @"C:\Program Files\dotnet\sdk\5.0.103";//GetCoreBasePath(AssemblyDirectory);
+            {
+                var v = Environment.Version;
+                toolsPath = toolsPath = PollForSdksPath().LastOrDefault();
+                if (!string.IsNullOrWhiteSpace(toolsPath))
+                    return toolsPath;
+                //return @"C:\Program Files\dotnet\sdk\";//GetCoreBasePath(AssemblyDirectory);
+            }
 
-            string toolsPath = ToolLocationHelper.GetPathToBuildToolsFile("msbuild.exe", ToolLocationHelper.CurrentToolsVersion);
+            toolsPath = ToolLocationHelper.GetPathToBuildToolsFile("msbuild.exe", ToolLocationHelper.CurrentToolsVersion);
             if (string.IsNullOrEmpty(toolsPath))
             {
                 toolsPath = PollForToolsPath().FirstOrDefault();
@@ -68,19 +92,34 @@ namespace Prometheus.MSBuild.Tests
 
         public static string[] PollForToolsPath()
         {
+            //MSBuildLocator.RegisterDefaults();
+            var programFiles = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles);
             var programFilesX86 = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86);
-            var windows = Environment.GetFolderPath(Environment.SpecialFolder.Windows);
 
             return new[]
                    {
                        Path.Combine(programFilesX86, @"MSBuild\15.0\Bin\MSBuild.exe"),
-                       Path.Combine(programFilesX86, @"MSBuild\14.0\Bin\MSBuild.exe")
+                       Path.Combine(programFiles, @"MSBuild\14.0\Bin\MSBuild.exe")
                    }.Where(File.Exists).ToArray();
+        }
+
+        public static string[] PollForSdksPath()
+        {
+            //MSBuildLocator.RegisterDefaults();
+            var programFilesX86 = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles);
+            var sdkDir = Path.Combine(programFilesX86, @"dotnet\sdk\");
+
+            var sdks = Directory.GetDirectories(sdkDir)
+                              .Where(verDirectory => 
+                                         File.Exists(Path.Combine(verDirectory, "MSBuild.dll")));
+
+            return sdks.ToArray();
         }
 
         public static IDictionary<string, string> GetGlobalProperties(string projectPath = "", string toolsPath = "", bool isSdkStyle = true)
         {
-            var tools = @"C:\Program Files\dotnet\sdk\5.0.103";//string.IsNullOrWhiteSpace(toolsPath) ? GetToolsPath(isSdkStyle) : toolsPath;
+            //MSBuildLocator.RegisterDefaults();
+            var tools = string.IsNullOrWhiteSpace(toolsPath) ? GetToolsPath(isSdkStyle) : toolsPath;
             //string solutionDir = !string.IsNullOrWhiteSpace(projectPath) && File.Exists(projectPath) ? Path.GetDirectoryName(projectPath) : AssemblyDirectory;
             var solutionDir = Path.Combine(AssemblyDirectory, "tests");
             string extensionsPath = isSdkStyle ? tools : Path.GetFullPath(Path.Combine(toolsPath, @"..\..\"));
@@ -132,6 +171,7 @@ namespace Prometheus.MSBuild.Tests
 
         public static string GetCoreBasePath(string projectPath)
         {
+            //MSBuildLocator.RegisterDefaults();
             const string DOTNET_CLI_UI_LANGUAGE = nameof(DOTNET_CLI_UI_LANGUAGE);
 
             // Ensure that we set the DOTNET_CLI_UI_LANGUAGE environment variable to "en-US" before

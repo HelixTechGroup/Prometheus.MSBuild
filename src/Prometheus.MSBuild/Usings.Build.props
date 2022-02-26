@@ -1,0 +1,39 @@
+<Project InitialTargets="PrintUsings">
+  <PropertyGroup>
+    <TaskAssembly>$(PrometheusLibDirectory)\$(PrometheusLibFramework)\Prometheus.MSBuild.Tasks.dll</TaskAssembly>
+    <UsingsLoaded>False</UsingsLoaded>
+  </PropertyGroup>
+  
+  <UsingTask TaskName="Prometheus.MSBuild.Tasks.AttachDebuggerTask"
+             AssemblyFile="$(TaskAssembly)"
+             Condition="'$(PrometheusTasksEnabled)' == 'true' And '$(Configuration)' == 'debug'" />
+
+  <UsingTask TaskName="Prometheus.MSBuild.Tasks.LogPropertyTask"
+             AssemblyFile="$(TaskAssembly)"
+             Condition="'$(PrometheusTasksEnabled)' == 'true'" />
+
+  <UsingTask TaskName="Prometheus.MSBuild.Tasks.DetectPlatformTask"
+             AssemblyFile="$(TaskAssembly)"
+             Condition="'$(PrometheusTasksEnabled)' == 'true'" />
+
+  <UsingTask TaskName="Prometheus.MSBuild.Tasks.CreateLogFormattingTask"
+             AssemblyFile="$(TaskAssembly)"
+             Condition="'$(PrometheusTasksEnabled)' == 'true'" />
+
+  <UsingTask TaskName="Prometheus.MSBuild.Tasks.ImportFileTask"
+             AssemblyFile="$(TaskAssembly)"
+             Condition="'$(PrometheusTasksEnabled)' == 'true'" />
+
+  <Target Name="PrintUsings">
+    <PropertyGroup>
+      <UsingLoaded>True</UsingLoaded>
+      <SectionSymbol>%</SectionSymbol>
+    </PropertyGroup>
+
+    <Message Text="| $(SectionString)" Importance="high" />
+    <Message Text="| []==~ $(MSBuildThisFile) ~==[]" Importance="high" />
+    <Message Text="| $(HeaderString)" Importance="high" />
+    
+    <Message Text="| $(SectionSymbol) TaskAssemblyName: $(TaskAssembly)" Importance="high" />
+  </Target>
+</Project>

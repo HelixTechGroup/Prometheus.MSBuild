@@ -19,9 +19,9 @@
   <!--<Import Project="$(SharedImports)" Condition="'$(SharedImports)' != ''" Label="Shared" />-->
 
   <ItemGroup Condition="$(MergeBinary) == 'true'">
-    <PackageReference Include="Costura.Fody" Version="5.0.2">
+    <PackageReference Include="Costura.Fody">
       <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive; buildmultitargeting</IncludeAssets>
+      <IncludeAssets>compile; runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
     <!--<Content Include="$(SourceDirectory)\FodyWeavers.xml"
              Condition="Exists('$(SourceDirectory)\FodyWeavers.xml')" Link="FodyWeavers.xml"/>
@@ -50,6 +50,7 @@
   <Target Name="SetupPrometheus" BeforeTargets="Build">
     <Message Text="| $(SectionString)" Importance="high" />
     <Message Text="| [*] $~- --Setting up Prometheus for $(MSBuildProjectName)-- -~$" Importance="high" />
+    <Message Text="| [*] " Importance="high" />
     <Message Text="| $(SectionString)" Importance="high" />
     <!--<CallTarget Targets="InitializeEnvironment;InitializePlatform;InitializeFramework" Condition="$(PrometheusEnabled) == 'true'"/>-->
     <!--<Message Text="| $(SectionSymbol) Import String: $(SharedImports)" Importance="high" />-->
@@ -58,7 +59,7 @@
     </PropertyGroup>
   </Target>
 
-  <Target Name="PostSetupPrometheus" AfterTargets="Build">
+  <Target Name="PostSetupPrometheus">
     <Message Text="| $(SectionString)" Importance="high" />
     <Message Text="| [*] $~- --Post Setting up Prometheus for $(MSBuildProjectName)-- -~$" Importance="high" />
     <Message Text="| $(HeaderString)" Importance="high" />
@@ -66,6 +67,37 @@
     <!--<CallTarget Targets="Pack" Condition="'$(IsPackable)' == 'true'" />-->
   </Target>
 
+  <Target Name="PostNugetPack" AfterTargets="Pack">
+  <!--Condition="'$(IsPackable)' == 'true'"-->
+    <CallTarget Targets="CopyToLocalNuGetRepo" />
+  </Target>
+
+  <Target Name="CopyToTestLib" Condition="'$(HasTests)' == 'true'">
+    <ItemGroup>
+      <OutputList Include="$(OutputDirectory)\**\*.*" >
+        <Destination>
+          
+        </Destination>
+      </OutputList>
+    </ItemGroup>
+    <Message Text="| []==~~ Copying Tasks library to Tests Lib directory ~~==[]" Importance="high" />
+    <!--<UpdateItem Include="@(OutputList)"  />-->
+      <!--<Output TaskParameter="Include" ItemName="TestItem" />
+    </UpdateItem>-->
+    <!--%(TaskPath.Identity)-->
+    <Message Text="| ====~~> Copying File: $(TestsDirectory)\lib\$(Configuration)\$(ProductName)\%(OutputList.RecursiveDir)\%(OutputList.Filename)%(OutputList.Extension)"/>
+    <!--<Copy SourceFiles="@(OutputList)" DestinationFiles="%(OutputList.Destination)" />-->
+    <!--@(TestItem->'%(Destination)%(FileName)%(Extension)')-->
+    <Copy SourceFiles="@(OutputList)" DestinationFiles="@(OutputList->'$(TestsDirectory)/lib/$(Configuration)/$(ProductName)/%(RecursiveDir)/%(Filename)%(Extension)')" SkipUnchangedFiles="true" ContinueOnError="true" OverwriteReadOnlyFiles="true" />
+
+  </Target>
+  
+  <Target Name="PostBuildOutput" AfterTargets="CopyFilesToOutputDirectory"
+	        BeforeTargets="PostBuildEvent;AfterBuild">
+    <CallTarget Targets="PostSetupPrometheus" />
+    <CallTarget Targets="CopyToTestLib"/>
+  </Target>
+  
   <Target Name="InitializeFramework" Condition="$(PrometheusPlatformEnabled) == 'true'">
     <Message Text="$~====== Initializing Framework for $(MSBuildProjectName) ======~$" Importance="high" />
     <CallTarget Targets="PrintProps;PrintImports;" />
@@ -85,7 +117,7 @@
     <CallTarget Targets="PrintPlatform;PrintPlatformProps;" />
   </Target>
 
-  <Target Name="CopyToLocalNuGetRepo" AfterTargets="Pack" Condition="Exists('$(LocalNugetRepo)') And '$(IsPackable)' == 'true'">
+  <Target Name="CopyToLocalNuGetRepo" Condition="Exists('$(LocalNugetRepo)') And '$(IsPackable)' == 'true'">
     <PropertyGroup>
       <SectionSymbol>$$</SectionSymbol>
     </PropertyGroup>
@@ -277,6 +309,7 @@
       <Found2>False</Found2>
     </PropertyGroup>
 
+    <Message Text="| $(SectionSymbol) MergeBinary: $(MergeBinary)" Importance="high" />
     <Message Text="| $(SectionSymbol) SharedImports: $(SharedImports)" Importance="high" />
     <Message Text="| $(SectionSymbol) Import Found: $(Found)" Importance="high" />
     <Message Text="| $(SectionSymbol) Import Found Target: $(Found2)" Importance="high" />

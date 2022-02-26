@@ -1,10 +1,31 @@
 <Project InitialTargets="DetectPlatform2">
-  <PropertyGroup>
+  <PropertyGroup Condition="'$(TargetPlatform)' != '' And '$(PrometheusTasksEnabled)' != 'true'">
     <Array>$(TargetPlatform.Split(`-`))</Array>
     <RuntimeId>$(TargetPlatform.Split(`-`)[0])</RuntimeId>
+    <!--<TargetFramework>$(TargetPlatform.Split(`-`)[0])</TargetFramework>-->
     <PlatformId Condition="$(Array.Contains(`;`))">$(TargetPlatform.Split(`-`)[1])</PlatformId>
+    <TargetFrameworks Condition="'$(TargetPlatforms)' != ''">$(TargetPlatforms)</TargetFrameworks>
   </PropertyGroup>
 
+  <PropertyGroup>
+    <SdkVersionTest>^net\d+(?:\.\d+)+(?:\-\S+)*</SdkVersionTest>
+  </PropertyGroup>
+  
+  <!--<PropertyGroup Condition="'$(PrometheusTasksEnabled)' != 'true'">
+    <RuntimeId>$(TargetFramework)</RuntimeId>
+    <PlatformId>None</PlatformId>
+  </PropertyGroup>-->
+
+  <PropertyGroup>
+    <IsSdkVersion Condition="'$([System.Text.RegularExpressions.Regex]::IsMatch($(TargetPlatform), $(SdkVersionTest)))' == 'true'">True</IsSdkVersion>
+    <IsCoreRuntime>$(IsSdkVersion)</IsCoreRuntime>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(IsSdkVersion)' == 'true'">
+    <RuntimeTargetFramework>$(TargetPlatform)</RuntimeTargetFramework>
+    <TargetFramework>$(TargetPlatform)</TargetFramework>
+  </PropertyGroup>
+  
   <!--<PropertyGroup Condition=" '$(TargetPlatform)' != '' ">
     <HasWindows>$(PlatformId.Contains(`windows`))</HasWindows>
     <HasAndroid>$(PlatformId.Contains(`android`))</HasAndroid>
@@ -19,23 +40,57 @@
 
   <!--<Import Project="$(PlatformPropsPath)" />-->
 
-  <Target Name="DetectPlatform2">
+  <Target Name="DetectPlatform2" Condition="'$(PrometheusDetectionEnabled)' == 'true'">
     <Message Text="| $(SectionString)" Importance="high" />
     <Message Text="| []==~ $(MSBuildThisFile) ~==[]" Importance="high" />
     <Message Text="| $(HeaderString)" Importance="high" />
 
-    <PropertyGroup Condition="'$(TargetPlatform)' == '' And '$(TargetPlatforms)' != ''">
-      <TargetPlatform>%(TPlatforms.Identity)</TargetPlatform>
-    </PropertyGroup>
-
     <ItemGroup Condition="'$(TargetPlatforms)' != ''">
       <TPlatforms Include="$(TargetPlatforms.Split(`;`))" />
     </ItemGroup>
+    
+    <PropertyGroup Condition="'$(TargetPlatforms)' != ''">
+      <TargetPlatform>%(TPlatforms.Identity)</TargetPlatform>
+    </PropertyGroup>
 
-    <DetectPlatformTask TargetPlatform="$(TargetPlatform)" SectionSymbol="$(SectionSymbol)" Condition="'$(PrometheusTasksEnabled)' == 'true'">
+    <!--<PropertyGroup Condition="'$(PrometheusTasksEnabled)' != 'true'">
+      <TPlatforms>$(TargetPlatform.Split(`-`))</TPlatforms>
+      <RuntimeId>$(TargetPlatform.Split(`-`)[0])</RuntimeId>
+      <PlatformId Condition="$(TPlatforms.Contains(`;`))">$(TargetPlatform.Split(`-`)[1])</PlatformId>
+      --><!--<TargetFramework>%(TPlatforms.Identity)</TargetFramework>--><!--
+      <TargetFrameworks>$(TargetPlatforms)</TargetFrameworks>
+    </PropertyGroup>-->
+
+    <PropertyGroup Condition="'$(PrometheusTasksEnabled)' != 'true'">
+      <RuntimeId>$(TargetFramework)</RuntimeId>
+      <PlatformId>None</PlatformId>
+    </PropertyGroup>
+
+    <PropertyGroup>
+      <IsSdkVersion Condition="'$([System.Text.RegularExpressions.Regex]::IsMatch($(TargetPlatform), $(SdkVersionTest)))' == 'true'">True</IsSdkVersion>
+      <IsCoreRuntime>$(IsSdkVersion)</IsCoreRuntime>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(IsSdkVersion)' == 'true'">
+      <RuntimeTargetFramework>$(TargetPlatform)</RuntimeTargetFramework>
+      <TargetFramework>$(TargetPlatform)</TargetFramework>
+    </PropertyGroup>
+
+    <DetectPlatformTask TargetPlatform="$(TargetPlatform)" SectionSymbol="$(SectionSymbol)"
+                        Condition="'$(PrometheusTasksEnabled)' == 'true'">
       <Output TaskParameter="RuntimeId" PropertyName="RuntimeId" />
       <Output TaskParameter="PlatformId" PropertyName="PlatformId" />
+      <Output TaskParameter="PlatformVersion" PropertyName="PlatformVersion" />
+      <Output TaskParameter="RuntimeVersion" PropertyName="RuntimeVersion" />
+      <Output TaskParameter="RuntimeTargetFramework" PropertyName="TargetFramework" />
+      <Output TaskParameter="IsCoreRuntime" PropertyName="IsCoreRuntime" />
+      <Output TaskParameter="PlatformDetected" PropertyName="PlatformDetected"/>
+      <Output TaskParameter="RuntimeDetected" PropertyName="RuntimeDetected" />
     </DetectPlatformTask>
+
+    <!--<PropertyGroup Condition="'$(RuntimeDetected)' == 'true'">
+      <TargetFramework>$(RuntimeTargetFramework)</TargetFramework>
+    </PropertyGroup>-->
 
     <!--<PropertyGroup Condition=" '$(TargetPlatform)' != '' ">
       <HasWindows>$(PlatformId.Contains(`windows`))</HasWindows>
@@ -53,5 +108,13 @@
     <PropertyGroup Condition="'$(RuntimeId.Contains(`netstandard`))' == 'true'">
       <TargetFramework>netstandard2.1</TargetFramework>
     </PropertyGroup>-->
+    <Message Text="| $(SectionSymbol) RuntimeId: $(RuntimeId)" Importance="high" />
+    <Message Text="| $(SectionSymbol) RuntimeVersion: $(RuntimeVersion)" Importance="high" />
+    <Message Text="| $(SectionSymbol) PlatformId: $(PlatformId)" Importance="high" />
+    <Message Text="| $(SectionSymbol) PlatformVersion: $(PlatformVersion)" Importance="high" />
+    <Message Text="| $(SectionSymbol) TargetPlatform: $(TargetPlatform)" Importance="high" />
+    <Message Text="| $(SectionSymbol) TargetPlatforms: $(TargetPlatforms)" Importance="high" />
+    <Message Text="| $(SectionSymbol) TargetFramework: $(TargetFramework)" Importance="high" />
+    <Message Text="| $(SectionSymbol) TargetFrameworks: $(TargetFrameworks)" Importance="high" />
   </Target>
 </Project>
