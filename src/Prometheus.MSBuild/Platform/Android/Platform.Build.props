@@ -1,25 +1,53 @@
-<Project>
+<Project InitialTargets="AndroidProps">
   <PropertyGroup>
     <PlatformId>Android</PlatformId>
     <PlatformType>Mobile</PlatformType>
     <Rendering>True</Rendering>
     <MergeBinary>False</MergeBinary>
+    <HasAndroid>True</HasAndroid>
+    <HasXamarin>$(RuntimeId.Contains(`xamarin`))</HasXamarin>
     <!--<OutputDirectory>$(SolutionDir)build\$(Configuration)\$(AssemblyName)\$(TargetPlatform)</OutputDirectory>-->
     <!--<OutputPath>$(OutputDirectory)</OutputPath>-->
   </PropertyGroup>
-  <PropertyGroup Condition="'$(IsSdkVersion)' == 'true' 
-                 And '$(RuntimeVersion)' &gt; '6.0'">
-    <TargetFrameworkVersion>v31.0</TargetFrameworkVersion>
-    <SupportedOSPlatformVersion>21</SupportedOSPlatformVersion>
+  <PropertyGroup Condition="'$(IsSdkVersion)' == 'true'"> 
+                 <!--And '$(RuntimeVersion)' &gt;= '5.0'-->
+    <!--<TargetFramework>$(RuntimeId)-android</TargetFramework>-->
+    <!--<TargetFrameworkVersion>v6.0</TargetFrameworkVersion>-->
+    <SupportedOSPlatformVersion>21.0</SupportedOSPlatformVersion>
+    <!--<TargetFrameworkIdentifier>.NETCoreApp</TargetFrameworkIdentifier>-->
   </PropertyGroup>
-  <PropertyGroup Condition="'$(HasXamarin)' == 'true' 
-                 Or ('$(IsSdkVersion)' == 'true' 
-                    And '$(RuntimeVersion)' &gt; '6.0')">
+  <!--<PropertyGroup Condition="'$(RuntimeVersion)' &lt;= '5.0'">
+    --><!--<TargetFrameworkIdentifier>MonoAndroid</TargetFrameworkIdentifier>--><!--
+    <RuntimeTargetFramework>net5.0</RuntimeTargetFramework>
+  </PropertyGroup>-->
+    
+  <ItemGroup Condition="'$(HasXamarin)' == 'true'">
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Mono.Android" />
+    <Reference Include="mscorlib" />
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Xml" />
+    <PackageReference Include="Xamarin.Android.Support.v7.AppCompat" Version="28.0.0.3"
+                      Condition="'$(UseAndroidX)' != 'true'" />
+    <PackageReference Include="Xamarin.AndroidX.AppCompat" Version="1.0.2.0.6" Condition="'$(UseAndroidX)' == 'true'" />
+    <PackageReference Include="Xamarin.AndroidX.Migration" Version="1.0.8" Condition="'$(UseAndroidX)' == 'true'" />
+  </ItemGroup>
+  
+  <!--<PropertyGroup Condition="'$(IsSdkVersion)' == 'true' 
+                 And '$(RuntimeVersion)' &gt; '6.0'">
+    <TargetFramework>$(RuntimeId)-android</TargetFramework>
+    <SupportedOSPlatformVersion>31.0</SupportedOSPlatformVersion>
+  </PropertyGroup>-->
+  <PropertyGroup Condition="'$(HasXamarin)' == 'true'"> 
+                 <!--Or ('$(IsSdkVersion)' == 'true' 
+                    And '$(RuntimeVersion)' &gt; '6.0')-->
     <ProjectGuid>{99BC5618-6F55-4B69-8BB6-BD29A856D9F6}</ProjectGuid>
     <ProjectTypeGuids>{EFBA0AD7-5A72-4C68-AF49-83D382785DCF};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <TemplateGuid>{9ef11e43-1701-4396-8835-8392d57abb70}</TemplateGuid>
-    <TargetFrameworkVersion>v11.0</TargetFrameworkVersion>
-    <SupportedOSPlatformVersion>5.0</SupportedOSPlatformVersion>
+    <TargetFrameworkVersion>v9.0</TargetFrameworkVersion>
+    <SupportedOSPlatformVersion>9.0</SupportedOSPlatformVersion>
     <TargetFramework></TargetFramework>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <FileAlignment>512</FileAlignment>
@@ -30,7 +58,7 @@
     <AndroidUseAapt2>true</AndroidUseAapt2>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
   </PropertyGroup>
-  <ItemGroup
+  <!--<ItemGroup
     Condition="'$(HasXamarin)' == 'true' 
                  Or ('$(IsSdkVersion)' == 'true' 
                     And '$(RuntimeVersion)' &gt; '6.0')">
@@ -50,5 +78,35 @@
     <None Include="Assets\AboutAssets.txt" />
     <AndroidResource Include="Resources\values\strings.xml" />
     <Folder Include="Resources\drawable\" />
-  </ItemGroup>
+  </ItemGroup>-->
+  <Target Name="AndroidProps">
+    <Message Text="| $(SectionString)" Importance="high" />
+    <Message Text="| []==~ $(MSBuildThisFile) --$(PlatformId)-- ~==[]" Importance="high" />
+    <Message Text="| $(HeaderString)" Importance="high" />
+
+    <Message Text="| $(SectionSymbol) IsValidPlatform: $(IsValidPlatform)" Importance="high" />
+    <Message Text="| $(SectionSymbol) RuntimeId: $(RuntimeId)" Importance="high" />
+    <Message Text="| $(SectionSymbol) RuntimeVersion: $(RuntimeVersion)" Importance="high" />
+    <Message Text="| $(SectionSymbol) PlatformId: $(PlatformId)" Importance="high" />
+    <Message Text="| $(SectionSymbol) PlatformType: $(PlatformType)" Importance="high" />
+    <Message Text="| $(SectionSymbol) PlatformVersion: $(PlatformVersion)" Importance="high" />
+    <Message Text="| $(SectionSymbol) RuntimeTargetFramework: $(RuntimeTargetFramework)" Importance="high" />
+    <Message Text="| $(SectionSymbol) TargetPlatform: $(TargetPlatform)" Importance="high" />
+    <Message Text="| $(SectionSymbol) TargetPlatforms: $(TargetPlatforms)" Importance="high" />
+    <Message Text="| $(SectionSymbol) TargetFramework: $(TargetFramework)" Importance="high" />
+    <Message Text="| $(SectionSymbol) TargetFrameworks: $(TargetFrameworks)" Importance="high" />
+    <Message Text="| $(SectionSymbol) TargetFrameworkVersion: $(TargetFrameworkVersion)" Importance="high" />
+    <Message Text="| $(SectionSymbol) TargetFrameworkIdentifier: $(TargetFrameworkIdentifier)" Importance="high" />
+    <Message Text="| $(SectionSymbol) TargetFrameworkProfile: $(TargetFrameworkProfile)" Importance="high" />
+    <Message Text="| $(SectionSymbol) SupportedOSPlatformVersion: $(SupportedOSPlatformVersion)" Importance="high" />
+    <Message Text="| $(SectionSymbol) IsCoreVersion: $(IsCoreRuntime)" Importance="high" />
+    <Message Text="| $(SectionSymbol) IsSdkVersion: $(IsSdkVersion)" Importance="high" />
+    <Message Text="| $(SectionSymbol) HasWindows: $(HasWindows)" Importance="high" />
+    <Message Text="| $(SectionSymbol) HasLinux: $(HasLinux)" Importance="high" />
+    <Message Text="| $(SectionSymbol) HasAndroid: $(HasAndroid)" Importance="high" />
+    <Message Text="| $(SectionSymbol) HasXamarin: $(HasXamarin)" Importance="high" />
+    <Message Text="| $(SectionSymbol) UseAndroidX: $(UseAndroidX)" Importance="high" />
+    <Message Text="| $(SectionSymbol) ProjectGuid: $(ProjectGuid)" Importance="high" />
+    <Message Text="| $(SectionSymbol) ProjectTypeGuid: $(ProjectTypeGuid)" Importance="high" />
+  </Target>
 </Project>

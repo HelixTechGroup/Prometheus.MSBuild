@@ -1,5 +1,8 @@
 ﻿<Project InitialTargets="PrintNuget2" Condition="'$(IsPackable)' == 'true'">
   <PropertyGroup>
+    <PackageId Condition="'$(PackageId)' == ''">$(ProductName).$(PlatformId)</PackageId>
+    <PackageId Condition="'$(PlatformId)' == '' Or '$(PlatformId)' == 'none'">$(ProductName)</PackageId>
+    <PackageVersion>$(ProductVersion)</PackageVersion>
     <NugetPackageName>$(ProductName).$(PackageVersion).nupkg</NugetPackageName>
     <PackageLicenseExpression Condition="'$(PackageLicenseExpression)' == ''">GPL-3.0-or-later</PackageLicenseExpression>
     <PublishRepositoryUrl Condition="'$(PublishRepositoryUrl)' == ''">true</PublishRepositoryUrl>
@@ -23,6 +26,8 @@
     <Message Text="| $(HeaderString)" Importance="high" />
     <LogPropertyTask ProjectFiles="$(MSBuildThisFileFullPath)" SectionSymbol="$(SectionSymbol)"
                      Condition="'$(PrometheusTasksEnabled)' == 'true'" />
+    <Message Text="| $(SectionSymbol) PackageId: $(PackageId)" Importance="high" />
+    <Message Text="| $(SectionSymbol) PackageVersion: $(PackageVersion)" Importance="high" />
     <Message Text="| $(SectionSymbol) NuGetPackageName: $(NugetPackageName)" Importance="high" />
     <Message Text="| $(SectionSymbol) PackageLicenseExpression: $(PackageLicenseExpression)" Importance="high" />
     <Message Text="| $(SectionSymbol) PublishRepositoryUrl: $(PublishRepositoryUrl)" Importance="high" />

@@ -1,0 +1,20 @@
+<Project InitialTargets="_PrintTestsProps">
+  <PropertyGroup>
+    <IsPackable>False</IsPackable>
+    <TestsDirectory Condition="'$(TestsDirectory)' == ''">$(SolutionDir)tests</TestsDirectory>
+    <PrometheusLibDirectory>$(BuildDirectory)\$(Configuration)\Prometheus.MSBuild.Tasks</PrometheusLibDirectory>
+  </PropertyGroup>
+  
+  <Target Name="_PrintTestsProps">
+    <PropertyGroup>
+      <SectionSymbol>&lt;*&gt;</SectionSymbol>
+    </PropertyGroup>
+
+    <Message Text="| $(SectionString)" Importance="high" />
+    <Message Text="| []==~ $(MSBuildThisFile) ~==[]" Importance="high" />
+    <Message Text="| $(HeaderString)" Importance="high" />
+
+    <Message Text="| $(SectionSymbol) IsTestProject: $(IsTestProject)" Importance="high" />
+    <Message Text="| $(SectionSymbol) TestsDirectory: $(TestsDirectory)" Importance="high" />
+  </Target>
+</Project>

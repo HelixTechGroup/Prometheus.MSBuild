@@ -1,19 +1,53 @@
 <Project InitialTargets="_PrintPrometheusTargets">
+  <!--<PropertyGroup>
+    <MSBuildProjectParentDirectory>$(MSBuildProjectDirectory)\..</MSBuildProjectParentDirectory>
+  </PropertyGroup>-->
+  <!--<PropertyGroup Condition="$(RootPath) == '' Or '$(SolutionDir)' == ''">
+    <RootPath Condition="$(RootPath) == ''">@(MSBuildProjectParentDirectory.FullPath)</RootPath>
+    <SolutionDir>$(RootPath)</SolutionDir>
+  </PropertyGroup>-->
+
+  <!--<PropertyGroup Condition="'$(TargetPlatform)' != '' And '$(TargetFramework)' == ''">
+    <Array>$(TargetPlatform.Split(`-`))</Array>
+    <RuntimeId>$(TargetPlatform.Split(`-`)[0])</RuntimeId>
+    <PlatformId Condition="'$(TargetPlatform.Split(`-`).Length)' &gt;= '2'">$(TargetPlatform.Split(`-`)[1])</PlatformId>
+    <TargetFrameworks Condition="'$(TargetPlatforms)' != ''">$(TargetPlatforms)</TargetFrameworks>
+  </PropertyGroup>-->
+
+  <!--<PropertyGroup Condition=" '$(PlatformId)' == '' Or '$(PlatformId)' == 'none'">
+    <HasWindows>False</HasWindows>
+    <HasAndroid>False</HasAndroid>
+    <HasLinux>False</HasLinux>
+    <HasXamarin>False</HasXamarin>
+    <HasPlatform>False</HasPlatform>
+  </PropertyGroup>-->
+  <!--<PropertyGroup Condition=" '$(PlatformId)' != '' And '$(PlatformId)' != 'none'">
+    <HasWindows>$(PlatformId.Contains(`windows`))</HasWindows>
+    <HasAndroid>$(PlatformId.Contains(`android`))</HasAndroid>
+    <HasLinux>$(PlatformId.Contains(`linux`))</HasLinux>
+    <HasXamarin>$(RuntimeId.Contains(`xamarin`))</HasXamarin>
+    <HasPlatform>True</HasPlatform>
+  </PropertyGroup>-->
+  
   <ImportGroup Label="Core Imports" Condition="'$(PrometheusEnabled)' == 'true'">
+    <Import Project="$(PrometheusTestsTargets)" Condition="'$(IsTestProject)' == 'true'" />
     <Import Project="$(PrometheusCheckTargets)" Condition="Exists('$(PrometheusCheckTargets)')" />
     <Import Project="$(PrometheusGlobalTargets)" Condition="Exists('$(PrometheusGlobalTargets)')"/>    
+    <Import Project="$(PrometheusUsingsProps)" Condition="Exists('$(PrometheusUsingsProps)')" />
   </ImportGroup>
 
-  <ImportGroup Condition="'$(PrometheusEnabled)' == 'true' And '$(PrometheusLoadType)' == 'full'">
-    <Import Project="$(PrometheusDetectFrameworkTargets)" Condition="Exists('$(PrometheusDetectFrameworkTargets)') And '$(PrometheusDetectionEnabled)' == 'true'" />
-    <Import Project="$(PrometheusRuntimeTargets)" Condition="Exists('$(PrometheusRuntimeTargets)')" />
-    <Import Project="$(PrometheusPlatformTargets)" Condition="Exists('$(PrometheusPlatformTargets)') And '$(PrometheusPlatformEnabled)' == 'true'" />
+  <Import Project="$(PrometheusRuntimeTargets)" Condition="Exists('$(PrometheusRuntimeTargets)')" />
+  
+  <ImportGroup Condition="'$(PrometheusEnabled)' == 'true' And '$(PrometheusLoadType)' == 'full'">    
+    <!--<Import Project="$(PrometheusDetectFrameworkTargets)" Condition="Exists('$(PrometheusDetectFrameworkTargets)') And '$(PrometheusDetectionEnabled)' == 'true'" />-->
+    <!--<Import Project="$(PrometheusRuntimeTargets)" Condition="Exists('$(PrometheusRuntimeTargets)')" />-->        
+    <Import Project="$(PrometheusPlatformTargets)" Condition="Exists('$(PrometheusPlatformTargets)') And '$(PrometheusPlatformEnabled)' == 'true'" />    
   </ImportGroup>
-
+  
   <ImportGroup Condition="'$(PrometheusEnabled)' == 'true' And '$(PrometheusLoadType)' == 'lite'">
 
   </ImportGroup>
-
+  
   <ImportGroup Condition="'$(PrometheusEnabled)' == 'true'">
     <Import Project="$(PrometheusCommonTargets)" Condition="Exists('$(PrometheusCommonTargets)')" />
     <Import Project="$(PrometheusImportertargets)" 
@@ -22,17 +56,56 @@
           And Exists('$(PrometheusImportertargets)')"/>
   </ImportGroup>
   
-  <Target Name="_PrintPrometheusTargets" Condition="'$(PrometheusEnabled)' == 'true'" Outputs="$(SharedImports)">
-    <ItemGroup>
-      <MSBuildProjectParentDirectory Include="$(MSBuildProjectDirectory)\..\.." />
-    </ItemGroup>
+  <Target Name="_PrintPrometheusTargets" Outputs="$(SharedImports)">
     <PropertyGroup Condition="$(RootPath) == '' Or '$(SolutionDir)' == ''">
-      <RootPath Condition="$(RootPath) == ''">%(MSBuildProjectParentDirectory.FullPath)"</RootPath>
-      <SolutionDir>$(RootPath)</SolutionDir>
+      <!--<RootPath Condition="$(RootPath) == ''">@(MSBuildProjectParentDirectory.FullPath)</RootPath>-->
+      <!--<RootPath Condition="$(RootPath) == ''">$([System.IO.Path]::GetFullPath($(MSBuildProjectParentDirectory)))</RootPath>-->
+      <RootPath Condition="$(RootPath) == ''">$(SolutionDir)</RootPath>
+      <SolutionDir Condition="'$(SolutionDir)' == ''">$(RootPath)</SolutionDir>
     </PropertyGroup>
     <PropertyGroup>
       <SectionSymbol>*</SectionSymbol>
     </PropertyGroup>
+
+    <!--<PropertyGroup Condition="'$(TargetPlatform)' != '' And '$(TargetFramework)' == ''">
+      <Array>$(TargetPlatform.Split(`-`))</Array>
+      <RuntimeId Condition="'$(RuntimeId)' == ''">$(TargetPlatform.Split(`-`)[0])</RuntimeId>
+
+      --><!--<RuntimeTargetFramework Condition="'$(RuntimeTargetFramework)' == '' And '$(RuntimeId)' != ''">$(RuntimeId)</RuntimeTargetFramework>--><!--
+
+      <PlatformId Condition="'$(PlatformId)' == ''">None</PlatformId>
+      <PlatformId Condition="'$(TargetPlatform.Split(`-`).Length)' &gt;= '2'">$(TargetPlatform.Split(`-`)[1])</PlatformId>
+      <RuntimeTargetFramework Condition="'$(PlatformId)' != ''">$(RuntimeId)-$(PlatformId)</RuntimeTargetFramework>
+    </PropertyGroup>
+
+    <PropertyGroup Condition=" '$(PlatformId)' != '' And '$(PlatformId)' != 'none'">
+      <HasWindows>$(PlatformId.Contains(`windows`))</HasWindows>
+      <HasAndroid>$(PlatformId.Contains(`android`))</HasAndroid>
+      <HasLinux>$(PlatformId.Contains(`linux`))</HasLinux>
+      <HasXamarin>$(RuntimeId.Contains(`xamarin`))</HasXamarin>
+      <HasPlatform>True</HasPlatform>
+    </PropertyGroup>-->
+    
+    <!--<PropertyGroup Condition="'$(TargetPlatform)' != '' And '$(TargetFramework)' == ''">
+      <Array>$(TargetPlatform.Split(`-`))</Array>
+      <RuntimeId Condition="'$(RuntimeId)' == ''">$(TargetPlatform.Split(`-`)[0])</RuntimeId>
+      --><!--<RuntimeTargetFramework Condition="'$(RuntimeTargetFramework)' == '' And '$(RuntimeId)' != ''">$(RuntimeId)</RuntimeTargetFramework>--><!--
+      <PlatformId Condition="'$(PlatformId)' == ''">None</PlatformId>
+      <PlatformId Condition="'$(TargetPlatform.Split(`-`).Length)' &gt;= '2'">$(TargetPlatform.Split(`-`)[1])</PlatformId>
+      <RuntimeTargetFramework Condition="'$(PlatformId)' != ''">$(RuntimeId)-$(PlatformId)</RuntimeTargetFramework>
+      --><!--<TargetFrameworks Condition="'$(TargetPlatforms)' != ''">$(TargetPlatforms)</TargetFrameworks>--><!--
+    </PropertyGroup>-->
+    
+    <!--<PropertyGroup Condition="'$(TargetPlatform)' != '' And '$(TargetFramework)' == ''">
+      <Array>$(TargetPlatform.Split(`-`))</Array>
+      <RuntimeId>$(TargetPlatform.Split(`-`)[0])</RuntimeId>
+      <RuntimeTargetFramework>$(RuntimeId)</RuntimeTargetFramework>
+      --><!--Condition="'$(TargetPlatform.Split(`-`).Length)' &gt;= '2'"--><!--
+      <PlatformId>$(TargetPlatform.Split(`-`)[1])</PlatformId>
+      --><!--<TargetFramework Condition="'$(PlatformId)' != ''">$(RuntimeId)-$(PlatformId)</TargetFramework>
+      <TargetFrameworks Condition="'$(TargetPlatforms)' != ''">$(TargetPlatforms)</TargetFrameworks>--><!--
+    </PropertyGroup>-->
+    
     <!--<PropertyGroup>
       <SharedImports Condition="'$(SharedImports)' == ''">@(Imports->'%(Identity)')</SharedImports>
     </PropertyGroup>-->
@@ -49,6 +122,6 @@
     <Message Text="| $(SectionSymbol) PrometheusTargets: $(PrometheusTargets)" Importance="high" />
     <Message Text="| $(SectionSymbol) SharedImports: $(SharedImports)" Importance="high" />
     <Message Text="| $(SectionSymbol) Imports: %(Imports.Identity)" Importance="high" />
-    <Message Text="| $(SectionSymbol) Compile ItemGroup: %(Compile.Identity)" Importance="high" />
+    <!--<Message Text="| $(SectionSymbol) Compile ItemGroup: %(Compile.Identity)" Importance="high" />-->
   </Target>
 </Project>

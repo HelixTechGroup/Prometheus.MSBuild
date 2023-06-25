@@ -2,13 +2,12 @@
   <PropertyGroup>
     <SdkVersionTest>^net\d+(?:\.\d+)+(?:\-\S+)*</SdkVersionTest>
   </PropertyGroup>
-  
-  <PropertyGroup Condition=" '$(RuntimeId.Contains(`netcore`))' == 'true'">
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+  <!--<PropertyGroup Condition=" '$(RuntimeId.Contains(`netcore`))' == 'true'">
+    <RuntimeTargetFramework>netcoreapp3.1</RuntimeTargetFramework>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(RuntimeId.Contains(`netstandard`))' == 'true'">
-    <TargetFramework>netstandard2.1</TargetFramework>
+    <RuntimeTargetFramework>netstandard2.1</RuntimeTargetFramework>
   </PropertyGroup>
 
   <PropertyGroup>
@@ -16,26 +15,31 @@
     <IsCoreRuntime>$(IsSdkVersion)</IsCoreRuntime>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(IsSdkVersion)' == 'true'">
+  <PropertyGroup Condition="'$(IsSdkVersion)' == 'true' 
+                 And '$(PrometheusDetectionEnabled)' != 'true'">
     <RuntimeTargetFramework>$(TargetPlatform)</RuntimeTargetFramework>
-    <TargetFramework>$(TargetPlatform)</TargetFramework>
+    <RuntimeTargetFramework Condition="'$(PlatformId)' != ''">$(RuntimeId)-$(PlatformId)</RuntimeTargetFramework>
   </PropertyGroup>
+
+  <PropertyGroup>
+    <TargetFramework Condition="'$(RuntimeTargetFramework)' != ''">$(RuntimeTargetFramework)</TargetFramework>
+  </PropertyGroup>-->
 
   <Target Name="PrintPrometheusRuntime">
     <Message Text="| $(SectionString)" Importance="high" />
     <Message Text="| []==~ $(MSBuildThisFile) ~==[]" Importance="high" />
     <Message Text="| $(HeaderString)" Importance="high" />
 
-    <PropertyGroup>
-    <IsSdkVersion Condition="'$([System.Text.RegularExpressions.Regex]::IsMatch($(TargetPlatform), $(SdkVersionTest)))' == 'true'">True</IsSdkVersion>
-    <IsCoreRuntime>$(IsSdkVersion)</IsCoreRuntime>
-  </PropertyGroup>
+    <!--<PropertyGroup>
+      <IsSdkVersion Condition="'$([System.Text.RegularExpressions.Regex]::IsMatch($(TargetPlatform), $(SdkVersionTest)))' == 'true'">True</IsSdkVersion>
+      <IsCoreRuntime>$(IsSdkVersion)</IsCoreRuntime>
+    </PropertyGroup>-->
 
-  <PropertyGroup Condition="'$(IsSdkVersion)' == 'true' 
+  <!--<PropertyGroup Condition="'$(IsSdkVersion)' == 'true' 
                  And '$(PrometheusDetectionEnabled)' != 'true'">
     <RuntimeTargetFramework>$(TargetPlatform)</RuntimeTargetFramework>
     <TargetFramework>$(TargetPlatform)</TargetFramework>
-  </PropertyGroup>
+  </PropertyGroup>-->
       
     <Message Text="| $(SectionSymbol) SdkVersionTest: $(SdkVersionTest)" Importance="high" />
     <Message Text="| $(SectionSymbol) TargetFramework: $(TargetFramework)" Importance="high" />

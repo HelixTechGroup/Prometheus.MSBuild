@@ -5,17 +5,19 @@
   <!--<Target Name="Check" AfterTargets="Build">
     <CallTarget Targets="CheckShieldSetup"/>
   </Target>-->
-  <Target Name="CheckPlatform" AfterTargets="InitializePlatform" Condition="$(SkipPlatform) != 'true'">
+  <Target Name="CheckPlatform" 
+          AfterTargets="InitializePlatform" 
+          Condition="'$(PrometheusDetectPlatform)' == 'true'">
     <Message Text="$~%%%%%% Checking Platform for $(MSBuildProjectName) %%%%%%~$" Importance="high" />
     <!--And ($(SuppressCommonPropsImportError) != 'true'-->
     <Error Condition=" '$(PlatformId)' == 'none' "
            Text="CheckPlatform: $(DefaultMessage)" />
 
-    <Error Condition=" Exists($(PlatformPropsPath)) != 'true' "
+    <Error Condition="!Exists($(PlatformPropsPath))"
            Text="PlatformPropsPath: $(PlatformPropsPath) does not exist." />
   </Target>
 
-  <Target Name="CheckFramework" AfterTargets="InitializeFramework" Condition="$(SkipPlatform) != 'true'">
+  <Target Name="CheckFramework" AfterTargets="InitializeFramework">
     <Message Text="$~%%%%%% Checking Imports for $(MSBuildProjectName) %%%%%%~$" Importance="high" />
     <!--And ($(SuppressCommonPropsImportError) != 'true'-->
     <Error Condition=" '$(PropsImported)' != 'true' "

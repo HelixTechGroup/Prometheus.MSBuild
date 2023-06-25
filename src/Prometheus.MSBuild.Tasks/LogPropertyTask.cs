@@ -111,7 +111,7 @@ namespace Prometheus.MSBuild.Tasks
 
             Log.LogMessage(MessageImportance.High, $"| {m_options.SectionSymbol} Property Name: {m_options.PropertyName}");
             Log.LogMessage(MessageImportance.High, $"| {m_options.SectionSymbol} Imports Only: {m_options.ImportsOnly}");
-            found.AddRange(this.GetProperties(project, m_options));
+            found = new ConcurrentList<ProjectPropertyInstance>(this.GetProperties(project, m_options));
             Log.LogMessage(MessageImportance.High, $"| {m_options.SectionSymbol} Found: {found.Count}");
 
             foreach (var n in found)

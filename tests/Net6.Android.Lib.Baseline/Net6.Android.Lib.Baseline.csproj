@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk" DefaultTargets="ProjectInfo">
   <PropertyGroup>
     <TargetFramework>net6.0-android</TargetFramework>
     <!--<TargetFrameworkVersion>v30.0</TargetFrameworkVersion>-->
@@ -6,4 +6,13 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
+
+  <Target Name="ProjectInfo">
+    <Message Text="| $(SectionSymbol) TargetFramework: $(TargetFramework)" Importance="high" />
+    <Message Text="| $(SectionSymbol) TargetFrameworks: $(TargetFrameworks)" Importance="high" />
+    <Message Text="| $(SectionSymbol) TargetFrameworkVersion: $(TargetFrameworkVersion)" Importance="high" />
+    <Message Text="| $(SectionSymbol) TargetFrameworkIdentifier: $(TargetFrameworkIdentifier)" Importance="high" />
+    <Message Text="| $(SectionSymbol) TargetFrameworkProfile: $(TargetFrameworkProfile)" Importance="high" />
+    <Message Text="| $(SectionSymbol) SupportedOSPlatformVersion: $(SupportedOSPlatformVersion)" Importance="high" />
+  </Target>
 </Project>

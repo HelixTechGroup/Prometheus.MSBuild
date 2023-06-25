@@ -15,7 +15,7 @@
   <!--<Import Project="$(SharedImportsString)" Label="Shared" Condition="'$(SharedImportsString)' != ''"/>-->
   <!--<Import Project="D:\Users\Bryan\Documents\Projects\HelixTechGroup\Design\Prometheus\msbuild\tests\Prometheus.MSBuild.Tests\bin\Debug\netcoreapp3.1\Test.projitems" Label="Shared" />-->
 
-  <PropertyGroup Condition="'$(PrometheusImporterEnabled)' == 'true'">
+  <!--<PropertyGroup Condition="'$(PrometheusImporterEnabled)' == 'true'">
     <UseHostCompilerIfAvailable>False</UseHostCompilerIfAvailable>
     <ResolveReferencesDependsOn>
       Import;
@@ -29,12 +29,12 @@
       Import;
       $(CompileDependsOn);
     </CompileDependsOn>
-  </PropertyGroup>
+  </PropertyGroup>-->
 
-  <Target Name="_BeforeReferences" BeforeTargets="ResolveProjectReferences"
+  <!--<Target Name="_BeforeReferences" BeforeTargets="ResolveProjectReferences"
           Condition="'$(PrometheusImporterEnabled)' == 'true'">
     <CallTarget Targets="_RunImporter" />
-  </Target>
+  </Target>-->
 
   <Target Name="Import">
     <CallTarget Targets="_RunImporter" />

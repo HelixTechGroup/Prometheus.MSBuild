@@ -7,13 +7,69 @@
     <PrometheusProps>$(PrometheusDirectory)\Prometheus.Build.props</PrometheusProps>
     <PrometheusTargets>$(PrometheusDirectory)\Prometheus.Build.targets</PrometheusTargets>
   </PropertyGroup>
-  <!--Condition="'$(PrometheusEnabled)' == 'true' And '$(PrometheusAutoLoad)' == 'true' And Exists('$(PrometheusTargets)')"-->
-  <Import Project="$(PrometheusTargets)"  />
-  <!--<Import Project="$(SharedImports)" Label="Shared" Condition="'$(SharedImports)' != ''" />-->
-  <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets"
-          Condition="'$(PlatformId)' == 'android'" />
+  
+  <!--<PropertyGroup Condition="'$(TargetPlatform)' != '' And '$(TargetFramework)' == ''">
+    <Array>$(TargetPlatform.Split(`-`))</Array>
+    <RuntimeId>$(TargetPlatform.Split(`-`)[0])</RuntimeId>    
+    --><!--<TargetFramework>$(RuntimeId)</TargetFramework>--><!--
+    --><!--Condition="'$(TargetPlatform.Split(`-`).Length)' &gt;= '2'"--><!--
+    <PlatformId Condition="'$(TargetPlatform.Split(`-`).Length)' &gt;= '2'">$(TargetPlatform.Split(`-`)[1])</PlatformId>
+    --><!--<TargetFramework Condition="'$(PlatformId)' != ''">$(RuntimeId)-$(PlatformId)</TargetFramework>
+    <TargetFrameworks Condition="'$(TargetPlatforms)' != ''">$(TargetPlatforms)</TargetFrameworks>--><!--
+  </PropertyGroup>-->
+  <!--<PropertyGroup Condition="'$(TargetPlatform)' != '' And '$(TargetFramework)' == ''">
+    <Array>$(TargetPlatform.Split(`-`))</Array>
+    <RuntimeId Condition="'$(RuntimeId)' == ''">$(TargetPlatform.Split(`-`)[0])</RuntimeId>
+    <RuntimeTargetFramework Condition="'$(RuntimeTargetFramework)' == '' And '$(RuntimeId)' != ''">$(RuntimeId)</RuntimeTargetFramework>
+    <PlatformId Condition="'$(TargetPlatform.Contains(`-`)' == 'true'">$(TargetPlatform.Split(`-`)[1])</PlatformId>
+    <RuntimeTargetFramework Condition="'$(PlatformId)' != ''">$(RuntimeId)-$(PlatformId)</RuntimeTargetFramework>
+    --><!--<TargetFrameworks Condition="'$(TargetPlatforms)' != ''">$(TargetPlatforms)</TargetFrameworks>--><!--
+  </PropertyGroup>-->
 
-  <ImportGroup Condition="'$(PrometheusLoadType)' != 'lite'">
+  <!--<PropertyGroup Condition=" '$(PlatformId)' != '' Or '$(PlatformId)' != 'none'">
+    <HasWindows>$(PlatformId.Contains(`windows`))</HasWindows>
+    <HasAndroid>$(PlatformId.Contains(`android`))</HasAndroid>
+    <HasLinux>$(PlatformId.Contains(`linux`))</HasLinux>
+    <HasXamarin>$(RuntimeId.Contains(`xamarin`))</HasXamarin>    
+  </PropertyGroup>-->
+  <!--Condition="'$(PrometheusEnabled)' == 'true' And '$(PrometheusAutoLoad)' == 'true' And Exists('$(PrometheusTargets)')"-->
+  <!--<Import Project="$(SharedImports)" Label="Shared" Condition="'$(SharedImports)' != ''" />-->
+  <!--<TargetFrameworks Condition="'$(TargetPlatforms)' != ''">$(TargetPlatforms)</TargetFrameworks>-->
+
+  <PropertyGroup Condition="'$(TargetPlatform)' != '' And '$(TargetFramework)' == ''">
+    <!--<Array>$(TargetPlatform.Split(`-`))</Array>
+    <RuntimeId Condition="'$(RuntimeId)' == ''">$(TargetPlatform.Split(`-`)[0])</RuntimeId>-->
+    
+    <!--<RuntimeTargetFramework Condition="'$(RuntimeTargetFramework)' == '' And '$(RuntimeId)' != ''">$(RuntimeId)</RuntimeTargetFramework>-->
+    
+    <!--<PlatformId Condition="'$(PlatformId)' == ''">None</PlatformId>
+    <PlatformId Condition="'$(TargetPlatform.Split(`-`).Length)' &gt;= '2'">$(TargetPlatform.Split(`-`)[1])</PlatformId>
+    <RuntimeTargetFramework Condition="'$(PlatformId)' != ''">$(RuntimeId)-$(PlatformId)</RuntimeTargetFramework>-->
+    
+    <!--<HasWindows>$(TargetPlatform.Contains(`windows`))</HasWindows>
+    <HasAndroid>$(TargetPlatform.Contains(`android`))</HasAndroid>
+    <HasLinux>$(TargetPlatform.Contains(`linux`))</HasLinux>
+    <HasXamarin>$(TargetPlatform.Contains(`xamarin`))</HasXamarin>-->
+  </PropertyGroup>
+
+  <!--<PropertyGroup Condition="'$(PlatformId)' != '' Or '$(PlatformId)' != 'none'">
+    <HasWindows>$(PlatformId.Contains(`windows`))</HasWindows>
+    <HasAndroid>$(PlatformId.Contains(`android`))</HasAndroid>
+    <HasLinux>$(PlatformId.Contains(`linux`))</HasLinux>
+    <HasXamarin>$(RuntimeId.Contains(`xamarin`))</HasXamarin>
+    <HasPlatform>True</HasPlatform>
+  </PropertyGroup>-->
+
+  <Import Project="$(PrometheusTargets)" />
+  
+  <PropertyGroup>
+    <TargetFramework Condition="'$(TargetFramework)' == '' And '$(RuntimeId)' != ''">$(RuntimeId)</TargetFramework>
+  </PropertyGroup>
+  
+  <ImportGroup Condition="'$(PrometheusLoadType)' == 'full' And ('$(TargetFramework)' != '' Or '$(TargetFrameworks)' != '')">
+    <Import Project="Sdk.props" Sdk="Microsoft.NET.Sdk" />
+    <!--<Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets"
+          Condition="'$(PlatformId)' == 'android' And '$(RuntimeVersion)' &lt;= '5.0'" />-->
     <Import Project="Sdk.targets" Sdk="Microsoft.NET.Sdk" />
   </ImportGroup>
 </Project>

@@ -1,29 +1,30 @@
 <Project InitialTargets="DetectPlatform">
-  <ItemGroup Condition="'$(TargetPlatforms)' != ''">
-    <TPlatforms Include="$(TargetPlatforms.Split(`;`))" />
-  </ItemGroup>
-
   <PropertyGroup>
     <SdkVersionTest>^net\d+(?:\.\d+)+(?:\-\S+)*</SdkVersionTest>
+    <!--<RuntimeId Condition="'$(RuntimeId)' == ''">None</RuntimeId>
+    <PlatformId Condition="'$(PlatformId)' == ''">None</PlatformId>
+    --><!--<RuntimeTargetFramework Condition="'$(RuntimeTargetFramework)' == ''">None</RuntimeTargetFramework>--><!--
+    <PlatformVersion Condition="'$(PlatformVersion)' == ''">0.0</PlatformVersion>
+    <RuntimeVersion Condition="'$(RuntimeVersion)' == ''">0.0</RuntimeVersion>-->
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(TargetPlatforms)' != ''">
-    <TargetPlatform>%(TPlatforms.Identity)</TargetPlatform>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(TargetPlatform)' != '' And '$(PrometheusTasksEnabled)' != 'true'">
-    <Array>$(TargetPlatform.Split(`-`))</Array>
-    <RuntimeId>$(TargetPlatform.Split(`-`)[0])</RuntimeId>
-    <TargetFramework>$(TargetPlatform.Split(`-`)[0])</TargetFramework>
-    <PlatformId Condition="$(Array.Contains(`;`))">$(TargetPlatform.Split(`-`)[1])</PlatformId>
-    <TargetFrameworks Condition="'$(TargetPlatforms)' != ''">$(TargetPlatforms)</TargetFrameworks>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(TargetPlatform)' == ''">
+  <!--<PropertyGroup Condition="'$(PrometheusTasksEnabled)' != 'true'">
     <RuntimeId>$(TargetFramework)</RuntimeId>
     <PlatformId>None</PlatformId>
-  </PropertyGroup>
+    <RuntimeTargetFramework>$(TargetFramework)</RuntimeTargetFramework>
+  </PropertyGroup>-->
 
+  <!--<PropertyGroup Condition="'$(TargetPlatform)' != ''">
+    <Array>$(TargetPlatform.Split(`-`))</Array>
+    <RuntimeId>$(TargetPlatform.Split(`-`)[0])</RuntimeId>
+    <PlatformId Condition="$(Array.Contains(`;`))">$(TargetPlatform.Split(`-`)[1])</PlatformId>
+    <TargetFrameworks Condition="'$(TargetPlatforms)' != ''">$(TargetPlatforms)</TargetFrameworks>
+    <HasWindows>$(PlatformId.Contains(`windows`))</HasWindows>
+    <HasAndroid>$(PlatformId.Contains(`android`))</HasAndroid>
+    <HasLinux>$(PlatformId.Contains(`linux`))</HasLinux>
+    <HasXamarin>$(RuntimeId.Contains(`xamarin`))</HasXamarin>
+  </PropertyGroup>
+  
   <PropertyGroup>
     <IsSdkVersion Condition="'$([System.Text.RegularExpressions.Regex]::IsMatch($(TargetPlatform), $(SdkVersionTest)))' == 'true'">True</IsSdkVersion>
     <IsCoreRuntime>$(IsSdkVersion)</IsCoreRuntime>
@@ -31,14 +32,11 @@
 
   <PropertyGroup Condition="'$(IsSdkVersion)' == 'true'">
     <RuntimeTargetFramework>$(TargetPlatform)</RuntimeTargetFramework>
-    <TargetFramework>$(TargetPlatform)</TargetFramework>
+    <RuntimeTargetFramework Condition="'$(PlatformId)' != ''">$(RuntimeId)-$(PlatformId)</RuntimeTargetFramework>
   </PropertyGroup>
 
-  <!--<PropertyGroup Condition=" '$(TargetPlatform)' != '' ">
-    <HasWindows>$(PlatformId.Contains(`windows`))</HasWindows>
-    <HasAndroid>$(PlatformId.Contains(`android`))</HasAndroid>
-    <HasLinux>$(PlatformId.Contains(`linux`))</HasLinux>
-    <HasXamarin>$(RuntimeId.Contains(`xamarin`))</HasXamarin>
+  <PropertyGroup>
+    <TargetFramework Condition="'$(RuntimeTargetFramework)' != ''">$(RuntimeTargetFramework)</TargetFramework>
   </PropertyGroup>-->
 
   <!--<PropertyGroup>
@@ -79,6 +77,91 @@
       --><!--<TargetFramework>%(TPlatforms.Identity)</TargetFramework>--><!--
       <TargetFrameworks Condition="'$(TargetPlatforms)' != ''">$(TargetPlatforms)</TargetFrameworks>
     </PropertyGroup>-->
+
+
+    <!--<PropertyGroup Condition="'$(TargetPlatform)' != ''">
+      <Array>$(TargetPlatform.Split(`-`))</Array>
+      <RuntimeId>$(TargetPlatform.Split(`-`)[0])</RuntimeId>
+      <TargetFramework>$(RuntimeId)</TargetFramework>
+      <PlatformId Condition="'$(Array.Length)' &gt;= '2'">$(TargetPlatform.Split(`-`)[1])</PlatformId>
+      --><!--<TargetFramework Condition="'$(PlatformId)' != ''">$(RuntimeId)-$(PlatformId)</TargetFramework>--><!--
+      <TargetFrameworks Condition="'$(TargetPlatforms)' != ''">$(TargetPlatforms)</TargetFrameworks>
+    </PropertyGroup>
+
+    --><!--<PropertyGroup Condition="'$(TargetPlatform)' == ''">
+    <RuntimeId>$(TargetFramework)</RuntimeId>
+    <PlatformId>None</PlatformId>
+  </PropertyGroup>--><!--
+
+    <PropertyGroup>
+      <IsSdkVersion Condition="'$([System.Text.RegularExpressions.Regex]::IsMatch($(TargetPlatform), $(SdkVersionTest)))' == 'true'">True</IsSdkVersion>
+      <IsCoreRuntime>$(IsSdkVersion)</IsCoreRuntime>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(IsSdkVersion)' == 'true' 
+                 And '$(PrometheusDetectionEnabled)' != 'true'">
+      --><!--<RuntimeTargetFramework>$(TargetPlatform)</RuntimeTargetFramework>--><!--
+      <RuntimeTargetFramework Condition="'$(PlatformId)' != ''">$(RuntimeId)-$(PlatformId)</RuntimeTargetFramework>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(IsSdkVersion)' != 'true'">
+      <RuntimeTargetFramework>$(RuntimeId)</RuntimeTargetFramework>
+    </PropertyGroup>-->
+
+    <!--<ItemGroup Condition="'$(TargetPlatforms)' != ''">
+      <TPlatforms Include="$(TargetPlatforms.Split(`;`))" />
+    </ItemGroup>
+
+    <PropertyGroup Condition="'$(TargetPlatforms)' != ''">
+      <TargetPlatform>%(TPlatforms.Identity)</TargetPlatform>
+    </PropertyGroup>-->
+
+    <!--<PropertyGroup Condition="'$(TargetPlatform)' != ''">
+      <Array>$(TargetPlatform.Split(`-`))</Array>
+      <RuntimeId>$(TargetPlatform.Split(`-`)[0])</RuntimeId>
+      <TargetFramework>$(RuntimeId)</TargetFramework>
+      <PlatformId Condition="'$(TargetPlatform.Split(`-`).Length)' &gt;= '2'">$(TargetPlatform.Split(`-`)[1])</PlatformId>
+      <TargetFramework Condition="'$(PlatformId)' != ''">$(RuntimeId)-$(PlatformId)</TargetFramework>
+      <TargetFrameworks Condition="'$(TargetPlatforms)' != ''">$(TargetPlatforms)</TargetFrameworks>
+    </PropertyGroup>-->
+
+    <!--<PropertyGroup>
+      <IsSdkVersion Condition="'$([System.Text.RegularExpressions.Regex]::IsMatch($(TargetPlatform), $(SdkVersionTest)))' == 'true'">True</IsSdkVersion>
+      <IsCoreRuntime>$(IsSdkVersion)</IsCoreRuntime>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(IsSdkVersion)' == 'true'">
+      <RuntimeTargetFramework>$(TargetPlatform)</RuntimeTargetFramework>
+      <RuntimeTargetFramework Condition="'$(PlatformId)' != ''">$(RuntimeId)-$(PlatformId)</RuntimeTargetFramework>
+    </PropertyGroup>
+
+    <PropertyGroup>
+      <TargetFramework Condition="'$(RuntimeTargetFramework)' != ''">$(RuntimeTargetFramework)</TargetFramework>
+    </PropertyGroup>-->
+    
+    <!--And '$(PrometheusTasksEnabled)' != 'true'-->
+    <!--<PropertyGroup Condition="'$(TargetPlatform)' != ''">
+      <Array>$(TargetPlatform.Split(`-`))</Array>
+      <RuntimeId>$(TargetPlatform.Split(`-`)[0])</RuntimeId>
+      <TargetFramework>$(RuntimeId)</TargetFramework>
+      <PlatformId Condition="'$(Array.Length)' &gt;= '2'">$(TargetPlatform.Split(`-`)[1])</PlatformId>
+      --><!--<TargetFramework Condition="'$(PlatformId)' != ''">$(RuntimeId)-$(PlatformId)</TargetFramework>-->
+        <!--
+      <TargetFrameworks Condition="'$(TargetPlatforms)' != ''">$(TargetPlatforms)</TargetFrameworks>
+    </PropertyGroup>-->
+
+    <!--<PropertyGroup>
+      <IsSdkVersion Condition="'$([System.Text.RegularExpressions.Regex]::IsMatch($(TargetPlatform), $(SdkVersionTest)))' == 'true'">True</IsSdkVersion>
+      <IsCoreRuntime>$(IsSdkVersion)</IsCoreRuntime>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(IsSdkVersion)' == 'true'">
+      <RuntimeTargetFramework>$(TargetPlatform)</RuntimeTargetFramework>
+      <RuntimeTargetFramework Condition="'$(PlatformId)' != ''">$(RuntimeId)-$(PlatformId)</RuntimeTargetFramework>
+    </PropertyGroup>
+
+    <PropertyGroup>
+      <TargetFramework Condition="'$(RuntimeTargetFramework)' != ''">$(RuntimeTargetFramework)</TargetFramework>
+    </PropertyGroup>-->
     
     <!--<LogPropertyTask ProjectFiles="$(MSBuildThisFileFullPath)" SectionSymbol="$(SectionSymbol)"
                      Condition="'$(PrometheusTasksEnabled)' == 'true'" />-->
@@ -87,6 +170,9 @@
     <Message Text="| $(SectionSymbol) RuntimeVersion: $(RuntimeVersion)" Importance="high" />
     <Message Text="| $(SectionSymbol) PlatformId: $(PlatformId)" Importance="high" />
     <Message Text="| $(SectionSymbol) PlatformVersion: $(PlatformVersion)" Importance="high" />
+    <Message Text="| $(SectionSymbol) RuntimeTargetFramework: $(RuntimeTargetFramework)" Importance="high" />
+    <Message Text="| $(SectionSymbol) IsSdkVersion: $(IsSdkVersion)" Importance="high" />
+    <Message Text="| $(SectionSymbol) IsCoreRuntime: $(IsCoreRuntime)" Importance="high" />
     <Message Text="| $(SectionSymbol) TargetPlatform: $(TargetPlatform)" Importance="high" />
     <Message Text="| $(SectionSymbol) TargetPlatforms: $(TargetPlatforms)" Importance="high" />
     <Message Text="| $(SectionSymbol) TargetFramework: $(TargetFramework)" Importance="high" />

@@ -3,67 +3,61 @@
     <SectionSymbol>*</SectionSymbol>
   </PropertyGroup>
 
-  <PropertyGroup>
+  <PropertyGroup Condition="'PrometheusEnabled' == 'true'">
+    <!--<ResolveReferencesDependsOn Condition="'PrometheusPlatformEnabled' == 'true'">
+      PrintPrometheusPlatform2;
+      $(ResolveReferencesDependsOn);
+    </ResolveReferencesDependsOn>-->
     <ResolveReferencesDependsOn>
       $(ResolveReferencesDependsOn);
-      _SetPrometheusFirstTimeLoading
+      _SetPrometheusFirstTimeLoading;
     </ResolveReferencesDependsOn>
   </PropertyGroup>
   <PropertyGroup>
-    <SolutionImportProps>$(SolutionDir)\Imports.Build.props</SolutionImportProps>
-    <SourceImportProps>$(SourceDirectory)\Imports.Build.props</SourceImportProps>
+    <SolutionImportProps Condition="'$(SolutionImportProps)' == ''">$(SolutionDir)\Imports.Build.props</SolutionImportProps>
+    <SourceImportProps Condition="'$(SourceImportProps)' == ''">$(SourceDirectory)\Imports.Build.props</SourceImportProps>
+    <SolutionImportTargets Condition="'$(SolutionImportTargets)' == ''">$(SolutionDir)\Imports.Build.targets</SolutionImportTargets>
+    <SourceImportTargets Condition="'$(SourceImportTargets)' == ''">$(SourceDirectory)\Imports.Build.targets</SourceImportTargets>
   </PropertyGroup>
 
-  <Import Project="$(SolutionImportProps)" Condition="Exists('$(SolutionImportProps)')" />
-  <Import Project="$(SourceImportProps)" Condition="Exists('$(SourceImportProps)') And $(MSBuildProjectFullPath.Contains('$(SourceDirectory)'))" />
-  <!--<Import Project="$(SharedImports)" Condition="'$(SharedImports)' != ''" Label="Shared" />-->
+  <Import Project="$(SolutionImportTargets)" Condition="Exists('$(SolutionImportTargets)')" />
+  <Import Project="$(SourceImportTargets)" Condition="Exists('$(SourceImportTargets)') And $(MSBuildProjectFullPath.Contains('$(SourceDirectory)'))" />
+  <Import Project="$(SharedImports)" Condition="'$(SharedImports)' != ''" Label="Shared" />
 
+  <PropertyGroup>
+    <PropsImported>True</PropsImported>
+  </PropertyGroup>
+  
   <ItemGroup Condition="$(MergeBinary) == 'true'">
-    <PackageReference Include="Costura.Fody">
+    <PackageReference Include="Costura.Fody" Version="5.8.0-alpha0098">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>compile; runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
-    <!--<Content Include="$(SourceDirectory)\FodyWeavers.xml"
-             Condition="Exists('$(SourceDirectory)\FodyWeavers.xml')" Link="FodyWeavers.xml"/>
-    <None Include="$(SourceDirectory)\FodyWeavers.xsd" Condition="Exists('$(SourceDirectory)\FodyWeavers.xsd')"
-          Link="FodyWeavers.xml">
-      <SubType>Designer</SubType>
-    </None>-->
-    <!--<Content Include="FodyWeavers.xml" Condition="Exists('FodyWeavers.xml')"
-             Link="FodyWeavers.xml" />
-    <None Include="FodyWeavers.xsd" Condition="Exists('FodyWeavers.xsd')"
-      Link="FodyWeavers.xml">
-      <SubType>Designer</SubType>
-    </None>
-    <Content Include="$(MSBuildProjectDirectory)\FodyWeavers.xml" Condition="Exists('$(MSBuildProjectDirectory)\FodyWeavers.xml')" Link="FodyWeavers.xml" />
-    <None Include="$(MSBuildProjectDirectory)\FodyWeavers.xsd" Condition="Exists('$(MSBuildProjectDirectory)\FodyWeavers.xsd')" Link="FodyWeavers.xml">
-      <SubType>Designer</SubType>
-    </None>-->
   </ItemGroup>
 
-  <Target Name="_SetPrometheusFirstTimeLoading">
+  <Target Name="_SetPrometheusFirstTimeLoading" Condition="'$(FirstTimeLoading)' != 'false'">
     <PropertyGroup>
       <FirstTimeLoading>false</FirstTimeLoading>
     </PropertyGroup>
   </Target>
-
-  <Target Name="SetupPrometheus" BeforeTargets="Build">
+  
+  <Target Name="SetupPrometheus" BeforeTargets="Build" Condition="$(PrometheusEnabled) == 'true'">
     <Message Text="| $(SectionString)" Importance="high" />
     <Message Text="| [*] $~- --Setting up Prometheus for $(MSBuildProjectName)-- -~$" Importance="high" />
     <Message Text="| [*] " Importance="high" />
-    <Message Text="| $(SectionString)" Importance="high" />
-    <!--<CallTarget Targets="InitializeEnvironment;InitializePlatform;InitializeFramework" Condition="$(PrometheusEnabled) == 'true'"/>-->
+    <Message Text="| $(HeaderString)" Importance="high" />
+    <CallTarget Targets="InitializeEnvironment;InitializePlatform;InitializeFramework;"/>
     <!--<Message Text="| $(SectionSymbol) Import String: $(SharedImports)" Importance="high" />-->
     <PropertyGroup>
       <SetupCompleted>True</SetupCompleted>
     </PropertyGroup>
   </Target>
 
-  <Target Name="PostSetupPrometheus">
+  <Target Name="PostSetupPrometheus" AfterTargets="Build" Condition="$(PrometheusEnabled) == 'true'">
     <Message Text="| $(SectionString)" Importance="high" />
     <Message Text="| [*] $~- --Post Setting up Prometheus for $(MSBuildProjectName)-- -~$" Importance="high" />
     <Message Text="| $(HeaderString)" Importance="high" />
-    <CallTarget Targets="PrintProject;"/>
+    <CallTarget Targets="PostBuildOutput;PrintProject;"/>
     <!--<CallTarget Targets="Pack" Condition="'$(IsPackable)' == 'true'" />-->
   </Target>
 
@@ -80,7 +74,9 @@
         </Destination>
       </OutputList>
     </ItemGroup>
+    <Message Text="| $(SectionString)" Importance="high" />
     <Message Text="| []==~~ Copying Tasks library to Tests Lib directory ~~==[]" Importance="high" />
+    <Message Text="| $(HeaderString)" Importance="high" />
     <!--<UpdateItem Include="@(OutputList)"  />-->
       <!--<Output TaskParameter="Include" ItemName="TestItem" />
     </UpdateItem>-->
@@ -88,43 +84,58 @@
     <Message Text="| ====~~> Copying File: $(TestsDirectory)\lib\$(Configuration)\$(ProductName)\%(OutputList.RecursiveDir)\%(OutputList.Filename)%(OutputList.Extension)"/>
     <!--<Copy SourceFiles="@(OutputList)" DestinationFiles="%(OutputList.Destination)" />-->
     <!--@(TestItem->'%(Destination)%(FileName)%(Extension)')-->
-    <Copy SourceFiles="@(OutputList)" DestinationFiles="@(OutputList->'$(TestsDirectory)/lib/$(Configuration)/$(ProductName)/%(RecursiveDir)/%(Filename)%(Extension)')" SkipUnchangedFiles="true" ContinueOnError="true" OverwriteReadOnlyFiles="true" />
+    <Copy SourceFiles="@(OutputList)" 
+          DestinationFiles="@(OutputList->'$(TestsDirectory)/lib/$(Configuration)/$(ProductName)/%(RecursiveDir)/%(Filename)%(Extension)')" 
+          ContinueOnError="true" 
+          OverwriteReadOnlyFiles="true" />
 
   </Target>
-  
-  <Target Name="PostBuildOutput" AfterTargets="CopyFilesToOutputDirectory"
-	        BeforeTargets="PostBuildEvent;AfterBuild">
+
+  <!--<Target Name="AfterBuild">
     <CallTarget Targets="PostSetupPrometheus" />
-    <CallTarget Targets="CopyToTestLib"/>
-  </Target>
-  
-  <Target Name="InitializeFramework" Condition="$(PrometheusPlatformEnabled) == 'true'">
-    <Message Text="$~====== Initializing Framework for $(MSBuildProjectName) ======~$" Importance="high" />
+  </Target>-->
+
+  <!--AfterTargets="CopyFilesToOutputDirectory" BeforeTargets="PostBuildEvent;AfterBuild"-->
+  <Target Name="PostBuildOutput">
+    <Message Text="| $(SectionString)" Importance="high" />
+    <Message Text="$~====== Finishing Initializing Framework for $(MSBuildProjectName) ======~$" Importance="high" />
+    <Message Text="| $(HeaderString)" Importance="high" />
     <CallTarget Targets="PrintProps;PrintImports;" />
-    <CallTarget Targets="RunNuGetRestore;" />
+    <CallTarget Targets="RunNuGetRestore;" Condition="'$(IsPackable)' == 'true'" />
   </Target>
 
   <Target Name="InitializeEnvironment">
+    <Message Text="| $(SectionString)" Importance="high" />
     <Message Text="$~====== Initializing Environment for $(MSBuildProjectName) ======~$" Importance="high" />
+    <Message Text="| $(HeaderString)" Importance="high" />
     <CallTarget Targets="PrintRootDirectory;PrintGlobals;" />
   </Target>
 
   <Target Name="InitializePlatform" Condition="$(PrometheusPlatformEnabled) == 'true'">
+    <Message Text="| $(SectionString)" Importance="high" />
     <Message Text="$~====== Initializing Platform for $(MSBuildProjectName) ======~$" Importance="high" />
+    <Message Text="| $(HeaderString)" Importance="high" />
     <!--<ItemGroup>
       <TFArray Include="$(TargetPlatform.Split('-'))" />
     </ItemGroup>-->
     <CallTarget Targets="PrintPlatform;PrintPlatformProps;" />
   </Target>
 
+  <Target Name="InitializeFramework" />
+  
   <Target Name="CopyToLocalNuGetRepo" Condition="Exists('$(LocalNugetRepo)') And '$(IsPackable)' == 'true'">
     <PropertyGroup>
       <SectionSymbol>$$</SectionSymbol>
     </PropertyGroup>
     <Message Text="| $(SectionString)" Importance="high" />
-    <Message Text="$~------ Copying NuGet packages to local repo $(LocalNugetRepo) for $(MSBuildProjectName) ------~$" Importance="high" />
-    <Message Text="| $(SectionString)" Importance="high" />
-
+    <Message Text="$~------ Copying NuGet packages to local repo for $(MSBuildProjectName) ------~$" Importance="high" />
+    <Message Text="| $(HeaderString)" Importance="high" />
+    <Message Text="| $(SectionSymbol) LocalNugetRepo: $(LocalNugetRepo)" Importance="high" />
+    <Message Text="| $(SectionSymbol) IsPackable: $(IsPackable)" Importance="high" />
+    <Message Text="| $(SectionSymbol) PackageId: $(PackageId)" Importance="high" />
+    <Message Text="| $(SectionSymbol) PackageVersion: $(PackageVersion)" Importance="high" />
+    <Message Text="| $(SectionSymbol) NuGetPackageName: $(NugetPackageName)" Importance="high" />
+    
     <Error Condition="'$(NugetPackageName)' == ''" Text="NugetPackageName is not set." />
     <Warning Condition="Exists('$(OutputDirectory)\$(NugetPackageName)')  == 'false'" Text="| $(SectionSymbol) Package Does not exist: '$(OutputDirectory)\$(NugetPackageName)'"/>
     <Message Condition="Exists('$(OutputDirectory)\$(NugetPackageName)')" Text="| $(SectionSymbol) Package Location: $(OutputDirectory)\$(NugetPackageName)" Importance="high" />
@@ -137,15 +148,15 @@
     </PropertyGroup>
     <Message Text="| $(SectionString)" Importance="high" />
     <Message Text="$~------ Getting Platform for $(MSBuildProjectName) ------~$" Importance="high" />
-    <Message Text="| $(SectionString)" Importance="high" />
+    <Message Text="| $(HeaderString)" Importance="high" />
 
-    <Error Condition="'$(PlatformId)' == '' Or '$(PlatformId)' == 'none'" Text="!!! PlatformId is None or Null !!!"/>
+    <Warning Condition="'$(PlatformId)' == '' Or '$(PlatformId)' == 'none'" Text="!!! PlatformId is None or Null !!!"/>
     <!--<CallTarget Targets="$(PlatformId)" />
     <CallTarget Targets="ExtraPlatformProps" Condition="Exists(ExtraPlatformProps)" />-->
 
-    <LogPropertyTask ProjectFiles="$(PrometheusPlatformProps);$(PrometheusPlatformTargets)" 
+    <!--<LogPropertyTask ProjectFiles="$(PrometheusPlatformProps);$(PrometheusPlatformTargets)" 
                      SectionSymbol="$(SectionSymbol)" 
-                     Condition="'$(PrometheusTasksEnabled)' == 'true'" />
+                     Condition="'$(PrometheusTasksEnabled)' == 'true'" />-->
 
     <Message Text="| $(SectionSymbol) IsValidPlatform: $(IsValidPlatform)" Importance="high" />
     <Message Text="| $(SectionSymbol) RuntimeId: $(RuntimeId)" Importance="high" />
@@ -153,6 +164,7 @@
     <Message Text="| $(SectionSymbol) TargetPlatform: $(TargetPlatform)" Importance="high" />
     <Message Text="| $(SectionSymbol) TargetFramework: $(TargetFramework)" Importance="high" />
     <Message Text="| $(SectionSymbol) TargetFrameworks: $(TargetFrameworks)" Importance="high" />
+    <Message Text="| $(SectionSymbol) HasPlatform: $(HasPlatform)" Importance="high" />
     <Message Text="| $(SectionSymbol) HasWindows: $(HasWindows)" Importance="high" />
     <Message Text="| $(SectionSymbol) HasLinux: $(HasLinux)" Importance="high" />
     <Message Text="| $(SectionSymbol) HasAndroid: $(HasAndroid)" Importance="high" />
@@ -171,6 +183,35 @@
     <Message Text="| [] TargetFramework: $(TargetFramework)" Importance="high" />
     <Message Text="| [] TargetFrameworks: $(TargetFrameworks)" Importance="high" />
     <Message Text="| $(HeaderString)" Importance="high" />
+
+    <Message Text="| $(SectionSymbol) RuntimeId: $(RuntimeId)" Importance="high" />
+    <Message Text="| $(SectionSymbol) RuntimeVersion: $(RuntimeVersion)" Importance="high" />
+    <Message Text="| $(SectionSymbol) PlatformId: $(PlatformId)" Importance="high" />
+    <Message Text="| $(SectionSymbol) PlatformType: $(PlatformType)" Importance="high" />
+    <Message Text="| $(SectionSymbol) PlatformVersion: $(PlatformVersion)" Importance="high" />
+    <Message Text="| $(SectionSymbol) RuntimeTargetFramework: $(RuntimeTargetFramework)" Importance="high" />
+    <Message Text="| $(SectionSymbol) TargetPlatform: $(TargetPlatform)" Importance="high" />
+    <Message Text="| $(SectionSymbol) TargetPlatforms: $(TargetPlatforms)" Importance="high" />
+    <Message Text="| $(SectionSymbol) TargetFramework: $(TargetFramework)" Importance="high" />
+    <Message Text="| $(SectionSymbol) TargetFrameworks: $(TargetFrameworks)" Importance="high" />
+    <Message Text="| $(SectionSymbol) TargetFrameworkVersion: $(TargetFrameworkVersion)" Importance="high" />
+    <Message Text="| $(SectionSymbol) TargetFrameworkIdentifier: $(TargetFrameworkIdentifier)" Importance="high" />
+    <Message Text="| $(SectionSymbol) TargetFrameworkProfile: $(TargetFrameworkProfile)" Importance="high" />
+    <Message Text="| $(SectionSymbol) SupportedOSPlatformVersion: $(SupportedOSPlatformVersion)" Importance="high" />
+    <Message Text="| $(SectionSymbol) IsCoreVersion: $(IsCoreRuntime)" Importance="high" />
+    <Message Text="| $(SectionSymbol) IsSdkVersion: $(IsSdkVersion)" Importance="high" />
+    <Message Text="| $(SectionSymbol) HasPlatform: $(HasPlatform)" Importance="high" />
+    <Message Text="| $(SectionSymbol) HasWindows: $(HasWindows)" Importance="high" />
+    <Message Text="| $(SectionSymbol) HasLinux: $(HasLinux)" Importance="high" />
+    <Message Text="| $(SectionSymbol) HasAndroid: $(HasAndroid)" Importance="high" />
+    <Message Text="| $(SectionSymbol) HasXamarin: $(HasXamarin)" Importance="high" />
+    <Message Text="| $(SectionSymbol) UseAndroidX: $(UseAndroidX)" Importance="high" />
+    <Message Text="| $(SectionSymbol) ProjectGuid: $(ProjectGuid)" Importance="high" />
+    <Message Text="| $(SectionSymbol) ProjectTypeGuid: $(ProjectTypeGuid)" Importance="high" />
+    <Message Text="| $(SectionString)" Importance="high" />
+
+    <!--<CallTarget Targets="PrintRootDirectory;PrintGlobals;PrintPlatform"/>-->
+    <Message Text="| $(SectionString)" Importance="high" />
     <!--<LogPropertyTask ProjectFiles="$(MSBuildProjectFullPath);$(PrometheusCommonProps);$(PrometheusGlobalProps);$(PrometheusGlobalTargets)" 
                      SectionSymbol="$(SectionSymbol)" 
                      Condition="'$(PrometheusTasksEnabled)' == 'true'" />-->
@@ -183,9 +224,13 @@
     <PropertyGroup>
       <SectionSymbol>%</SectionSymbol>
     </PropertyGroup>
-    
-    <Message Text="$~----- Setting Global Variables for $(MSBuildProjectName) ------~$" Importance="high" />
-    <LogPropertyTask ProjectFiles="$(PrometheusGlobalProps);$(PrometheusGlobalTargets)" SectionSymbol="$(SectionSymbol)" />
+
+    <Message Text="| $(SectionString)" Importance="high" />
+    <Message Text="$~----- Getting Global Variables for $(MSBuildProjectName) ------~$" Importance="high" />
+    <Message Text="| $(HeaderString)" Importance="high" />
+    <LogPropertyTask ProjectFiles="$(PrometheusGlobalProps);$(PrometheusGlobalTargets)" 
+                     SectionSymbol="$(SectionSymbol)" 
+                     Condition="'$(PrometheusTasksEnabled)' == 'true'"/>
 
     <Message Text="| $(SectionSymbol) ProductName: $(ProductName)" Importance="high" />
     <Message Text="| $(SectionSymbol) AssemblyName: $(AssemblyName)" Importance="high" />
@@ -194,6 +239,7 @@
     <Message Text="| $(SectionSymbol) PackageVersion: $(PackageVersion)" Importance="high" />
     <Message Text="| $(SectionSymbol) TargetFramework: $(TargetFramework)" Importance="high" />
     <Message Text="| $(SectionSymbol) AutoDetectPlatform: $(AutoDetectPlatform)" Importance="high" />
+    <Message Text="| $(SectionSymbol) IsPackable: $(IsPackable)" Importance="high" />
     <Message Text="| $(SectionSymbol) IsSharedProject: $(IsSharedProject)" Importance="high" />
     <Message Text="| $(SectionSymbol) IsTestProject: $(IsTestProject)" Importance="high" />
     <Message Text="| $(SectionSymbol) IsLibraryProject: $(IsLibraryProject)" Importance="high" />
@@ -208,7 +254,9 @@
   </Target>
 
   <Target Name="PrintRootDirectory">
+    <Message Text="| $(SectionString)" Importance="high" />
     <Message Text="$~----- Getting Project Parent Directory for $(MSBuildProjectName) ------~$" Importance="high" />
+    <Message Text="| $(HeaderString)" Importance="high" />
     <Message Text="| $(SectionSymbol) RootPath: $(RootPath)" Importance="high" />
     <Message Text="| $(SectionSymbol) SolutionDir: $(SolutionDir)" Importance="high" />
   </Target>
@@ -218,14 +266,18 @@
       <SectionSymbol>#</SectionSymbol>
     </PropertyGroup>
 
+    <Message Text="| $(SectionString)" Importance="high" />
     <Message Text="$~----- Importing Props for $(MSBuildProjectName) ------~$" Importance="high" />
+    <Message Text="| $(HeaderString)" Importance="high" />
     <Message Text="| $(SectionSymbol) CommonTargets: $(PrometheusCommonTargets)" Importance="high" />
     <Message Text="| $(SectionSymbol) CommonProps: $(PrometheusCommonProps)" Importance="high" />
     <Message Text="| $(SectionSymbol) CommonPlatformProps: $(PrometheusPlatformProps)" Importance="high" />
   </Target>
 
   <Target Name="RunNuGetRestore">
+    <Message Text="| $(SectionString)" Importance="high" />
     <Message Text="$~----- Restoring NuGet Packages for $(MSBuildProjectName) ------~$" Importance="high" />
+    <Message Text="| $(HeaderString)" Importance="high" />
 
     <!-- You're going to be super temped to combine this with BuildTIMSNET -->
     <!-- However you cannot because of bugs in the context; see the common -->
@@ -242,7 +294,9 @@
       <SectionSymbol>%*</SectionSymbol>
     </PropertyGroup>
 
+    <Message Text="| $(SectionString)" Importance="high" />
     <Message Importance="high" Text="$~~~~~~~ Importing Platform $(PlatformId) ~~~~~~~$" />
+    <Message Text="| $(HeaderString)" Importance="high" />
     <Message Text="| $(SectionSymbol) RuntimeId: $(RuntimeId)" Importance="high" />
     <Message Text="| $(SectionSymbol) PlatformId: $(PlatformId)" Importance="high" />
     <Message Text="| $(SectionSymbol) PlatformType: $(PlatformType)" Importance="high" />
@@ -277,26 +331,27 @@
     </Otherwise>
   </Choose>
 
-  <Target Name="BuildDesignPackage">
+  <!--<Target Name="BuildDesignPackage">
+    <Message Text="| $(SectionString)" Importance="high" />
     <Message Text="| $(SectionSymbol) SharedImports: $(SharedImports)" Importance="high" />
     <Message Text="| $(SectionSymbol) SharedImportsString: $(SharedImportsString)" Importance="high" />
+    <Message Text="| $(HeaderString)" Importance="high" />
     <CallTarget Targets="Clean" />
     <CallTarget Targets="Make" />
     <CallTarget Targets="Register" />
-  </Target>
+  </Target>-->
 
   <!--<Target Name="PrintSourceImportProps">
     <Message Importance="high" Text="$~~~~~~~ | $(SectionSymbol) Importing Support projitems ~~~~~~~$" />
   </Target>-->
-  <Target Name="PrintPrometheusCommon2" Outputs="$(Imports)">
+  <Target Name="PrintPrometheusCommon2">
     <PropertyGroup>
       <SectionSymbol>**</SectionSymbol>
     </PropertyGroup>
 
-    <Message Text="| $(SectionSymbol) []==~ $(MSBuildThisFile) ~==[]" Importance="high" />
-    <Message Text="| $(SectionSymbol) ---------------------------------------" Importance="high" />
-    <Message Text="| $(SectionSymbol) SolutionImportProps: $(SolutionImportProps)" Importance="high" />
-    <Message Text="| $(SectionSymbol) SourceImportProps: $(SourceImportProps)" Importance="high" />
+    <Message Text="| $(SectionString)" Importance="high" />
+    <Message Text="| []==~ $(MSBuildThisFile) ~==[]" Importance="high" />
+    <Message Text="| $(HeaderString)" Importance="high" />
 
     <!--<PropertyGroup>
       <SharedImports>@(Imports->'%(Identity)')</SharedImports>
@@ -309,6 +364,8 @@
       <Found2>False</Found2>
     </PropertyGroup>
 
+    <Message Text="| $(SectionSymbol) SolutionImportProps: $(SolutionImportProps)" Importance="high" />
+    <Message Text="| $(SectionSymbol) SourceImportProps: $(SourceImportProps)" Importance="high" />
     <Message Text="| $(SectionSymbol) MergeBinary: $(MergeBinary)" Importance="high" />
     <Message Text="| $(SectionSymbol) SharedImports: $(SharedImports)" Importance="high" />
     <Message Text="| $(SectionSymbol) Import Found: $(Found)" Importance="high" />

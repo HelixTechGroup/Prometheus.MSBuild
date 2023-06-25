@@ -21,6 +21,8 @@
     <None Include="Globals\Globals.Build.targets" />
     <None Include="Globals\NuGet.Build.props" />
     <None Include="Globals\NuGet.Build.targets" />
+    <None Include="Globals\Tests.Build.targets" />
+    <None Include="Globals\Tests.Build.props" />
     <None Include="Platform\Android\Platform.Build.props" />
     <None Include="Platform\Android\Platform.Build.targets" />
     <None Include="Platform\Detect.Build.props" />
@@ -41,9 +43,6 @@
     <None Include="Sdk\Sdk.targets" />
     <None Include="Template2.props" />
     <None Include="Usings.Build.props" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Properties\PublishProfiles\" />
   </ItemGroup>
   <Import Project="Prometheus.MSBuild.1.projitems" Label="Shared" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\CodeSharing\Microsoft.CodeSharing.CSharp.targets" />

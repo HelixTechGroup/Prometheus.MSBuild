@@ -1,7 +1,7 @@
 <Project InitialTargets="PrintPrometheusGlobals">
-  <ItemGroup>
-    <MSBuildProjectParentDirectory Include="$(MSBuildProjectDirectory)\.." />
-  </ItemGroup>
+  <!--<PropertyGroup>
+    <MSBuildProjectParentDirectory>$(MSBuildProjectDirectory)\..</MSBuildProjectParentDirectory>
+  </PropertyGroup>-->
   <PropertyGroup Condition="$(SolutionDir) != ''">
     <!--<SolutionDir>$(SolutionDir.TrimEnd('\'))</SolutionDir>-->
     <SourceDirectory Condition=" '$(SourceDirectory)' == '' ">$(SolutionDir)src</SourceDirectory>
@@ -10,7 +10,6 @@
     <!--<PrometheusDirectory Condition=" '$(PrometheusDirectory)' == '' ">$(PrometheusDirectory)\Prometheus</PrometheusDirectory>-->
     <OutputDirectory Condition="'$(OutputDirectory)' == ''">$(BuildDirectory)\$(Configuration)\$(AssemblyName)</OutputDirectory>
     <OutputPath Condition=" '$(OutputPath)' == '' ">$(OutputDirectory)</OutputPath>
-    <TestsDirectory Condition="'$(TestsDirectory)' == ''">$(SolutionDir)tests</TestsDirectory>
     <!--<BaseIntermediateOutputPath>$(SolutionDir)\build\obj\$(Configuration)\$(AssemblyName)</BaseIntermediateOutputPath>-->
     <SolutionProps Condition=" '$(SolutionProps)' == '' ">$(SolutionDir)Solution.Build.props</SolutionProps>
     <UserProps Condition=" '$(UserProps)' == '' ">$(SolutionDir)User.Build.props</UserProps>
@@ -28,11 +27,11 @@
     <MergeBinary Condition=" '$(MergeBinary)' == '' ">True</MergeBinary>
     <UseGitHub Condition="'$(UseGitHub)' == ''">False</UseGitHub>
     <FirstTimeLoading Condition=" '$(FirstTimeLoading)' == '' ">True</FirstTimeLoading>
-    <IsPackable Condition="'$(IsPackable)' == ''">False</IsPackable>
+    <!--<IsPackable Condition="'$(IsPackable)' == ''">False</IsPackable>-->
     <EnableNETAnalyzers Condition="'$(EnableNETAnalyzers)' == ''">True</EnableNETAnalyzers>
     <SetupCompleted Condition=" '$(SetupCompleted)' == '' ">False</SetupCompleted>
-    <TargetPlatform Condition=" '$(TargetPlatform)' == '' And '$(TargetPlatforms)' != ''">net6.0</TargetPlatform>
-    <PlatformId Condition=" '$(PlatformId)' == '' ">None</PlatformId>
+    <!--<TargetPlatform Condition=" '$(TargetPlatform)' == '' And '$(TargetPlatforms)' != ''">net6.0</TargetPlatform>-->
+    <!--<PlatformId Condition=" '$(PlatformId)' == '' ">None</PlatformId>-->
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <Description Condition="'$(Description)' == ''">Description</Description>
@@ -57,13 +56,13 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(IsPackable)' == 'true'">
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
   </PropertyGroup>
 
   <Import Project="$(PrometheusGlobalDirectory)\NuGet.Build.props" Condition="'$(IsPackable)' == 'true'" />
 
-  <!--<Import Project="$(SolutionProps)" Condition="Exists($(SolutionProps))"/>
-  <Import Project="$(UserProps)" Condition="Exists($(UserProps))" />-->
+  <Import Project="$(SolutionProps)" Condition="Exists($(SolutionProps))"/>
+  <Import Project="$(UserProps)" Condition="Exists($(UserProps))" />
 
   <Target Name="PrintPrometheusGlobals">
     <PropertyGroup>
@@ -92,10 +91,17 @@
     <Message Text="| $(SectionSymbol) ProductVersion: $(ProductVersion)" Importance="high" />
     <Message Text="| $(SectionSymbol) Version: $(Version)" Importance="high" />
     <Message Text="| $(SectionSymbol) PackageVersion: $(PackageVersion)" Importance="high" />
+    <Message Text="| $(SectionSymbol) RuntimeId: $(RuntimeId)" Importance="high" />
+    <Message Text="| $(SectionSymbol) RuntimeVersion: $(RuntimeVersion)" Importance="high" />
+    <Message Text="| $(SectionSymbol) PlatformId: $(PlatformId)" Importance="high" />
+    <Message Text="| $(SectionSymbol) PlatformVersion: $(PlatformVersion)" Importance="high" />
+    <Message Text="| $(SectionSymbol) RuntimeTargetFramework: $(RuntimeTargetFramework)" Importance="high" />
     <Message Text="| $(SectionSymbol) TargetPlatform: $(TargetPlatform)" Importance="high" />
     <Message Text="| $(SectionSymbol) TargetPlatforms: $(TargetPlatforms)" Importance="high" />
     <Message Text="| $(SectionSymbol) TargetFramework: $(TargetFramework)" Importance="high" />
+    <Message Text="| $(SectionSymbol) TargetFrameworks: $(TargetFrameworks)" Importance="high" />
     <Message Text="| $(SectionSymbol) AutoDetectPlatform: $(AutoDetectPlatform)" Importance="high" />
+    <Message Text="| $(SectionSymbol) IsPackable: $(IsPackable)" Importance="high" />
     <Message Text="| $(SectionSymbol) IsSharedProject: $(IsSharedProject)" Importance="high" />
     <Message Text="| $(SectionSymbol) IsTestProject: $(IsTestProject)" Importance="high" />
     <Message Text="| $(SectionSymbol) IsLibraryProject: $(IsLibraryProject)" Importance="high" />

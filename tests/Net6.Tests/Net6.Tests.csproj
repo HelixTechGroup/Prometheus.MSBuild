@@ -1,10 +1,8 @@
-﻿<Project>
+<Project Sdk="Microsoft.NET.Sdk">
   <Import Project="..\..\src\Prometheus.MSBuild\Sdk\Sdk.props" />
   <PropertyGroup>
-    <ProductName>Net6.Windows.Tests</ProductName>
-    <TargetPlatform>net6.0-windows</TargetPlatform>
-    <PlatformId>Windows</PlatformId>
-    <!--<TargetFramework>net6.0-windows</TargetFramework>-->
+    <ProductName>Net6.Tests</ProductName>
+    <TargetPlatform>net6.0</TargetPlatform>
     <IsTestProject>True</IsTestProject>
     <IsLibraryProject>True</IsLibraryProject>
     <IsPackable>False</IsPackable>

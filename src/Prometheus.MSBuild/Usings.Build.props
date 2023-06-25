@@ -1,9 +1,22 @@
 <Project InitialTargets="PrintUsings">
   <PropertyGroup>
-    <TaskAssembly>$(PrometheusLibDirectory)\$(PrometheusLibFramework)\Prometheus.MSBuild.Tasks.dll</TaskAssembly>
+    <PrometheusLibDirectory Condition="'$(PrometheusLibDirectory)' == ''">$(PrometheusDirectory)\lib</PrometheusLibDirectory>
+    <PrometheusLibFramework Condition="'$(PrometheusLibFramework)' == ''">netstandard2.0</PrometheusLibFramework>
     <UsingsLoaded>False</UsingsLoaded>
   </PropertyGroup>
-  
+
+  <!--<PropertyGroup Condition=" '$(MSBuildRuntimeType)' == 'Core'">
+    <PrometheusLibFramework>ne6.0</PrometheusLibFramework>
+  </PropertyGroup>
+
+  <PropertyGroup Condition=" '$(MSBuildRuntimeType)' == 'Full'">
+    <PrometheusLibFramework>net48</PrometheusLibFramework>
+  </PropertyGroup>-->
+
+  <PropertyGroup>
+    <TaskAssembly>$(PrometheusLibDirectory)\$(PrometheusLibFramework)\Prometheus.MSBuild.Tasks.dll</TaskAssembly>
+  </PropertyGroup>
+
   <UsingTask TaskName="Prometheus.MSBuild.Tasks.AttachDebuggerTask"
              AssemblyFile="$(TaskAssembly)"
              Condition="'$(PrometheusTasksEnabled)' == 'true' And '$(Configuration)' == 'debug'" />

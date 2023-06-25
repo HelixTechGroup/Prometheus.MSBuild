@@ -8,8 +8,8 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{76C98FB4-153B-4314-9E3F-543755D2B611}"
 	ProjectSection(SolutionItems) = preProject
 		CHANGELOG.md = CHANGELOG.md
-		CODE_OF_CONDUCT.md = CODE_OF_CONDUCT.md
 		CODESTYLE.md = CODESTYLE.md
+		CODE_OF_CONDUCT.md = CODE_OF_CONDUCT.md
 		CONTRIBUTING.md = CONTRIBUTING.md
 		Directory.Build.props = Directory.Build.props
 		LICENSE.md = LICENSE.md
@@ -62,15 +62,17 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Prometheus.MSBuild.Tasks", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Net6.Android.Lib.Baseline", "tests\Net6.Android.Lib.Baseline\Net6.Android.Lib.Baseline.csproj", "{CAED7508-3E72-40C2-B9FF-3484F628F7DC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Net6.Android.App.Baseline", "tests\Net6.Android.App.Baseline\Net6.Android.App.Baseline.csproj", "{A27C8217-F568-49B9-9367-345CB9D053F0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Net6.Android.App.Baseline", "tests\Net6.Android.App.Baseline\Net6.Android.App.Baseline.csproj", "{A27C8217-F568-49B9-9367-345CB9D053F0}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Baselines", "Baselines", "{675A3EC6-C6FF-4B1D-A7A5-523CCB2FB4B8}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Net6.Winui3.Lib.Baseline", "tests\Net6.Winui3.Lib.Baseline\Net6.Winui3.Lib.Baseline.csproj", "{3C4FF7B1-9B35-4434-A2B2-BA3C2DE6F8E4}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Multiplatform.Tests", "tests\Multiplatform.Tests\Multiplatform.Tests.csproj", "{AD16EB85-7937-44EA-A846-04135AE6912A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Net6.Tests", "tests\Net6.Tests\Net6.Tests.csproj", "{D6F88F0C-F40A-4F89-BDC3-890E9D3BD9F2}"
+EndProject
 Global
-	GlobalSection(SharedMSBuildProjectFiles) = preSolution
-		src\Prometheus.MSBuild.Tasks\Prometheus.Tasks.projitems*{97f07d19-375a-4e6d-a067-b897e238dd45}*SharedItemsImports = 5
-		src\Prometheus.MSBuild.Tasks\Prometheus.Tasks.projitems*{a7f9764c-023b-428d-bd99-555b5778344f}*SharedItemsImports = 13
-	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Debug|x64 = Debug|x64
@@ -314,6 +316,66 @@ Global
 		{A27C8217-F568-49B9-9367-345CB9D053F0}.Release-MONO|x64.ActiveCfg = Release|Any CPU
 		{A27C8217-F568-49B9-9367-345CB9D053F0}.Release-MONO|x64.Build.0 = Release|Any CPU
 		{A27C8217-F568-49B9-9367-345CB9D053F0}.Release-MONO|x64.Deploy.0 = Release|Any CPU
+		{3C4FF7B1-9B35-4434-A2B2-BA3C2DE6F8E4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3C4FF7B1-9B35-4434-A2B2-BA3C2DE6F8E4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3C4FF7B1-9B35-4434-A2B2-BA3C2DE6F8E4}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{3C4FF7B1-9B35-4434-A2B2-BA3C2DE6F8E4}.Debug|x64.Build.0 = Debug|Any CPU
+		{3C4FF7B1-9B35-4434-A2B2-BA3C2DE6F8E4}.Debug-MONO|Any CPU.ActiveCfg = Debug|Any CPU
+		{3C4FF7B1-9B35-4434-A2B2-BA3C2DE6F8E4}.Debug-MONO|Any CPU.Build.0 = Debug|Any CPU
+		{3C4FF7B1-9B35-4434-A2B2-BA3C2DE6F8E4}.Debug-MONO|x64.ActiveCfg = Debug|Any CPU
+		{3C4FF7B1-9B35-4434-A2B2-BA3C2DE6F8E4}.Debug-MONO|x64.Build.0 = Debug|Any CPU
+		{3C4FF7B1-9B35-4434-A2B2-BA3C2DE6F8E4}.MachineIndependent|Any CPU.ActiveCfg = Debug|Any CPU
+		{3C4FF7B1-9B35-4434-A2B2-BA3C2DE6F8E4}.MachineIndependent|Any CPU.Build.0 = Debug|Any CPU
+		{3C4FF7B1-9B35-4434-A2B2-BA3C2DE6F8E4}.MachineIndependent|x64.ActiveCfg = Debug|Any CPU
+		{3C4FF7B1-9B35-4434-A2B2-BA3C2DE6F8E4}.MachineIndependent|x64.Build.0 = Debug|Any CPU
+		{3C4FF7B1-9B35-4434-A2B2-BA3C2DE6F8E4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3C4FF7B1-9B35-4434-A2B2-BA3C2DE6F8E4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3C4FF7B1-9B35-4434-A2B2-BA3C2DE6F8E4}.Release|x64.ActiveCfg = Release|Any CPU
+		{3C4FF7B1-9B35-4434-A2B2-BA3C2DE6F8E4}.Release|x64.Build.0 = Release|Any CPU
+		{3C4FF7B1-9B35-4434-A2B2-BA3C2DE6F8E4}.Release-MONO|Any CPU.ActiveCfg = Release|Any CPU
+		{3C4FF7B1-9B35-4434-A2B2-BA3C2DE6F8E4}.Release-MONO|Any CPU.Build.0 = Release|Any CPU
+		{3C4FF7B1-9B35-4434-A2B2-BA3C2DE6F8E4}.Release-MONO|x64.ActiveCfg = Release|Any CPU
+		{3C4FF7B1-9B35-4434-A2B2-BA3C2DE6F8E4}.Release-MONO|x64.Build.0 = Release|Any CPU
+		{AD16EB85-7937-44EA-A846-04135AE6912A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AD16EB85-7937-44EA-A846-04135AE6912A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AD16EB85-7937-44EA-A846-04135AE6912A}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{AD16EB85-7937-44EA-A846-04135AE6912A}.Debug|x64.Build.0 = Debug|Any CPU
+		{AD16EB85-7937-44EA-A846-04135AE6912A}.Debug-MONO|Any CPU.ActiveCfg = Debug|Any CPU
+		{AD16EB85-7937-44EA-A846-04135AE6912A}.Debug-MONO|Any CPU.Build.0 = Debug|Any CPU
+		{AD16EB85-7937-44EA-A846-04135AE6912A}.Debug-MONO|x64.ActiveCfg = Debug|Any CPU
+		{AD16EB85-7937-44EA-A846-04135AE6912A}.Debug-MONO|x64.Build.0 = Debug|Any CPU
+		{AD16EB85-7937-44EA-A846-04135AE6912A}.MachineIndependent|Any CPU.ActiveCfg = Debug|Any CPU
+		{AD16EB85-7937-44EA-A846-04135AE6912A}.MachineIndependent|Any CPU.Build.0 = Debug|Any CPU
+		{AD16EB85-7937-44EA-A846-04135AE6912A}.MachineIndependent|x64.ActiveCfg = Debug|Any CPU
+		{AD16EB85-7937-44EA-A846-04135AE6912A}.MachineIndependent|x64.Build.0 = Debug|Any CPU
+		{AD16EB85-7937-44EA-A846-04135AE6912A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AD16EB85-7937-44EA-A846-04135AE6912A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AD16EB85-7937-44EA-A846-04135AE6912A}.Release|x64.ActiveCfg = Release|Any CPU
+		{AD16EB85-7937-44EA-A846-04135AE6912A}.Release|x64.Build.0 = Release|Any CPU
+		{AD16EB85-7937-44EA-A846-04135AE6912A}.Release-MONO|Any CPU.ActiveCfg = Release|Any CPU
+		{AD16EB85-7937-44EA-A846-04135AE6912A}.Release-MONO|Any CPU.Build.0 = Release|Any CPU
+		{AD16EB85-7937-44EA-A846-04135AE6912A}.Release-MONO|x64.ActiveCfg = Release|Any CPU
+		{AD16EB85-7937-44EA-A846-04135AE6912A}.Release-MONO|x64.Build.0 = Release|Any CPU
+		{D6F88F0C-F40A-4F89-BDC3-890E9D3BD9F2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D6F88F0C-F40A-4F89-BDC3-890E9D3BD9F2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D6F88F0C-F40A-4F89-BDC3-890E9D3BD9F2}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{D6F88F0C-F40A-4F89-BDC3-890E9D3BD9F2}.Debug|x64.Build.0 = Debug|Any CPU
+		{D6F88F0C-F40A-4F89-BDC3-890E9D3BD9F2}.Debug-MONO|Any CPU.ActiveCfg = Debug|Any CPU
+		{D6F88F0C-F40A-4F89-BDC3-890E9D3BD9F2}.Debug-MONO|Any CPU.Build.0 = Debug|Any CPU
+		{D6F88F0C-F40A-4F89-BDC3-890E9D3BD9F2}.Debug-MONO|x64.ActiveCfg = Debug|Any CPU
+		{D6F88F0C-F40A-4F89-BDC3-890E9D3BD9F2}.Debug-MONO|x64.Build.0 = Debug|Any CPU
+		{D6F88F0C-F40A-4F89-BDC3-890E9D3BD9F2}.MachineIndependent|Any CPU.ActiveCfg = Debug|Any CPU
+		{D6F88F0C-F40A-4F89-BDC3-890E9D3BD9F2}.MachineIndependent|Any CPU.Build.0 = Debug|Any CPU
+		{D6F88F0C-F40A-4F89-BDC3-890E9D3BD9F2}.MachineIndependent|x64.ActiveCfg = Debug|Any CPU
+		{D6F88F0C-F40A-4F89-BDC3-890E9D3BD9F2}.MachineIndependent|x64.Build.0 = Debug|Any CPU
+		{D6F88F0C-F40A-4F89-BDC3-890E9D3BD9F2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D6F88F0C-F40A-4F89-BDC3-890E9D3BD9F2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D6F88F0C-F40A-4F89-BDC3-890E9D3BD9F2}.Release|x64.ActiveCfg = Release|Any CPU
+		{D6F88F0C-F40A-4F89-BDC3-890E9D3BD9F2}.Release|x64.Build.0 = Release|Any CPU
+		{D6F88F0C-F40A-4F89-BDC3-890E9D3BD9F2}.Release-MONO|Any CPU.ActiveCfg = Release|Any CPU
+		{D6F88F0C-F40A-4F89-BDC3-890E9D3BD9F2}.Release-MONO|Any CPU.Build.0 = Release|Any CPU
+		{D6F88F0C-F40A-4F89-BDC3-890E9D3BD9F2}.Release-MONO|x64.ActiveCfg = Release|Any CPU
+		{D6F88F0C-F40A-4F89-BDC3-890E9D3BD9F2}.Release-MONO|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -334,8 +396,15 @@ Global
 		{CAED7508-3E72-40C2-B9FF-3484F628F7DC} = {675A3EC6-C6FF-4B1D-A7A5-523CCB2FB4B8}
 		{A27C8217-F568-49B9-9367-345CB9D053F0} = {675A3EC6-C6FF-4B1D-A7A5-523CCB2FB4B8}
 		{675A3EC6-C6FF-4B1D-A7A5-523CCB2FB4B8} = {201ABF3E-4DEE-430F-A115-B6FF5ACA85AC}
+		{3C4FF7B1-9B35-4434-A2B2-BA3C2DE6F8E4} = {675A3EC6-C6FF-4B1D-A7A5-523CCB2FB4B8}
+		{AD16EB85-7937-44EA-A846-04135AE6912A} = {201ABF3E-4DEE-430F-A115-B6FF5ACA85AC}
+		{D6F88F0C-F40A-4F89-BDC3-890E9D3BD9F2} = {201ABF3E-4DEE-430F-A115-B6FF5ACA85AC}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {1C3B7AFA-2A1C-4272-B7BE-E97A117839FE}
+	EndGlobalSection
+	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		src\Prometheus.MSBuild.Tasks\Prometheus.Tasks.projitems*{97f07d19-375a-4e6d-a067-b897e238dd45}*SharedItemsImports = 5
+		src\Prometheus.MSBuild.Tasks\Prometheus.Tasks.projitems*{a7f9764c-023b-428d-bd99-555b5778344f}*SharedItemsImports = 13
 	EndGlobalSection
 EndGlobal

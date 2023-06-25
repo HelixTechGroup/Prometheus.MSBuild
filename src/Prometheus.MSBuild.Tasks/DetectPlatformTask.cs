@@ -59,9 +59,13 @@ namespace Prometheus.MSBuild.Tasks
             //else
             //    Debugger.Break();
 
-            var versionRegex = new Regex(@$"\d+(?:\.\d+)+");
+            PlatformId = RuntimeId = RuntimeTargetFramework = "None";
+            PlatformVersion = RuntimeVersion = "0.0";
+            var versionRegex = new Regex(@$"\d+?(?:\.\d+)+");
+            var lazyVersionRegex = new Regex($@"\d+?\.?\d+?");
             var coreVersionRegex = new Regex(@$"^net\d+(?:\.\d+)+");
             var platformVersionRegex = new Regex(@$"\S+(\d+)");
+
             if (string.IsNullOrWhiteSpace(TargetPlatform))
             {
                 Log.LogError("TargetPlatform cannot be empty");
@@ -71,45 +75,50 @@ namespace Prometheus.MSBuild.Tasks
             if (!TargetPlatform.Contains('-'))
             {
                 Log.LogMessage("No Platform detected.");
-            }
-
-            var tmp = TargetPlatform.Split('-');
-            RuntimeId = tmp[0];
-            if (tmp.Length > 1)
-            {
-                PlatformDetected = tmp.Length >= 2;
-                PlatformId = PlatformDetected  ? tmp[1] : "None";
-            }
-
-            if (TargetPlatform.Contains("netcore"))
-            {
-                RuntimeTargetFramework = "netcoreapp3.1";
-                IsCoreRuntime = true;
-                RuntimeVersion = "3.1";
-                RuntimeDetected = true;
+                PlatformId = "None";
+                RuntimeTargetFramework = RuntimeId = TargetPlatform;
+                RuntimeVersion = lazyVersionRegex.IsMatch(RuntimeId) ? lazyVersionRegex.Match(RuntimeId).Value : "0.0";
             }
             else
             {
-                RuntimeTargetFramework = !PlatformDetected ? tmp[0] : @$"{tmp[0]}-{tmp[1]}";
-                RuntimeVersion = versionRegex.IsMatch(RuntimeId) ? versionRegex.Match(RuntimeId).Value : "0.0";
-                //Log.LogMessage(MessageImportance.High, $"| {m_options.SectionSymbol} DETECTED VERSION: {RuntimeVersion}");
-                RuntimeDetected = true;
-                IsCoreRuntime = coreVersionRegex.IsMatch(RuntimeId);
-            }
-
-            var versionMatch = versionRegex.Match(PlatformId);
-            PlatformVersion = versionMatch.Success ? versionMatch.Value : "0.0";
-            if (versionMatch.Success)
-            {
-                PlatformId = PlatformId.Replace(versionMatch.Value, string.Empty);
-            }
-
-            if (PlatformId == "android")
-            {
-                if (!versionMatch.Success)
+                var tmp = TargetPlatform.Split('-');
+                RuntimeId = tmp[0];
+                if (tmp.Length > 1)
                 {
-                    PlatformVersion = AndroidSdkVersion.Latest;
-                    //RuntimeTargetFramework = @$"{tmp[0]}-{tmp[1]}{PlatformVersion}";
+                    PlatformDetected = tmp.Length >= 2;
+                    PlatformId = PlatformDetected ? tmp[1] : "None";
+                }
+
+                if (TargetPlatform.Contains("netcore"))
+                {
+                    RuntimeTargetFramework = "netcoreapp3.1";
+                    IsCoreRuntime = true;
+                    RuntimeVersion = "3.1";
+                    RuntimeDetected = true;
+                }
+                else
+                {
+                    RuntimeTargetFramework = !PlatformDetected ? tmp[0] : @$"{tmp[0]}-{tmp[1]}";
+                    RuntimeVersion = lazyVersionRegex.IsMatch(RuntimeId) ? lazyVersionRegex.Match(RuntimeId).Value : "0.0";
+                    //Log.LogMessage(MessageImportance.High, $"| {m_options.SectionSymbol} DETECTED VERSION: {RuntimeVersion}");
+                    RuntimeDetected = true;
+                    IsCoreRuntime = coreVersionRegex.IsMatch(RuntimeId);
+                }
+
+                var versionMatch = versionRegex.Match(PlatformId);
+                PlatformVersion = versionMatch.Success ? versionMatch.Value : "0.0";
+                if (versionMatch.Success)
+                {
+                    PlatformId = PlatformId.Replace(versionMatch.Value, string.Empty);
+                }
+
+                if (PlatformId == "android")
+                {
+                    if (!versionMatch.Success)
+                    {
+                        PlatformVersion = AndroidSdkVersion.Latest;
+                        //RuntimeTargetFramework = @$"{tmp[0]}-{tmp[1]}{PlatformVersion}";
+                    }
                 }
             }
 

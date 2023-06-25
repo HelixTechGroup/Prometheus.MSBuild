@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk" InitialTargets="ProjectInfo">
   <PropertyGroup>
     <TargetFramework>net6.0-android</TargetFramework>
     <SupportedOSPlatformVersion>21</SupportedOSPlatformVersion>
@@ -9,4 +9,13 @@
     <ApplicationVersion>1</ApplicationVersion>
     <ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>
   </PropertyGroup>
+
+  <Target Name="ProjectInfo">
+    <Message Text="| $(SectionSymbol) TargetFramework: $(TargetFramework)" Importance="high" />
+    <Message Text="| $(SectionSymbol) TargetFrameworks: $(TargetFrameworks)" Importance="high" />
+    <Message Text="| $(SectionSymbol) TargetFrameworkVersion: $(TargetFrameworkVersion)" Importance="high" />
+    <Message Text="| $(SectionSymbol) TargetFrameworkIdentifier: $(TargetFrameworkIdentifier)" Importance="high" />
+    <Message Text="| $(SectionSymbol) TargetFrameworkProfile: $(TargetFrameworkProfile)" Importance="high" />
+    <Message Text="| $(SectionSymbol) SupportedOSPlatformVersion: $(SupportedOSPlatformVersion)" Importance="high" />
+  </Target>
 </Project>

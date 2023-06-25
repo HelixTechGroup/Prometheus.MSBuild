@@ -14,11 +14,11 @@
     <PrometheusTasksEnabled>True</PrometheusTasksEnabled>
     <ProductName>Net6.Import.Tests</ProductName>
     <TargetPlatform>net6.0</TargetPlatform>
-    <TargetFramework>net6.0</TargetFramework>
+    <!--<TargetFramework>net6.0</TargetFramework>-->
     <IsTestProject>True</IsTestProject>
     <IsLibraryProject>True</IsLibraryProject>
     <IsPackable>False</IsPackable>
-    <PrometheusImporterEnabled>True</PrometheusImporterEnabled>  
+    <!--<PrometheusImporterEnabled>True</PrometheusImporterEnabled>-->  
   </PropertyGroup>
   <!--<Import Project="$(SolutionDir)tests\resources\Test.projitems" Label="Shared"/>-->
   <Import Project="..\..\src\Prometheus.MSBuild\Sdk\Sdk.targets" />

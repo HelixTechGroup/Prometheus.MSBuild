@@ -4,6 +4,7 @@
     <PlatformId>Linux</PlatformId>
     <PlatformType>Desktop</PlatformType>
     <Rendering>True</Rendering>
+    <HasLinux>True</HasLinux>
     <TargetFramework Condition="'$(TargetPlatform.Contains(`net5.0`))' == 'true'">net5.0</TargetFramework>
   </PropertyGroup>
 </Project>

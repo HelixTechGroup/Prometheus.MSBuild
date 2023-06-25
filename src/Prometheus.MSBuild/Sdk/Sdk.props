@@ -8,9 +8,18 @@
     <PrometheusProps>$(PrometheusDirectory)\Prometheus.Build.props</PrometheusProps>
     <PrometheusTargets>$(PrometheusDirectory)\Prometheus.Build.targets</PrometheusTargets>
   </PropertyGroup>
+  <!--<PropertyGroup Condition="'$(TargetPlatform)' != ''">
+    <Array>$(TargetPlatform.Split(`-`))</Array>
+    <RuntimeId>$(TargetPlatform.Split(`-`)[0])</RuntimeId>
+    --><!--<TargetFramework>$(RuntimeId)</TargetFramework>--><!--
+    --><!--Condition="'$(TargetPlatform.Split(`-`).Length)' &gt;= '2'"--><!--
+    <PlatformId>$(TargetPlatform.Split(`-`)[1])</PlatformId>
+    <TargetFramework Condition="'$(PlatformId)' != ''">$(RuntimeId)-$(PlatformId)</TargetFramework>
+    --><!--<TargetFrameworks Condition="'$(TargetPlatforms)' != ''">$(TargetPlatforms)</TargetFrameworks>--><!--
+  </PropertyGroup>-->
   <!--Condition="'$(PrometheusEnabled)' == 'true' And '$(PrometheusAutoLoad)' == 'true' And Exists('$(PrometheusProps)')"-->
-  <Import Project="$(PrometheusProps)"  />
-  <ImportGroup Condition="'$(PrometheusLoadType)' != 'lite'">
+  <!--<ImportGroup Condition="'$(PrometheusLoadType)' != 'lite'">
     <Import Project="Sdk.props" Sdk="Microsoft.NET.Sdk" />
-  </ImportGroup>
+  </ImportGroup>-->
+  <Import Project="$(PrometheusProps)"  />
 </Project>

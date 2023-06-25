@@ -4,11 +4,11 @@
   </PropertyGroup>
 
   <PropertyGroup Condition=" '$(RuntimeId.Contains(`netcore`))' == 'true'">
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <RuntimeTargetFramework>netcoreapp3.1</RuntimeTargetFramework>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(RuntimeId.Contains(`netstandard`))' == 'true'">
-    <TargetFramework>netstandard2.1</TargetFramework>
+    <RuntimeTargetFramework>netstandard2.1</RuntimeTargetFramework>
   </PropertyGroup>
 
   <PropertyGroup>
@@ -18,9 +18,14 @@
 
   <PropertyGroup Condition="'$(IsSdkVersion)' == 'true' 
                  And '$(PrometheusDetectionEnabled)' != 'true'">
-    <RuntimeTargetFramework>$(TargetPlatform)</RuntimeTargetFramework>
-    <TargetFramework>$(TargetPlatform)</TargetFramework>
+    <RuntimeTargetFramework>$(RuntimeId)</RuntimeTargetFramework>
+    <RuntimeTargetFramework Condition="'$(PlatformId)' != ''">$(RuntimeId)-$(PlatformId)</RuntimeTargetFramework>
   </PropertyGroup>
+
+  <!--<PropertyGroup>
+    <TargetFramework Condition="'$(RuntimeTargetFramework)' != ''">$(RuntimeTargetFramework)</TargetFramework>
+  </PropertyGroup>-->
+
 
   <Target Name="PrintPrometheusRuntime2">
     <Message Text="| $(SectionString)" Importance="high" />

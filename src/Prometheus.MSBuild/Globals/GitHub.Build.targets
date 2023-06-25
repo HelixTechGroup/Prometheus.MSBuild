@@ -2,8 +2,8 @@
   <Choose>
     <When Condition="'$(RepositoryHttpUrl)' != ''">
       <PropertyGroup>
-        <GitHubOrg>$([System.Text.RegularExpressions.Regex]::Match($(RepositoryHttpUrl), `https://github.com/([^/]*)/([^/]*)`).Groups[1].Value)</GitHubOrg>
-        <GitHubProject>$([System.Text.RegularExpressions.Regex]::Match($(RepositoryHttpUrl), `https://github.com/([^/]*)/([^/]*)`).Groups[2].Value)</GitHubProject>
+        <SafeCompanyName>$([System.Text.RegularExpressions.Regex]::Match($(RepositoryHttpUrl), `https://github.com/([^/]*)/([^/]*)`).Groups[1].Value)</SafeCompanyName>
+        <SafeProductName>$([System.Text.RegularExpressions.Regex]::Match($(RepositoryHttpUrl), `https://github.com/([^/]*)/([^/]*)`).Groups[2].Value)</SafeProductName>
       </PropertyGroup>
     </When>
     <Otherwise>
@@ -13,22 +13,25 @@
         <SafeCompanyName>$([System.Text.RegularExpressions.Regex]::Replace($(SafeCompanyName), '[\\s]', '-'))</SafeCompanyName>
         <SafeProductName>$([System.Text.RegularExpressions.Regex]::Replace($(Productame), '[^aA-zZ0-9\\s-]', ''))</SafeProductName>
         <SafeProductName>$([System.Text.RegularExpressions.Regex]::Replace($(SafeProductName), '[\\s+]', ' '))</SafeProductName>
-        <SafeProductName>$([System.Text.RegularExpressions.Regex]::Replace($(SafeProductName), '[\\s]', '-'))</SafeProductName>
-        <GitHubOrg>$(SafeCompanyName)</GitHubOrg>
-        <GitHubProject>$(SafeProductName)</GitHubProject>
+        <SafeProductName>$([System.Text.RegularExpressions.Regex]::Replace($(SafeProductName), '[\\s]', '-'))</SafeProductName>      
       </PropertyGroup>
     </Otherwise>
   </Choose>
 
-  <!--<PropertyGroup Label="Enable SourceLink Support">
+  <PropertyGroup>
+    <GitHubOrg>$(SafeCompanyName)</GitHubOrg>
+    <GitHubProject>$(SafeProductName)</GitHubProject>
+  </PropertyGroup>
+  
+  <PropertyGroup Label="Enable SourceLink Support">
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
     <DebugType>portable</DebugType>
     <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
   </PropertyGroup>
 
   <ItemGroup Label="Enable SourceLink GitHub Support">
-    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="All" />
-  </ItemGroup>-->
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" PrivateAssets="All" />
+  </ItemGroup>
 
   <PropertyGroup>
     <RepositoryUrl>https://github.com/$(GitHubOrg)/$(GitHubProject).git</RepositoryUrl>

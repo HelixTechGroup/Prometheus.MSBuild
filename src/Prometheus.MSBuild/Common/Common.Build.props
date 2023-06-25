@@ -1,5 +1,5 @@
 <Project InitialTargets="PrintPrometheusCommon">
-  <Target Name="PrintImports" Returns="@(Imports)" Outputs="@(Imports)" />
+  <Target Name="PrintImports"/>
   <!--<Target Name="PrintImports" Outputs="@(Imports)">
     <PropertyGroup>
       <SectionSymbol>**</SectionSymbol>
@@ -11,17 +11,19 @@
     <Message Importance="high" Text="$~~~~~~~ | $(SectionSymbol) Importing Support projitems ~~~~~~~$" />
   </Target>-->
 
-  <!--<PropertyGroup>
+  <PropertyGroup>
     <SolutionImportProps Condition="'$(SolutionImportProps)' == ''">$(SolutionDir)\Imports.Build.props</SolutionImportProps>
     <SourceImportProps Condition="'$(SourceImportProps)' == ''">$(SourceDirectory)\Imports.Build.props</SourceImportProps>
-  </PropertyGroup>-->
-
-  <!--<Import Project="$(SolutionImportProps)" Condition="Exists($(SolutionImportProps))" />
-  <Import Project="$(SourceImportProps)" Condition="Exists('$(SourceImportProps)')" />-->
-
-  <PropertyGroup>
-    <PropsImported>True</PropsImported>
+    <SolutionImportTargets Condition="'$(SolutionImportTargets)' == ''">$(SolutionDir)\Imports.Build.targets</SolutionImportTargets>
+    <SourceImportTargets Condition="'$(SourceImportTargets)' == ''">$(SourceDirectory)\Imports.Build.targets</SourceImportTargets>
   </PropertyGroup>
+
+  <Import Project="$(SolutionImportProps)" Condition="Exists($(SolutionImportProps))" />
+  <Import Project="$(SourceImportProps)" Condition="Exists('$(SourceImportProps)')" />
+
+  <!--<PropertyGroup>
+    <PropsImported>True</PropsImported>
+  </PropertyGroup>-->
 
   <Target Name="PrintPrometheusCommon">
     <PropertyGroup>
@@ -32,5 +34,12 @@
     <Message Text="| $(HeaderString)" Importance="high" />
     <Message Text="| $(SectionSymbol) SolutionImportProps: $(SolutionImportProps)" Importance="high" />
     <Message Text="| $(SectionSymbol) SourceImportProps: $(SourceImportProps)" Importance="high" />
+    <Message Text="| $(SectionSymbol) SolutionImportProps: $(SolutionImportProps)" Importance="high" />
+    <Message Text="| $(SectionSymbol) SourceImportProps: $(SourceImportProps)" Importance="high" />
+    <Message Text="| $(SectionSymbol) MergeBinary: $(MergeBinary)" Importance="high" />
+    <Message Text="| $(SectionSymbol) SharedImports: $(SharedImports)" Importance="high" />
+    <Message Text="| $(SectionSymbol) Import Found: $(Found)" Importance="high" />
+    <Message Text="| $(SectionSymbol) Import Found Target: $(Found2)" Importance="high" />
+    <Message Text="| $(SectionSymbol) ---------------------------------------" Importance="high" />
   </Target>
 </Project>

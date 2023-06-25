@@ -1,32 +1,120 @@
-<Project InitialTargets="PrintPrometheusPlatform2" Condition="'$(PrometheusPlatformEnabled)' == 'true'">
+<Project InitialTargets="PrintPrometheusPlatform2">
+  <PropertyGroup Condition="'$(TargetPlatform)' != '' And '$(TargetFramework)' == ''">
+    <Array>$(TargetPlatform.Split(`-`))</Array>
+    <RuntimeId>$(TargetPlatform.Split(`-`)[0])</RuntimeId>    
+    <PlatformId Condition="'$(TargetPlatform.Split(`-`).Length)' &gt;= '2'">$(TargetPlatform.Split(`-`)[1])</PlatformId>
+    <PlatformId Condition="'$(PlatformId)' == ''" >None</PlatformId>
+    <RuntimeTargetFramework Condition="'$(PlatformId)' != ''">$(RuntimeId)-$(PlatformId)</RuntimeTargetFramework>
+    <RuntimeTargetFramework Condition="'$(PlatformId)' == '' Or '$(PlatformId)' == 'none'">$(RuntimeId)</RuntimeTargetFramework>
+    <TargetFrameworks Condition="'$(TargetPlatforms)' != ''">$(TargetPlatforms)</TargetFrameworks>
+  </PropertyGroup>
+    
+  <PropertyGroup Condition="'$(PlatformId)' == 'none'">
+    <!--<HasWindows>False</HasWindows>
+    <HasAndroid>False</HasAndroid>
+    <HasLinux>False</HasLinux>
+    <HasXamarin>False</HasXamarin>-->
+    <HasPlatform>False</HasPlatform>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(PlatformId)' != '' And '$(PlatformId)' != 'none'">
+    <!--<HasWindows>$(PlatformId.Contains(`windows`))</HasWindows>
+    <HasAndroid>$(PlatformId.Contains(`android`))</HasAndroid>
+    <HasLinux>$(PlatformId.Contains(`linux`))</HasLinux>
+    <HasXamarin>$(RuntimeId.Contains(`xamarin`))</HasXamarin>-->
+    <HasPlatform>True</HasPlatform>
+  </PropertyGroup>
+      
+  <PropertyGroup Condition="'$(IsCoreRuntime)' == 'true'">
+    <!--<RuntimeTargetFramework>$(RuntimeId)</RuntimeTargetFramework>-->
+    <!--<RuntimeTargetFramework Condition="'$(PlatformId)' != ''">$(RuntimeId)-$(PlatformId)</RuntimeTargetFramework>-->
+    <!--<TargetFrameworkIdentifier>.NETCoreApp</TargetFrameworkIdentifier>-->
+  </PropertyGroup>
+
+  <PropertyGroup Condition=" '$(RuntimeId.Contains(`netcore`))' == 'true'">
+    <RuntimeTargetFramework>netcoreapp3.1</RuntimeTargetFramework>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(RuntimeId.Contains(`netstandard`))' == 'true'">
+    <RuntimeTargetFramework>netstandard2.1</RuntimeTargetFramework>
+  </PropertyGroup>  
+  
   <ItemGroup>
     <PlatformFolders Include="$([System.IO.Directory]::GetDirectories($(PrometheusPlatformDirectory)))" />
   </ItemGroup>
-
-  <!--<Import Project="Detect.Build.props" />-->
-  <!--<Import Project="$(PlatformPropsPath);$(PlatformTargetsPath)"/>-->
-
-  <!--$(MSBuildProjectFullPath)-->
 
   <PropertyGroup>
     <PlatformPropsPath>$(PrometheusPlatformDirectory)\$(PlatformId)\Platform.Build.Props</PlatformPropsPath>
     <PlatformTargetsPath>$(PrometheusPlatformDirectory)\$(PlatformId)\Platform.Build.Targets</PlatformTargetsPath>
   </PropertyGroup>
-  <Import Project="$(PlatformTargetsPath)" />
+  
+  <Import Project="$(PrometheusPlatformDirectory)\*\**\*.targets" />
+  <!--<Import Project="Detect.Build.props" />-->
+  <!--<Import Project="$(PlatformPropsPath);$(PlatformTargetsPath)"/>-->
 
+  <!--$(MSBuildProjectFullPath)-->
+  <!--<Import Project="$(PlatformTargetsPath)" />-->
+
+  <!--<Import Project="$(PlatformPropsPath)" Condition="Exists('$(PlatformPropsPath)')"/>-->
+  <Import Project="$(PlatformPropsPath)" Condition="Exists('$(PlatformPropsPath)')" />
+  <PropertyGroup>
+    <TargetFramework Condition="'$(RuntimeTargetFramework)' != ''">$(RuntimeTargetFramework)</TargetFramework>
+  </PropertyGroup>
+  
   <Target Name="PrintPrometheusPlatform2">
     <PropertyGroup>
       <SectionSymbol>@</SectionSymbol>
       <!--<RuntimeId>@(TFArray)->[0]</RuntimeId>
       <PlatformId>%(TFArray.Identity)</PlatformId>-->
     </PropertyGroup>
-
-    <PropertyGroup Condition=" '$(TargetPlatform)' != '' ">
+    
+    <PropertyGroup Condition="'$(TargetPlatform)' != ''">
+    <Array>$(TargetPlatform.Split(`-`))</Array>
+    <RuntimeId>$(TargetPlatform.Split(`-`)[0])</RuntimeId>    
+    <PlatformId Condition="'$(TargetPlatform.Split(`-`).Length)' &gt;= '2'">$(TargetPlatform.Split(`-`)[1])</PlatformId>
+    <RuntimeTargetFramework Condition="'$(PlatformId)' != ''">$(RuntimeId)-$(PlatformId)</RuntimeTargetFramework>
+    <RuntimeTargetFramework Condition="'$(PlatformId)' == '' Or '$(PlatformId)' == 'none'">$(RuntimeId)</RuntimeTargetFramework>
+    <TargetFrameworks Condition="'$(TargetPlatforms)' != ''">$(TargetPlatforms)</TargetFrameworks>
+  </PropertyGroup>   
+  
+  <PropertyGroup Condition=" '$(PlatformId)' != '' And '$(PlatformId)' != 'none'">
+    <!--<HasWindows>$(PlatformId.Contains(`windows`))</HasWindows>
+    <HasAndroid>$(PlatformId.Contains(`android`))</HasAndroid>
+    <HasLinux>$(PlatformId.Contains(`linux`))</HasLinux>
+    <HasXamarin>$(RuntimeId.Contains(`xamarin`))</HasXamarin>-->
+    <HasPlatform>True</HasPlatform>
+  </PropertyGroup>
+    
+    <!--<PropertyGroup Condition="'$(TargetPlatform)' != '' And '$(TargetFramework)' == ''">
+      <Array>$(TargetPlatform.Split(`-`))</Array>
+      <RuntimeId>$(TargetPlatform.Split(`-`)[0])</RuntimeId>    
+      <PlatformId Condition="'$(TargetPlatform.Contains(`-`)' == 'true'">$(TargetPlatform.Split(`-`)[1])</PlatformId>
+      <RuntimeTargetFramework Condition="'$(PlatformId)' != ''">$(RuntimeId)-$(PlatformId)</RuntimeTargetFramework>
+      <RuntimeTargetFramework Condition="'$(PlatformId)' == '' Or '$(PlatformId)' == 'none'">$(RuntimeId)</RuntimeTargetFramework>      
+    </PropertyGroup>-->
+    
+    <!--<PropertyGroup Condition="'$(TargetPlatform)' != '' And '$(TargetFramework)' == ''">
+      <Array>$(TargetPlatform.Split(`-`))</Array>
+      <RuntimeId Condition="'$(RuntimeId)' == ''">$(TargetPlatform.Split(`-`)[0])</RuntimeId>
+      <RuntimeTargetFramework Condition="'$(RuntimeTargetFramework)' == '' And '$(RuntimeId)' != ''">$(RuntimeId)</RuntimeTargetFramework>
+      <PlatformId Condition="'$(TargetPlatform.Split(`-`).Length)' &gt;= '2'">$(TargetPlatform.Split(`-`)[1])</PlatformId>
+      <RuntimeTargetFramework Condition="'$(PlatformId)' != ''">$(RuntimeId)-$(PlatformId)</RuntimeTargetFramework>
+      --><!--<TargetFrameworks Condition="'$(TargetPlatforms)' != ''">$(TargetPlatforms)</TargetFrameworks>--><!--
+    </PropertyGroup>-->
+    
+    <!--<PropertyGroup Condition=" '$(PlatformId)' != '' Or '$(PlatformId)' != 'none'">
       <HasWindows>$(PlatformId.Contains(`windows`))</HasWindows>
       <HasAndroid>$(PlatformId.Contains(`android`))</HasAndroid>
       <HasLinux>$(PlatformId.Contains(`linux`))</HasLinux>
       <HasXamarin>$(RuntimeId.Contains(`xamarin`))</HasXamarin>
-      <!--<TargetFramework Condition="'$(IsCoreRuntime)' == 'true' And '$(RuntimeVersion)' &gt; '5.0'">$(RuntimeId)-$(PlatformId)</TargetFramework>-->
+      <HasPlatform>True</HasPlatform>
+    </PropertyGroup>-->
+
+    <PropertyGroup Condition=" '$(RuntimeId.Contains(`netcore`))' == 'true'">
+      <RuntimeTargetFramework>netcoreapp3.1</RuntimeTargetFramework>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(RuntimeId.Contains(`netstandard`))' == 'true'">
+      <RuntimeTargetFramework>netstandard2.1</RuntimeTargetFramework>
     </PropertyGroup>
 
     <!--<PropertyGroup Condition=" '$(RuntimeId.Contains(`netcore`))' == 'true'">
@@ -50,7 +138,15 @@
       <PlatformTargetsPath>$(PrometheusPlatformDirectory)\$(PlatformId)\Platform.Build.Targets</PlatformTargetsPath>
     </PropertyGroup>
 
-    <CallTarget Targets="$(PlatformId)" Condition="Exists('$(PlatformPropsPath)')" />
+    <PropertyGroup Condition="'$(IsCoreRuntime)' == 'true'">
+      <!--<RuntimeTargetFramework>$(RuntimeId)</RuntimeTargetFramework>-->
+      <!--<RuntimeTargetFramework Condition="'$(PlatformId)' != ''">$(RuntimeId)-$(PlatformId)</RuntimeTargetFramework>-->
+      <!--<TargetFrameworkIdentifier>.NETCoreApp</TargetFrameworkIdentifier>-->
+      <!--<TargetFrameworkProfile>$(PlatformId)</TargetFrameworkProfile>-->
+    </PropertyGroup>
+
+    <Warning Condition="!Exists('$(PlatformPropsPath)')" />
+    <CallTarget Targets="$(PlatformId)" Condition="Exists('$(PlatformTargetsPath)')" />
     <!--<PropertyGroup Condition="'$(HasWindows)' == 'true'">
       <PlatformProps>Windows</PlatformProps>
     </PropertyGroup>
@@ -63,8 +159,12 @@
       <PlatformProps>Android</PlatformProps>
     </PropertyGroup>-->
 
-    <!--<Error Condition="'$(PlatformId)' == '' Or '$(PlatformId)' == 'none'" Text="!!! PlatformId is None or Null !!!" />-->
+    <Warning Condition="'$(PlatformId)' == '' Or '$(PlatformId)' == 'none'" Text="!!! PlatformId is None or Null !!!" />
 
+    <PropertyGroup>
+      <TargetFramework Condition="'$(RuntimeTargetFramework)' != ''">$(RuntimeTargetFramework)</TargetFramework>
+    </PropertyGroup>
+    
     <Message Text="| $(SectionString)" Importance="high" />
     <Message Text="| []==~ $(MSBuildThisFile) ~==[]" Importance="high" />
     <Message Text="| $(HeaderString)" Importance="high" />
@@ -72,13 +172,25 @@
     <!--<ImportFileTask ImportFiles="$(PlatformPropsPath)" />-->
     <CallTarget Targets="ExtraPlatformProps" Condition="Exists(ExtraPlatformProps)" />
 
-    <Message Text="| $(SectionSymbol) IsValidPlatform: $(IsValidPlatform)" Importance="high" />
+    <Message Text="| $(SectionSymbol) IsValidPlatform: $(IsValidPlatform)" Importance="high" />        
     <Message Text="| $(SectionSymbol) RuntimeId: $(RuntimeId)" Importance="high" />
+    <Message Text="| $(SectionSymbol) RuntimeVersion: $(RuntimeVersion)" Importance="high" />
     <Message Text="| $(SectionSymbol) PlatformId: $(PlatformId)" Importance="high" />
     <Message Text="| $(SectionSymbol) PlatformType: $(PlatformType)" Importance="high" />
+    <Message Text="| $(SectionSymbol) PlatformVersion: $(PlatformVersion)" Importance="high" />
+    <Message Text="| $(SectionSymbol) PlatformPropsPath: $(PlatformPropsPath)" Importance="high" />
+    <Message Text="| $(SectionSymbol) RuntimeTargetFramework: $(RuntimeTargetFramework)" Importance="high" />
     <Message Text="| $(SectionSymbol) TargetPlatform: $(TargetPlatform)" Importance="high" />
+    <Message Text="| $(SectionSymbol) TargetPlatforms: $(TargetPlatforms)" Importance="high" />
     <Message Text="| $(SectionSymbol) TargetFramework: $(TargetFramework)" Importance="high" />
     <Message Text="| $(SectionSymbol) TargetFrameworks: $(TargetFrameworks)" Importance="high" />
+    <Message Text="| $(SectionSymbol) TargetFrameworkVersion: $(TargetFrameworkVersion)" Importance="high" />
+    <Message Text="| $(SectionSymbol) TargetFrameworkIdentifier: $(TargetFrameworkIdentifier)" Importance="high" />
+    <Message Text="| $(SectionSymbol) TargetFrameworkProfile: $(TargetFrameworkProfile)" Importance="high" />
+    <Message Text="| $(SectionSymbol) SupportedOSPlatformVersion: $(SupportedOSPlatformVersion)" Importance="high" />
+    <Message Text="| $(SectionSymbol) IsCoreVersion: $(IsCoreRuntime)" Importance="high" />
+    <Message Text="| $(SectionSymbol) IsSdkVersion: $(IsSdkVersion)" Importance="high" />
+    <Message Text="| $(SectionSymbol) HasPlatform: $(HasPlatform)" Importance="high" />
     <Message Text="| $(SectionSymbol) HasWindows: $(HasWindows)" Importance="high" />
     <Message Text="| $(SectionSymbol) HasLinux: $(HasLinux)" Importance="high" />
     <Message Text="| $(SectionSymbol) HasAndroid: $(HasAndroid)" Importance="high" />
