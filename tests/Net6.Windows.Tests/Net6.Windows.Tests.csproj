@@ -2,12 +2,25 @@
   <Import Project="..\..\src\Prometheus.MSBuild\Sdk\Sdk.props" />
   <PropertyGroup>
     <ProductName>Net6.Windows.Tests</ProductName>
+    <ProjectName>Net6.Windows.Tests</ProjectName>
     <TargetPlatform>net6.0-windows</TargetPlatform>
     <PlatformId>Windows</PlatformId>
-    <!--<TargetFramework>net6.0-windows</TargetFramework>-->
+    <TargetFramework>net6.0-windows</TargetFramework>
     <IsTestProject>True</IsTestProject>
     <IsLibraryProject>True</IsLibraryProject>
     <IsPackable>False</IsPackable>
+    <PrometheusSDKTaskTester>true</PrometheusSDKTaskTester>
+    <PrometheusTasksEnabled>false</PrometheusTasksEnabled>
   </PropertyGroup>
+  <!--<ItemGroup>
+    <PackageReference Include="Prometheus.MSBuild.Tasks" Version="0.2.2-beta.27" PrivateAssets="all"/>
+  </ItemGroup>
+  <Import Project="$(LocalNugetRepoDirectory)" />-->
+  <ItemGroup>
+   <!-- <PackageReference Include="Prometheus.MSBuild.Tasks" Version="0.2.2-beta.27" PrivateAssets="all">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>-->
+  </ItemGroup>
+  <!--<Import Project="$(PrometheusTaskBuildTargets)" />-->
   <Import Project="..\..\src\Prometheus.MSBuild\Sdk\Sdk.targets" />
 </Project>

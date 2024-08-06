@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Prometheus.MSBuild.Tasks
+﻿namespace Prometheus.MSBuild.Tasks.Settings
 {
-    public class PrometheusTaskOptions
+    public class PrometheusTaskSettings
     {
         protected string m_sectionSymbol = "X";
 

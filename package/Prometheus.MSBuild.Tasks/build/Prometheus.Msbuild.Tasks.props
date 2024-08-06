@@ -1,0 +1,44 @@
+<Project InitialTargets="_PrintPrometheusTasksUsings">
+  <PropertyGroup>
+    <!--<PrometheusTasksEnabled Condition="'$(PrometheusTasksEnabled)' == ''">true</PrometheusTasksEnabled>-->
+    <!--<PrometheusTaskRootDirectory Condition="'$(NuGetPackageRoot)' != ''">$(NuGetPackageRoot)prometheus.msbuild.tasks</PrometheusTaskRootDirectory>-->
+    <PrometheusTaskRootDirectory Condition="'$(PrometheusTaskRootDirectory)' == ''">$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), Usings.Build.targets))</PrometheusTaskRootDirectory>
+    <PrometheusLibDirectory Condition="'$(PrometheusTaskRootDirectory)' != ''">$(PrometheusTaskRootDirectory)\tasks</PrometheusLibDirectory>
+    <PrometheusTaskUsingTargets Condition="'$(PrometheusLibDirectory)' != ''">$(PrometheusTaskRootDirectory)\Usings.Build.targets</PrometheusTaskUsingTargets>
+    <PrometheusTaskBuildProps Condition="'$(PrometheusTaskRootDirectory)' != ''">$(PrometheusTaskRootDirectory)\build\Prometheus.MSBuild.Tasks.props</PrometheusTaskBuildProps>
+    <PrometheusTaskBuildTargets Condition="'$(PrometheusTaskRootDirectory)' != ''">$(PrometheusTaskRootDirectory)\build\Prometheus.MSBuild.Tasks.targets</PrometheusTaskBuildTargets>
+  </PropertyGroup>
+
+  <PropertyGroup Condition=" '$(MSBuildRuntimeType)' == 'Core'">
+    <PrometheusLibFramework>ne8.0</PrometheusLibFramework>
+  </PropertyGroup>
+
+  <PropertyGroup Condition=" '$(MSBuildRuntimeType)' == 'Full'">
+    <PrometheusLibFramework>net48</PrometheusLibFramework>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(PrometheusLibFramework)' != ''">
+    <PrometheusTaskAssembly>$(PrometheusLibDirectory)\$(PrometheusLibFramework)\Prometheus.MSBuild.Tasks.dll</PrometheusTaskAssembly>
+    <PrometheusTaskBuildPropsLoaded>true</PrometheusTaskBuildPropsLoaded>
+  </PropertyGroup>
+
+ <!--<PropertyGroup Condition="'$(PrometheusLibFramework)' != ''">
+   <PrometheusTaskBuildPropsLoaded>true</PrometheusTaskBuildPropsLoaded>
+ </PropertyGroup>-->
+ 
+  <!--<Target Name="_PrintPrometheusTasksUsings">
+    <PropertyGroup>
+      <SectionSymbol>%</SectionSymbol>
+    </PropertyGroup>
+
+    <Message Text="| $(SectionString)" Importance="high" />
+    <Message Text="| []==~ $(MSBuildThisFile) ~==[]" Importance="high" />
+    <Message Text="| $(HeaderString)" Importance="high" />
+
+    <Message Text="| $(SectionSymbol) MSBuildRuntimeType: $(MSBuildRuntimeType)" Importance="high" />
+    <Message Text="| $(SectionSymbol) PrometheusLibDirectory: $(PrometheusLibDirectory)" Importance="high" />
+    <Message Text="| $(SectionSymbol) PrometheusLibFramework: $(PrometheusLibFramework)" Importance="high" />
+    <Message Text="| $(SectionSymbol) PrometheusUsingsLoaded: $(PrometheusUsingsLoaded)" Importance="high" />
+    <Message Text="| $(SectionSymbol) PrometheusTaskAssembly: $(PrometheusTaskAssembly)" Importance="high" />
+  </Target>-->
+</Project>

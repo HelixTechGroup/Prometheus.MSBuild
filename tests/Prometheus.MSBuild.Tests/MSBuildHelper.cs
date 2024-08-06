@@ -6,12 +6,14 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+
 using Microsoft.Build.Construction;
 using Microsoft.Build.Evaluation;
 using Microsoft.Build.Execution;
 using Microsoft.Build.Locator;
 using Microsoft.Build.Utilities;
-using Shin.Framework.Collections.Concurrent;
+
+using Shin.Collections.Concurrent;
 
 namespace Prometheus.MSBuild.Tests
 {
@@ -110,7 +112,7 @@ namespace Prometheus.MSBuild.Tests
             var sdkDir = Path.Combine(programFilesX86, @"dotnet\sdk\");
 
             var sdks = Directory.GetDirectories(sdkDir)
-                              .Where(verDirectory => 
+                              .Where(verDirectory =>
                                          File.Exists(Path.Combine(verDirectory, "MSBuild.dll")));
 
             return sdks.ToArray();
@@ -126,7 +128,7 @@ namespace Prometheus.MSBuild.Tests
             string sdksPath = Path.Combine(extensionsPath, "Sdks");
             string roslynTargetsPath = Path.Combine(toolsPath, "Roslyn");
 
-            var props = new Dictionary<string, string>() 
+            var props = new Dictionary<string, string>()
                    {
                        {"Configuration", "Debug"},
                        {"Platform", "AnyCpu"},

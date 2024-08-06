@@ -23,14 +23,15 @@
     <GitHubProject>$(SafeProductName)</GitHubProject>
   </PropertyGroup>
   
-  <PropertyGroup Label="Enable SourceLink Support">
+  <PropertyGroup Label="Enable SourceLink Support" Condition="'$(IsPackageOnlyProject)' != 'true'">
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
     <DebugType>portable</DebugType>
     <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
   </PropertyGroup>
 
-  <ItemGroup Label="Enable SourceLink GitHub Support">
-    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" PrivateAssets="All" />
+  <ItemGroup Label="Enable SourceLink GitHub Support" 
+             Condition="'$(IsPackageOnlyProject)' != 'true'">
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0" PrivateAssets="All" />
   </ItemGroup>
 
   <PropertyGroup>

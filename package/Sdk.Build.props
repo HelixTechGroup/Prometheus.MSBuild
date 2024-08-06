@@ -1,0 +1,78 @@
+<Project>
+  <PropertyGroup>
+    <SectionSymbol>@</SectionSymbol>
+    <CompanyName>HelixTechGroup,llc</CompanyName>
+    <AuthorName>Bryan M. Longacre</AuthorName>
+    <ProductVersion>0.2.2-beta.31</ProductVersion>
+    <CopyrightStartYear>2017</CopyrightStartYear>
+    <Targetframework>net8.0</Targetframework>
+    <!--<TargetFrameworks>
+      net6.0;
+      net8.0;
+      netstandard2.0;
+      netstandard2.1;
+    </TargetFrameworks>-->
+    <!--<TargetFrameworks>net6.0;netcoreapp3.1;netstandard2.1;net40;</TargetFrameworks>-->
+    <!--<TargetFramework>net5.0;monoandroid90;net40;net5.0;netcoreapp3.1;netstandard2.1;</TargetFramework>-->
+    <!--<IsProjectReferenceProvider>false</IsProjectReferenceProvider>-->
+    <LocalNugetRepoDirectory>D:\Users\Bryan\Documents\Projects\HelixTechGroup\local-nuget</LocalNugetRepoDirectory>
+    <PackageOnlyBuild>true</PackageOnlyBuild>
+    <IsLibraryProject>true</IsLibraryProject>
+    <IsPackageOnlyProject>true</IsPackageOnlyProject>
+    <DevelopmentDependency>true</DevelopmentDependency>
+    <Description>The Prometheus Framework is a set of msbuild targets and properties that automate the creation of creation of cross-platform or platform specific projects</Description>
+    <PackageTags>MSBuild MSBuildSdk android windows linux cross-platform dotnet build-tool build-tools crossplatform msbuild-sdk msbuild-tasks</PackageTags>
+    <!--<ArtifactsPath>$(BaseArtifactsPath)\$(MSBuildProjectName)\</ArtifactsPath>-->
+    <!--<IncludeBuildOutput></IncludeBuildOutput>-->
+    <!--<BuildPackage>true</BuildPackage>-->
+    <PrometheusEnabled>True</PrometheusEnabled>
+    <PrometheusPlatformEnabled>false</PrometheusPlatformEnabled>
+    <RepositoryHttpUrl>https://github.com/HelixTechGroup/Prometheus.MSBuild</RepositoryHttpUrl>
+    <UseGitHub>True</UseGitHub>
+    <PrometheusTasksEnabled>false</PrometheusTasksEnabled>
+    <!--<PrometheusLibDirectory>$(BuildDirectory)</PrometheusLibDirectory>-->
+    <!--<PrometheusLibDirectory>$(PrometheusDirectory)\lib</PrometheusLibDirectory>-->
+    <!--<PrometheusLibDirectory>D:\Users\Bryan\Documents\Projects\HelixTechGroup\Design\Prometheus\msbuild\build\Debug\Prometheus.MSBuild.Tasks</PrometheusLibDirectory>-->
+    <!--<IsProjectReferenceProvider>false</IsProjectReferenceProvider>-->
+    <!--<ArtifactsPath>$(BaseArtifactsPath)\$(MSBuildProjectName)\</ArtifactsPath>-->
+    <NoBuild>true</NoBuild>
+    <PrometheusLoadType>lite</PrometheusLoadType>
+  </PropertyGroup>
+
+  <!--<ItemGroup>
+    <Compile Remove="obj\\**\*" />
+    <PackageReference Update="@(PackageReference)" PrivateAssets="All" />
+  </ItemGroup>-->
+
+  <ItemGroup>
+    <PackageReference Include="Prometheus.MSBuild.Tasks" Version="0.2.2-beta.27"
+                      IncludeAssets="runtime; build; native; contentfiles; analyzers; buildtransitive" />
+    <!--<PackageReference Update="@(PackageReference)" />-->
+    <!--<Content Include="..\..\build\$(Configuration)\Prometheus.MSBuild.Tasks\**" 
+             Pack="True" 
+             PackagePath="lib\">
+      <Link>lib\%(RecursiveDir)%(Filename)%(Extension)</Link>
+    </Content>-->
+    <!--<PackageReference Include="Prometheus.MSBuild.Tasks" Version="0.2.2-beta.6" PrivateAssets="All"/>-->
+  </ItemGroup>
+
+  <!--<Target Name="CopyTasksToLib" BeforeTargets="Pack">
+    <ItemGroup>
+      <LibFiles Include="..\Prometheus.MSBuild.Tasks\bin\$(Configuration)\net48\**" Exclude="$(NugetPackageName)"/>
+    </ItemGroup>
+    <Message Text="| []==~~ Copying Tasks library to Lib directory ~~==[]" Importance="high" />
+    <Copy DestinationFolder="$(PrometheusLibDirectory)"
+          SourceFiles="@(LibFiles)" OverwriteReadOnlyFiles="True" SkipUnchangedFiles="True"/>
+  </Target>-->
+  <!--<Target Name="Replace" AfterTargets="Pack">
+      <PropertyGroup>
+          <InputFile>$(SolutionDir)global.json</InputFile>
+          <OutputFile>$(SolutionDir)global.json</OutputFile>
+      </PropertyGroup>
+      <WriteLinesToFile
+          File="$(OutputFile)"
+          Lines="$([System.IO.File]::ReadAllText($(InputFile)).Replace('from','to'))"
+          Overwrite="true"
+          Encoding="Unicode"/>
+  </Target>-->
+</Project>

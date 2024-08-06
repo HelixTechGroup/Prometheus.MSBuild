@@ -12,31 +12,30 @@ using System.Threading;
 using Microsoft.Build.Construction;
 using Microsoft.Build.Execution;
 using Prometheus.MSBuild.Tasks.Extension;
-using Shin.Framework.Collections.Concurrent;
+using Prometheus.MSBuild.Tasks.Settings;
+using Shin.Collections.Concurrent;
 
 namespace Prometheus.MSBuild.Tasks
 {
-    public class LogPropertyTask : BuildUtil.Task
+    public class LogPropertyTask : PrometheusTask<PropertySearchSettings>
     {
-        PropertySearchOptions m_options = new PropertySearchOptions();
-
         [Required]
         public string ProjectFiles
         {
-            get { return m_options.ProjectFiles.ToString(); }
-            set { m_options.ProjectFiles = value.Split(';'); }
+            get { return m_settings.ProjectFiles.ToString(); }
+            set { m_settings.ProjectFiles = value.Split(';'); }
         }
 
         public string PropertyName
         {
-            get { return m_options.PropertyName; }
-            set { m_options.PropertyName = value; }
+            get { return m_settings.PropertyName; }
+            set { m_settings.PropertyName = value; }
         }
 
         public bool ImportsOnly
         {
-            get { return m_options.ImportsOnly; }
-            set { m_options.ImportsOnly = value; }
+            get { return m_settings.ImportsOnly; }
+            set { m_settings.ImportsOnly = value; }
         }
 
         //[Output]
@@ -44,8 +43,8 @@ namespace Prometheus.MSBuild.Tasks
 
         public string SectionSymbol
         {
-            get { return m_options.SectionSymbol; }
-            set { m_options.SectionSymbol = value; }
+            get { return m_settings.SectionSymbol; }
+            set { m_settings.SectionSymbol = value; }
         }
 
         public override bool Execute()
@@ -59,13 +58,13 @@ namespace Prometheus.MSBuild.Tasks
             var found = new ConcurrentList<ProjectPropertyInstance>();
             //Log.LogMessage(MessageImportance.High, ProjectFiles);
 
-            if (m_options.ProjectFiles.Count == 0)
+            if (m_settings.ProjectFiles.Count == 0)
             {
                 Log.LogError($"ProjectFile {ProjectFiles} does not exists.");
                 return false;
             }
 
-            if (m_options.ProjectFiles.Any(f => !File.Exists(f)))
+            if (m_settings.ProjectFiles.Any(f => !File.Exists(f)))
             {
                 Log.LogError($"ProjectFile {ProjectFiles} does not exists.");
                 return false;
@@ -80,7 +79,7 @@ namespace Prometheus.MSBuild.Tasks
                 project = this.GetProjectInstance();
                 if (project == null)
                 {
-                    Thread.Sleep(5000);
+                    Thread.Sleep(1000);
                     continue;
                     //Log.LogWarning($"Could not get Project Instance.");
                     //return false;
@@ -109,14 +108,14 @@ namespace Prometheus.MSBuild.Tasks
             //else
             //    Debugger.Break();
 
-            Log.LogMessage(MessageImportance.High, $"| {m_options.SectionSymbol} Property Name: {m_options.PropertyName}");
-            Log.LogMessage(MessageImportance.High, $"| {m_options.SectionSymbol} Imports Only: {m_options.ImportsOnly}");
-            found = new ConcurrentList<ProjectPropertyInstance>(this.GetProperties(project, m_options));
-            Log.LogMessage(MessageImportance.High, $"| {m_options.SectionSymbol} Found: {found.Count}");
+            Log.LogMessage(MessageImportance.High, $"| {m_settings.SectionSymbol} Property Name: {m_settings.PropertyName}");
+            Log.LogMessage(MessageImportance.High, $"| {m_settings.SectionSymbol} Imports Only: {m_settings.ImportsOnly}");
+            found = new ConcurrentList<ProjectPropertyInstance>(this.GetProperties(project, m_settings));
+            Log.LogMessage(MessageImportance.High, $"| {m_settings.SectionSymbol} Found: {found.Count}");
 
             foreach (var n in found)
             {
-                Log.LogMessage(MessageImportance.High, $"| {m_options.SectionSymbol} {n.Name}: {n.EvaluatedValue}");
+                Log.LogMessage(MessageImportance.High, $"| {m_settings.SectionSymbol} {n.Name}: {n.EvaluatedValue}");
             }
 
             return true;

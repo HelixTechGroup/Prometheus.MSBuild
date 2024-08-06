@@ -1,0 +1,53 @@
+<Project InitialTargets="PrintUsings">
+  <PropertyGroup>
+    <PrometheusUsingsLoaded>True</PrometheusUsingsLoaded>
+    <MSBuildSdkVersionTest>^net\d+(?:\.\d+)+(?:\-\S+)*</MSBuildSdkVersionTest>
+  </PropertyGroup>
+
+  <!--<PropertyGroup>
+    <PrometheusTasksEnabled Condition="'$(PrometheusTasksEnabled)' == ''">true</PrometheusTasksEnabled>
+    <PrometheusTaskRootDirectory Condition="'$(PrometheusTaskRootDirectory)' == ''">$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), Usings.Build.props))</PrometheusTaskRootDirectory>
+    <PrometheusLibDirectory Condition="'$(PrometheusLibDirectory)' == ''">$(PrometheusTaskRootDirectory)\lib</PrometheusLibDirectory>
+    <LocalNugetRepoDirectory Condition="'$(LocalNugetRepoDirectory)' == ''">$(PrometheusTaskRootDirectory)\Usings.Build.props</LocalNugetRepoDirectory>
+    --><!--<PrometheusTaskBuildProps Condition="'$(PrometheusTaskBuildProps)' == ''">build\Prometheus.MSBuild.Tasks.props</PrometheusTaskBuildProps>
+    <PrometheusTaskBuildTargets Condition="'$(PrometheusTaskBuildTargets)' == ''">build\Prometheus.MSBuild.Tasks.targets</PrometheusTaskBuildTargets>--><!--
+  </PropertyGroup>-->
+
+  <PropertyGroup>
+    <PrometheusTasksUsingsLoaded>true</PrometheusTasksUsingsLoaded>
+  </PropertyGroup>
+  
+  <UsingTask TaskName="Prometheus.MSBuild.Tasks.AttachDebuggerTask" AssemblyFile="$(PrometheusTaskAssembly)"
+             Condition="'$(PrometheusTasksEnabled)' == 'true' And '$(Configuration)' == 'debug'" />
+
+  <UsingTask TaskName="Prometheus.MSBuild.Tasks.LogPropertyTask" AssemblyFile="$(PrometheusTaskAssembly)"
+             Condition="'$(PrometheusTasksEnabled)' == 'true'" />
+
+  <UsingTask TaskName="Prometheus.MSBuild.Tasks.DetectPlatformTask" AssemblyFile="$(PrometheusTaskAssembly)"
+             Condition="'$(PrometheusTasksEnabled)' == 'true'" />
+
+  <UsingTask TaskName="Prometheus.MSBuild.Tasks.CreateLogFormattingTask" AssemblyFile="$(PrometheusTaskAssembly)"
+             Condition="'$(PrometheusTasksEnabled)' == 'true'" />
+
+  <UsingTask TaskName="Prometheus.MSBuild.Tasks.ImportFileTask" AssemblyFile="$(PrometheusTaskAssembly)"
+             Condition="'$(PrometheusTasksEnabled)' == 'true'" />
+
+  <UsingTask TaskName="Prometheus.MSBuild.Tasks.SetupPrometheusTask" AssemblyFile="$(PrometheusTaskAssembly)"
+             Condition="'$(PrometheusTasksEnabled)' == 'true'" />
+  
+  <Target Name="PrintUsings">
+    <PropertyGroup>
+      <SectionSymbol>%</SectionSymbol>
+    </PropertyGroup>
+
+    <Message Text="| $(SectionString)" Importance="high" />
+    <Message Text="| []==~ $(MSBuildThisFile) ~==[]" Importance="high" />
+    <Message Text="| $(HeaderString)" Importance="high" />
+    
+    <Message Text="| $(SectionSymbol) MSBuildRuntimeType: $(MSBuildRuntimeType)" Importance="high" />
+    <Message Text="| $(SectionSymbol) PrometheusLibDirectory: $(PrometheusLibDirectory)" Importance="high" />
+    <Message Text="| $(SectionSymbol) PrometheusLibFramework: $(PrometheusLibFramework)" Importance="high" />
+    <Message Text="| $(SectionSymbol) PrometheusTasksUsingsLoaded: $(PrometheusTasksUsingsLoaded)" Importance="high" />
+    <Message Text="| $(SectionSymbol) PrometheusTasksAssembly: $(PrometheusTaskAssembly)" Importance="high" />
+  </Target>
+</Project>

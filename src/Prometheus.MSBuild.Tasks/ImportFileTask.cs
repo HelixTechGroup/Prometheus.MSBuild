@@ -10,6 +10,7 @@ using Microsoft.Build.Evaluation;
 using Microsoft.Build.Framework;
 using System.IO;
 using System.Reflection;
+using System.Security;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.Encodings.Web;
@@ -19,36 +20,35 @@ using System.Threading.Tasks;
 using System.Xml;
 using Microsoft.Build.Construction;
 using Microsoft.Build.Execution;
-using Microsoft.Build.Graph;
 using Prometheus.MSBuild.Tasks.Caching;
 using Prometheus.MSBuild.Tasks.Converters;
 using Prometheus.MSBuild.Tasks.Extension;
-using Shin.Framework.Collections.Concurrent;
+using Prometheus.MSBuild.Tasks.Settings;
+using Shin.Collections.Concurrent;
 
 namespace Prometheus.MSBuild.Tasks
 {
-    public class ImportFileTask : PrometheusTask
+    public class ImportFileTask : PrometheusTask<ImportFileSettings>
     {
         protected string m_cacheFileName = "project.prometheus.import.cache";
-        protected new ImportFileOptions m_options = new ImportFileOptions();
 
         [Required]
         public ITaskItem[] ImportFiles
         {
-            get { return m_options.ImportFiles?.ToArray(); }
-            set { m_options.ImportFiles = value; }
+            get { return m_settings.ImportFiles?.ToArray(); }
+            set { m_settings.ImportFiles = value; }
         }
 
         public bool UseCache
         {
-            get { return m_options.UseCache; }
-            set { m_options.UseCache = value; }
+            get { return m_settings.UseCache; }
+            set { m_settings.UseCache = value; }
         }
 
         [Output]
-        public ITaskItem[] CachedImportFiles 
+        public ITaskItem[] CachedImportFiles
         {
-            get { return m_options.Cache.CachedItems.ToArray(); }
+            get { return m_settings.Cache.CachedItems.ToArray(); }
         }
 
         public override bool Execute()
@@ -57,14 +57,14 @@ namespace Prometheus.MSBuild.Tasks
             //    Debugger.Launch();
             //else
             //    Debugger.Break();
-
-            var objPath = this.GetProjectInstance()?.GetPropertyValue("BaseIntermediateOutputPath");
+            var project = this.GetProjectInstance();
+            var objPath = project?.GetPropertyValue("BaseIntermediateOutputPath");
             if (objPath == null)
                 return true;
 
             var fileName = Path.Combine(objPath, m_cacheFileName);
-            Log.LogMessage(MessageImportance.High, $"| {m_options.SectionSymbol} Importing Files.");
-            if (m_options.ImportFiles.Count == 0)
+            Log.LogMessage(MessageImportance.High, $"| {m_settings.SectionSymbol} Importing Files.");
+            if (m_settings.ImportFiles.Count == 0)
             {
                 Log.LogWarning($"ImportFiles parameter is empty.");
                 return true;
@@ -75,40 +75,27 @@ namespace Prometheus.MSBuild.Tasks
             //EnvDTE80.DTE2 dte = (EnvDTE100.DTE2)obj;
 
             //if (m_options.ImportFiles.Any(f => !File.Exists(f)))
-            foreach (var f in m_options.ImportFiles)
+            var validFiles = new ConcurrentList<ITaskItem>();
+            foreach (var f in m_settings.ImportFiles)
             {
-                if (File.Exists(f.ItemSpec))
-                    continue;
+                if (!File.Exists(f.ItemSpec))
+                    Log.LogWarning($"ImportFile {f} does not exists.");
 
-                Log.LogWarning($"ImportFile {f} does not exists.");
+                validFiles.Add(f);
             }
 
-
-            var res = new ImportCacheResult()
+            var res = CreateCache(validFiles);
+            if (m_settings.UseCache && CheckCache(fileName, ref res))
             {
-                NewItems = ImportFiles,
-                CachedItems = ImportFiles
-            };
+                m_settings.Cache = res;
+                Log.LogMessage(MessageImportance.High, $"| {m_settings.SectionSymbol} Adding Imports.");
+                this.AddImports(m_settings.Cache.NewItems, ref project);
 
-            if (m_options.UseCache)
-                res = CheckCache(fileName);
-
-            m_options.Cache = res;
-            var project = this.GetProjectInstance();
-            Log.LogMessage(MessageImportance.High, $"| {m_options.SectionSymbol} Adding Imports.");
-            this.AddImports(ref project, m_options);
-
-            if (m_options.UseCache)
-            {
-                foreach (var cItem in m_options.Cache.Cache.Where(c => m_options.Cache.CachedItems.Any(i => i.ItemSpec == c.FilePath)))
-                {
-                    //var sReader = new StringReader(cItem.Contents);
-                    //var newRoot = XmlReader.Create(sReader);
-                    //var p = new Project(newRoot);
-                    var p = new Project(cItem.Contents);
-                    project = project.MergeProject(p);                
-                }
+                //Log.LogMessage(MessageImportance.High, $"| {m_settings.SectionSymbol} Error Could not check cache.");
+                //return false;
             }
+            else
+                this.AddImports(m_settings.Cache.CachedItems, ref project);
 
             var buildEngine = ((IBuildEngine6)BuildEngine);
             var bm = BuildManager.DefaultBuildManager;
@@ -123,15 +110,15 @@ namespace Prometheus.MSBuild.Tasks
             var cloneMethod = requestConfig.GetType().GetMethod("ShallowCloneWithNewId", BindingFlags.NonPublic | BindingFlags.Instance);
             //Log.LogMessage(MessageImportance.High, $"| {m_options.SectionSymbol} Import Files: {m_options.ImportFiles}");
 
-            var newConfig = cloneMethod?.Invoke(requestConfig, new object[] {int.MaxValue});
+            var newConfig = cloneMethod?.Invoke(requestConfig, new object[] { int.MaxValue });
             var projectProp = newConfig.GetType().GetProperty("Project", BindingFlags.Public | BindingFlags.Instance);
             var configIdField = newConfig.GetType().GetField("_configId", BindingFlags.NonPublic | BindingFlags.Instance);
             configIdField?.SetValue(newConfig, int.MinValue);
             projectProp?.SetValue(newConfig, project);
 
             try
-            {              
-                replaceMethod?.Invoke(bm, new[] {newConfig, requestConfig});
+            {
+                replaceMethod?.Invoke(bm, new[] { newConfig, requestConfig });
             }
             catch (TargetInvocationException tie)
             {
@@ -144,14 +131,14 @@ namespace Prometheus.MSBuild.Tasks
             return true;
         }
 
-        protected ImportCacheResult CheckCache(string cachePath)
+        protected bool CheckCache(string cachePath, ref ImportCacheResult cache)
         {
             var toBeLoaded = new ConcurrentList<ImportCacheItem>();
             var newAdd = new ConcurrentList<ITaskItem>();
             var current = new ConcurrentList<ITaskItem>();
-            var tmp = CreateCache();
+            var tmp = cache.ImportItems;
 
-            Log.LogMessage(MessageImportance.High, $"| {m_options.SectionSymbol} Checking cache {cachePath}");
+            Log.LogMessage(MessageImportance.High, $"| {m_settings.SectionSymbol} Checking cache {cachePath}");
 
             if (File.Exists(cachePath))
             {
@@ -161,19 +148,19 @@ namespace Prometheus.MSBuild.Tasks
                 //var bytes = Encoding.ASCII.GetBytes(c);
                 //var reader = new Utf8JsonReader(bytes);
                 var jsonOptions = new JsonSerializerOptions(JsonSerializerDefaults.General)
-                                  {
-                                      ReferenceHandler = ReferenceHandler.Preserve,
-                                      DefaultBufferSize = 4096,
-                                      NumberHandling = JsonNumberHandling.AllowNamedFloatingPointLiterals | JsonNumberHandling.AllowReadingFromString,
-                                      AllowTrailingCommas = true,
-                                      WriteIndented = true,
-                                      Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
-                                      //Converters =
-                                      //{
-                                      //    new ImportCacheItemJsonConverter()
+                {
+                    ReferenceHandler = ReferenceHandler.Preserve,
+                    DefaultBufferSize = 4096,
+                    NumberHandling = JsonNumberHandling.AllowNamedFloatingPointLiterals | JsonNumberHandling.AllowReadingFromString,
+                    AllowTrailingCommas = true,
+                    WriteIndented = true,
+                    Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
+                    //Converters =
+                    //{
+                    //    new ImportCacheItemJsonConverter()
 
-                                      //}
-                                  };
+                    //}
+                };
 
                 var imports = JsonSerializer.Deserialize(c, typeof(ImportCacheItem[]), jsonOptions) as ImportCacheItem[];
                 //var imports = JsonSerializer.Deserialize(reader, typeof(ImportCacheItem),jsonOptions);
@@ -182,7 +169,6 @@ namespace Prometheus.MSBuild.Tasks
                 //var contents = reader.ReadBytes((int)stream.Length);
                 ////var test = reader.ReadString();
                 //var imports = JsonSerializer.Deserialize<ConcurrentList<ImportCacheItem>>(contents);
-
 
                 foreach (var cacheItem in tmp)
                 {
@@ -239,44 +225,48 @@ namespace Prometheus.MSBuild.Tasks
                 //    
                 //}
                 //writer.WriteEndArray();
-                
+
             }
 
-            return new ImportCacheResult()
+            cache = new ImportCacheResult()
             {
-                Cache = toBeLoaded,
+                ImportItems = toBeLoaded,
                 CachedItems = current,
                 NewItems = newAdd
             };
+
+            return true;
         }
 
-        protected IList<ImportCacheItem> CreateCache()
+        /// <exception cref="SecurityException">The caller does not have the required permission.</exception>
+        protected ImportCacheResult CreateCache(IList<ITaskItem> validFiles)
         {
             var sums = new ConcurrentList<ImportCacheItem>();
 
-            foreach (var file in ImportFiles)
+            foreach (var file in validFiles)
             {
                 if (!File.Exists(file.ItemSpec))
                     continue;
 
-                Log.LogMessage(MessageImportance.High, $"| {m_options.SectionSymbol} -- File: {file.ItemSpec}");
+                Log.LogMessage(MessageImportance.High, $"| {m_settings.SectionSymbol} -- File: {file.ItemSpec}");
                 var info = new FileInfo(file.ItemSpec);
                 using var bStream = info.Open(FileMode.Open, FileAccess.Read, FileShare.Read);
                 using var copy = new BufferedStream(bStream);
                 var checksum = copy.GenerateSha256Checksum();
                 var project = MSBuildHelper.CreateProjectInstance(file.ItemSpec);
-                Log.LogMessage(MessageImportance.High, $"| {m_options.SectionSymbol} -- Checksum: {checksum}");
+                var contents = project.ToProjectRootElement();
+                Log.LogMessage(MessageImportance.High, $"| {m_settings.SectionSymbol} -- Checksum: {checksum}");
                 sums.Add(new ImportCacheItem()
                 {
                     FileName = info.Name,
                     FilePath = info.FullName,
                     DateCached = DateTime.UtcNow,
                     Checksum = checksum,
-                    Contents = project.ToProjectRootElement()
+                    Contents = contents
                 });
             }
 
-            return sums;
+            return new ImportCacheResult(sums);
         }
     }
 }

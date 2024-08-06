@@ -7,6 +7,7 @@ using System.Resources;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Xml;
+
 using Microsoft.Build.BuildEngine;
 using Microsoft.Build.Construction;
 using Microsoft.Build.Evaluation;
@@ -14,9 +15,12 @@ using Microsoft.Build.Execution;
 using Microsoft.Build.Framework;
 using Microsoft.Build.Locator;
 using Microsoft.Build.Tasks;
+
 using Prometheus.MSBuild.Tasks;
-using Shin.Framework.Logging.Native;
-using Loggers = Shin.Framework.Logging.Loggers;
+
+using Shin.Logging.Native;
+
+using Loggers = Shin.Logging.Loggers;
 using Project = Microsoft.Build.Evaluation.Project;
 
 namespace Prometheus.MSBuild.Tests
@@ -109,7 +113,7 @@ namespace Prometheus.MSBuild.Tests
 
             //instance.ToProjectRootElement().AddImport(@$"{prometheusDirectory}\build\Prometheus.MSBuild.props");
             //Console.WriteLine($"Default Configuration: {project.GetPropertyValue("Configuration")}");
-            
+
             //Console.WriteLine($"Active Configuration: {instance.GlobalProperties["Configuration"]}");
             //Console.WriteLine($"Active PlatformId: {instance.GlobalProperties["PlatformId"]}");
 
@@ -171,7 +175,7 @@ namespace Prometheus.MSBuild.Tests
             prometheusProperties.AddProperty("RootPath", testsDirectory);
             prometheusProperties.AddProperty("SolutionDir", $@"{testsDirectory}\");
             prometheusProperties.AddProperty(
-                                             "MSBuildExtensionsPath", 
+                                             "MSBuildExtensionsPath",
                                              instance.GetPropertyValue("MSBuildExtensionsPath"));
             prometheusProperties.AddProperty(
                                              "MSBuildSDKsPath",
@@ -180,10 +184,10 @@ namespace Prometheus.MSBuild.Tests
             prometheusProperties.AddProperty(
                                              "RoslynTargetsPath",
                                              instance.GetPropertyValue("RoslynTargetsPath"));
-            prometheusProperties.AddProperty("DesignTimeBuild","true");
-            prometheusProperties.AddProperty("BuildProjectReferences","false");
-            prometheusProperties.AddProperty("SkipCompilerExecution","true");
-            prometheusProperties.AddProperty("ProvideCommandLineArgs","true");
+            prometheusProperties.AddProperty("DesignTimeBuild", "true");
+            prometheusProperties.AddProperty("BuildProjectReferences", "false");
+            prometheusProperties.AddProperty("SkipCompilerExecution", "true");
+            prometheusProperties.AddProperty("ProvideCommandLineArgs", "true");
             prometheusProperties.AddProperty("UseImportCache", "false");
 
             ProjectInstance testInstance = null;
@@ -248,10 +252,10 @@ namespace Prometheus.MSBuild.Tests
             //    Thread.Sleep(500);
             //    i++;
             //}
-            
+
             var buildTask = new Task(() =>
                                        {
-                                           testInstance.Build(target, new ILogger[] {new ConsoleLogger(LoggerVerbosity.Normal)});
+                                           testInstance.Build(target, new ILogger[] { new ConsoleLogger(LoggerVerbosity.Normal) });
                                        });
             buildTask.ConfigureAwait(false);
             buildTask.Start();

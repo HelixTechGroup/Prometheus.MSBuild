@@ -1,0 +1,6 @@
+<Project>
+  <PropertyGroup>
+    <DirectoryBuildFileAbove>[MSBuild]::GetPathOfFileAbove('$(MSBuildThisFile)', '$(MSBuildThisFileDirectory)../')</DirectoryBuildFileAbove>
+  </PropertyGroup>
+  <Import Project="$(DirectoryBuildFileAbove)" Condition="Exists('$(DirectoryBuildFileAbove)')" />
+</Project>

@@ -1,15 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.Build.Execution;
+﻿using System.Collections.Generic;
+
 using Microsoft.Build.Framework;
+
 using Prometheus.MSBuild.Tasks.Caching;
 
-namespace Prometheus.MSBuild.Tasks
+namespace Prometheus.MSBuild.Tasks.Settings
 {
-    public class ImportFileOptions : PrometheusTaskOptions
+    public class ImportFileSettings : PrometheusTaskSettings
     {
         protected IList<ITaskItem> m_files;
         protected bool m_useCache = true;

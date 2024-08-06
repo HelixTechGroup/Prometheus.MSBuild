@@ -13,10 +13,11 @@ using System.Security;
 using Microsoft.Build.Construction;
 using Microsoft.Build.Execution;
 using Prometheus.MSBuild.Tasks.Extension;
+using Prometheus.MSBuild.Tasks.Settings;
 
 namespace Prometheus.MSBuild.Tasks
 {
-    public class AttachDebuggerTask : BuildUtil.Task
+    public class AttachDebuggerTask : PrometheusTask<PrometheusTaskSettings>
     {
         public override bool Execute()
         {

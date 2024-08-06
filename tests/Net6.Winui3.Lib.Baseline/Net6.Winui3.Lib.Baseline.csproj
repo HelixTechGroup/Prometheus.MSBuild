@@ -1,15 +1,40 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk" InitialTargets="test">
   <PropertyGroup>
-    <TargetFramework>net5.0-windows10.0.19041.0</TargetFramework>
+    <TargetFramework>net6.0-windows10.0.19041.0</TargetFramework>
     <TargetPlatformMinVersion>10.0.17763.0</TargetPlatformMinVersion>
     <RootNamespace>Net6.Winui3.Lib.Baseline</RootNamespace>
     <RuntimeIdentifiers>win10-x86;win10-x64;win10-arm64</RuntimeIdentifiers>
     <UseWinUI>true</UseWinUI>
+    <PrometheusTasksEnabled>true</PrometheusTasksEnabled>
   </PropertyGroup>
 
   <ItemGroup>
       <PackageReference Include="Microsoft.ProjectReunion" Version="0.8.6" />
       <PackageReference Include="Microsoft.ProjectReunion.Foundation" Version="0.8.6" />
       <PackageReference Include="Microsoft.ProjectReunion.WinUI" Version="0.8.6" />
+
+      <PackageReference Include="Prometheus.MSBuild.Tasks" 
+                        Version="0.2.2-beta.27" 
+                        PrivateAssets="all"/>
   </ItemGroup>
+  <!--<Import Project="$(PrometheusTaskBuildTargets)"
+          Condition="Exists('$(PrometheusTaskBuildTargets)')" />-->
+  
+  <Target Name="test">
+    <CreateLogFormattingTask SectionSymbol="$(SectionSymbol)" SectionLength="$(SectionLength)" HeaderLength="$(HeaderLength)" SectionChar="$(SectionChar)" HeaderChar="$(HeaderChar)" 
+                             Condition="'$(PrometheusTasksEnabled)' == 'true'">
+      <Output TaskParameter="SectionString" PropertyName="SectionString" />
+      <Output TaskParameter="HeaderString" PropertyName="HeaderString" />
+    </CreateLogFormattingTask>
+
+    <Message Text="| $(SectionString)" Importance="high" />
+    <Message Text="| []==~ $(MSBuildThisFile) ~==[]" Importance="high" />
+    <Message Text="| $(HeaderString)" Importance="high" />
+
+    <Message Text="| $(SectionSymbol) MSBuildRuntimeType: $(MSBuildRuntimeType)" Importance="high" />
+    <Message Text="| $(SectionSymbol) PrometheusLibDirectory: $(PrometheusLibDirectory)" Importance="high" />
+    <Message Text="| $(SectionSymbol) PrometheusLibFramework: $(PrometheusLibFramework)" Importance="high" />
+    <Message Text="| $(SectionSymbol) PrometheusUsingsLoaded: $(PrometheusUsingsLoaded)" Importance="high" />
+    <Message Text="| $(SectionSymbol) PrometheusTaskAssembly: $(PrometheusTaskAssembly)" Importance="high" />
+  </Target>
 </Project>

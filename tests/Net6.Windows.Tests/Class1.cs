@@ -1,8 +1,9 @@
-﻿using System;
+﻿using Shin;
 
-namespace Net5.Android.Tests
+namespace Net6.Windows.Tests
 {
     public class Class1
     {
+
     }
 }

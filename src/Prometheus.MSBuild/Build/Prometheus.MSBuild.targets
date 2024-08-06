@@ -1,0 +1,13 @@
+<Project>
+  <PropertyGroup>
+    <PrometheusDirectory
+      Condition="'$(PrometheusDirectory)' == ''">$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), Prometheus.Build.props))</PrometheusDirectory>
+    <PrometheusProps>$(PrometheusDirectory)\Prometheus.Build.props</PrometheusProps>
+    <PrometheusTargets>$(PrometheusDirectory)\Prometheus.Build.targets</PrometheusTargets>
+  </PropertyGroup>
+  <Import Project="$(PrometheusTargets)"/>
+          <!--Condition="'$(PrometheusEnabled)' == 'true' And '$(PrometheusAutoLoad)' == 'true' And Exists('$(PrometheusTargets)')" />-->
+  <!--<Import Project="$(SharedImports)" Label="Shared" Condition="'$(SharedImports)' != ''" />-->
+  <!--<Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets"
+          Condition="'$(PlatformId)' == 'android'" />-->
+</Project>

@@ -1,0 +1,88 @@
+﻿<Project>
+  <PropertyGroup>
+    <PrometheusTasksEnabled>False</PrometheusTasksEnabled>
+    <!--<PrometheusLibDirectory>$(BuildDirectory)\$(Configuration)</PrometheusLibDirectory>-->
+  </PropertyGroup>
+  <!--<Import Project=".\build\Prometheus.MSBuild.Tasks.props" />-->
+  <Import Project="..\..\src\Prometheus.MSBuild\Sdk\Sdk.props" />
+  <!--<Import Project="build\Prometheus.MSBuild.Tasks.props" />-->
+  <!--<Import Project="$(PrometheusGlobalProps)" />-->
+  <PropertyGroup>
+    <ProductName>Prometheus.MSBuild.Tasks</ProductName>
+    <ProductVersion>0.2.2-beta.27</ProductVersion>
+    <IsMSBuildTaskLibraryProject>true</IsMSBuildTaskLibraryProject>
+    <!--<TargetFramework>net48</TargetFramework>-->
+    <!--<TargetPlatform>net60</TargetPlatform>-->
+    <!--<TargetPlatform>net48</TargetPlatform>-->
+    <!--<TargetPlatforms>net6.0;net48</TargetPlatforms>-->
+    <TargetPlatforms>
+      net48;
+      net8.0;
+    </TargetPlatforms>
+    <!--<IncludeBuildOutput>True</IncludeBuildOutput>-->
+    <!--<OutputType>Library</OutputType>-->
+    <!--<MergeBinary>false</MergeBinary>-->
+    <LangVersion>latest</LangVersion>
+    <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+    <ForcePack>true</ForcePack>
+    <IsPackable>true</IsPackable>
+    <ProduceReferenceAssembly>True</ProduceReferenceAssembly>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <GenerateBindingRedirectsOutputType>true</GenerateBindingRedirectsOutputType>
+    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+    <!--<HasTests>True</HasTests>-->
+    <PrometheusSDKTaskBuilder>true</PrometheusSDKTaskBuilder>
+    <PackageRequireLicenseAcceptance>False</PackageRequireLicenseAcceptance>
+    <MergeBinary>true</MergeBinary>
+    <!--<DisableTransitiveProjectReferences>true</DisableTransitiveProjectReferences>-->
+  </PropertyGroup>
+  <!--<Target Name="ChangeAliasesOfStrongNameAssemblies" BeforeTargets="FindReferenceAssembliesForReferences;ResolveReferences">
+    <Message Text="| $(SectionSymbol) ReferencePathe: $(FileName)" Importance="high" />
+    <ItemGroup>
+      <ReferencePath Condition="'%(FileName)' == 'Prometheus.MSBuild.Tasks'">
+        <Aliases>signed</Aliases>
+      </ReferencePath>
+    </ItemGroup>
+    <Message Text="| $(SectionSymbol) ReferencePathe: $(FileName)" Importance="high" />
+  </Target>-->
+  
+  <ItemGroup>
+    <PackageReference Update="@(PackageReference)" PrivateAssets="All" />
+    <Content Include="*.props" Pack="True" PackagePath="\" Exclude="$(BaseIntermediateDirectory)"/>
+    <Content Include="*.targets" Pack="True" PackagePath="\" />
+    <Content Include="build\*.*" Pack="True" PackagePath="build\"
+             Link="build\%(RecursiveDir)%(Filename)%(Extension)" />
+    <!--<Content Include=".\build\**" 
+             Pack="True"
+             PackagePath="buildMultiTargeting\" Link="buildMultiTargeting\%(RecursiveDir)%(Filename)%(Extension)" />-->
+    <Content Include=".\build\*.*" Pack="True" PackagePath="buildTransitive\" 
+             Link="buildTrasitive\%(RecursiveDir)%(Filename)%(Extension)" />
+    <!--<Content Include="$(OutputDirectory)\*.*" Pack="True" PackagePath="lib\" Link="lib\%(RecursiveDir)%(Filename)%(Extension)" />-->
+    <!--<Content Include="Usings.Build.props" Pack="True" PackagePath="\" />-->
+    <!--<Content Include="build\Prometheus.Msbuild.Tasks.props" Pack="True" PackagePath="build\" />
+    <Content Include="build\Prometheus.Msbuild.Tasks.targets" Pack="True" PackagePath="build\" />-->
+  </ItemGroup>
+  <!--Exclude="$(BuildDirectory)\$(Configuration)\Prometheus.MSBuild.Tasks\*.nupkg; $(BuildDirectory)\$(Configuration)\Prometheus.MSBuild.Tasks\*.snupkg;"-->
+  <!--<ItemGroup>
+    <None Remove="..\..\src\Prometheus.MSBuild\build\Prometheus.MSBuild.props" />
+    <None Remove="..\..\src\Prometheus.MSBuild\build\Prometheus.MSBuild.targets" />
+  </ItemGroup>-->
+  
+  <Import Project="..\..\src\Prometheus.MSBuild.Tasks\Prometheus.Tasks.projitems" Label="Shared" />
+
+  <!--<Target Name="CopyToLib" BeforeTargets="PostNugetPack">
+    <ItemGroup>
+      <LibFiles Include="$(OutputDirectory)\**\*.*" />
+    </ItemGroup>
+    <Message Text="| []==~~ Copying Tasks library to Lib directory ~~==[]" Importance="high" />
+    -->
+<!--<Copy DestinationFolder="$(PrometheusLibDirectory)" SourceFiles="@(LibFiles)" OverwriteReadOnlyFiles="True"
+          SkipUnchangedFiles="True" />--><!--
+    <Copy SourceFiles="@(LibFiles)" DestinationFiles="@(LibFiles->'$(PrometheusLibDirectory)\%(RecursiveDir)/%(Filename)%(Extension)')"/>
+  </Target>-->
+  
+  <!--<Import Project="$(PrometheusGlobalTargets)" Condition="Exists('$(PrometheusGlobalTargets)')" />-->
+  <!--<Import Project=".\build\Prometheus.MSBuild.Tasks.targets" />-->
+  <!--<Import Project="build\Prometheus.MSBuild.Tasks.targets" />-->
+  <Import Project="..\..\src\Prometheus.MSBuild\Sdk\Sdk.targets" />
+</Project>

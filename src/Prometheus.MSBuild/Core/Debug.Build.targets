@@ -1,0 +1,17 @@
+<Project InitialTargets="PrintPrometheusDebug">
+  <PropertyGroup Condition="'$(Configuration)' == 'debug'">
+    <MergeBinary>false</MergeBinary>
+    <IsPackable Condition="'$(ForcePack)' == 'true'">true</IsPackable>
+  </PropertyGroup>
+
+  <Target Name="PrintPrometheusDebug">
+    <PropertyGroup>
+      <SectionSymbol>%</SectionSymbol>
+    </PropertyGroup>
+    
+    <LogPropertyTask ProjectFiles="$(MSBuildThisFileFullPath)" SectionSymbol="$(SectionSymbol)"
+                     Condition="'$(PrometheusTasksEnabled)' == 'true'" />
+
+    <Message Text="| $(SectionSymbol) Configuration: $(Configuration)" Importance="high" />
+  </Target>
+</Project>

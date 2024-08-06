@@ -1,9 +1,11 @@
 <Project>
-  <ItemGroup>
+  <!--<ItemGroup>
     <MSBuildProjectParentDirectory Include="$(MSBuildThisFileDirectory)\..\" />
-  </ItemGroup>
+  </ItemGroup>-->
   <PropertyGroup>
-    <PrometheusDirectory>$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), Prometheus.Build.props))</PrometheusDirectory>
+    <PrometheusDirectory
+      Condition="'$(PrometheusDirectory)' == '' 
+                         And '$(IsTestProject)' != 'true'">$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), Prometheus.Build.props))</PrometheusDirectory>
     <PrometheusProps>$(PrometheusDirectory)\Prometheus.Build.props</PrometheusProps>
     <PrometheusTargets>$(PrometheusDirectory)\Prometheus.Build.targets</PrometheusTargets>
   </PropertyGroup>
@@ -60,16 +62,21 @@
     <HasPlatform>True</HasPlatform>
   </PropertyGroup>-->
 
-  <Import Project="$(PrometheusTargets)" />
-  
   <PropertyGroup>
     <TargetFramework Condition="'$(TargetFramework)' == '' And '$(RuntimeId)' != ''">$(RuntimeId)</TargetFramework>
+    <TargetFrameworks Condition="'$(TargetFrameworks)' == '' And '$(TargetPlatforms)' != ''">$(TargetPlatforms)</TargetFrameworks>
+    <TargetPlatform Condition="'$(TargetPlatform)' == '' And '$(TargetFramework)' != ''">$(TargetFramework)</TargetPlatform>
   </PropertyGroup>
   
-  <ImportGroup Condition="'$(PrometheusLoadType)' == 'full' And ('$(TargetFramework)' != '' Or '$(TargetFrameworks)' != '')">
-    <Import Project="Sdk.props" Sdk="Microsoft.NET.Sdk" />
+  <Import Project="$(PrometheusTargets)" />
+
+  <ImportGroup>
+    <!--Condition="'$(PrometheusLoadType)' == 'full' And ('$(TargetFramework)' != '' Or '$(TargetFrameworks)' != '')">-->
+    <!--<Import Project="Sdk.props" Sdk="Microsoft.NET.Sdk" />-->
     <!--<Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets"
           Condition="'$(PlatformId)' == 'android' And '$(RuntimeVersion)' &lt;= '5.0'" />-->
-    <Import Project="Sdk.targets" Sdk="Microsoft.NET.Sdk" />
+    <Import Project="Sdk.targets" Sdk="Microsoft.NET.Sdk" Condition="'$(IsPackageOnlyProject)' != 'true'" />
+    <Import Project="Sdk.targets" Sdk="Microsoft.Build.NoTargets" Version="3.7.56"
+            Condition="'$(IsPackageOnlyProject)' == 'true'" />
   </ImportGroup>
 </Project>

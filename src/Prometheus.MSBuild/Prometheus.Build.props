@@ -1,19 +1,13 @@
 <Project InitialTargets="_PrintPrometheusProps">
-  <!--<PropertyGroup>
-    <MSBuildProjectParentDirectory>$(MSBuildProjectDirectory)\..</MSBuildProjectParentDirectory>
-  </PropertyGroup>-->
   <PropertyGroup>
     <PrometheusEnabled Condition="'$(PrometheusEnabled)' == ''" >True</PrometheusEnabled>
     <PrometheusAutoLoad Condition="'$(PrometheusAutoLoad)' == ''">True</PrometheusAutoLoad>
-    <!--<NodeReuse>False</NodeReuse>-->
   </PropertyGroup>
   
   <PropertyGroup Condition="'$(PrometheusEnabled)' == 'true'">
     <PrometheusLoadType Condition="'$(PrometheusLoadType)' == ''">Full</PrometheusLoadType>
-    <PrometheusTasksEnabled Condition="'$(PrometheusTasksEnabled)' == ''">True</PrometheusTasksEnabled>
-    <!--<PrometheusLibDirectory>lib</PrometheusLibDirectory>-->
+    <!--<PrometheusTasksEnabled Condition="'$(PrometheusTasksEnabled)' == ''">True</PrometheusTasksEnabled>-->
     <SourceImportProps Condition="'$(SourceImportProps)' == ''"></SourceImportProps>
-    <!--<PrometheusDirectory>$([System.Environment]::CurrentDirectory)</PrometheusDirectory>-->
   </PropertyGroup>
   <PropertyGroup Label="Core directories and files" 
                  Condition="'$(PrometheusEnabled)' == 'true'">
@@ -21,13 +15,16 @@
     <PrometheusCommonTargets>$(PrometheusCommonDirectory)\Common.Build.targets</PrometheusCommonTargets>
     <PrometheusCommonProps>$(PrometheusCommonDirectory)\Common.Build.props</PrometheusCommonProps>
     <PrometheusImportertargets>$(PrometheusCommonDirectory)\Importer.Build.targets</PrometheusImportertargets>
-    <PrometheusGlobalDirectory>$(PrometheusDirectory)\Globals</PrometheusGlobalDirectory>
-    <PrometheusGlobalProps>$(PrometheusGlobalDirectory)\Globals.Build.props</PrometheusGlobalProps>
-    <PrometheusGlobalTargets>$(PrometheusGlobalDirectory)\Globals.Build.targets</PrometheusGlobalTargets>
-    <PrometheusTestsProps>$(PrometheusGlobalDirectory)\Tests.Build.props</PrometheusTestsProps>
-    <PrometheusTestsTargets>$(PrometheusGlobalDirectory)\Tests.Build.targets</PrometheusTestsTargets>
+    <PrometheusCoreDirectory>$(PrometheusDirectory)\Core</PrometheusCoreDirectory>
+    <PrometheusGlobalProps>$(PrometheusCoreDirectory)\Globals.Build.props</PrometheusGlobalProps>
+    <PrometheusGlobalTargets>$(PrometheusCoreDirectory)\Globals.Build.targets</PrometheusGlobalTargets>
+    <PrometheusReleaseTargets>$(PrometheusCoreDirectory)\Release.Build.targets</PrometheusReleaseTargets>
+    <PrometheusDebugTargets>$(PrometheusCoreDirectory)\Debug.Build.targets</PrometheusDebugTargets>
+    <!---->
+    <PrometheusTestsProps>$(PrometheusCoreDirectory)\Tests.Build.props</PrometheusTestsProps>
+    <PrometheusTestsTargets>$(PrometheusCoreDirectory)\Tests.Build.targets</PrometheusTestsTargets>
     <PrometheusCheckTargets>$(PrometheusDirectory)\Check.Build.targets</PrometheusCheckTargets>
-    <PrometheusUsingsProps>$(PrometheusDirectory)\Usings.Build.props</PrometheusUsingsProps>
+    <PrometheusUsingsTargets>$(PrometheusDirectory)\Usings.Build.targets</PrometheusUsingsTargets>
   </PropertyGroup>
 
   <Choose>
@@ -70,17 +67,25 @@
     <PlatformId>$(TargetPlatform.Split(`-`)[1])</PlatformId>
     <TargetFramework Condition="'$(PlatformId)' != ''">$(RuntimeId)-$(PlatformId)</TargetFramework>
     --><!--<TargetFrameworks Condition="'$(TargetPlatforms)' != ''">$(TargetPlatforms)</TargetFrameworks>--><!--
-  </PropertyGroup>-->   
+  </PropertyGroup>-->
+  <!--<PropertyGroup Condition="'$(PrometheusEnabled)' == 'true'">
+    <BeforeTargetFrameworkInferenceTargets Condition="'$(IsTestProject)' == 'true'">$(BeforeTargetFrameworkInferenceTargets);$(PrometheusTestsProps)</BeforeTargetFrameworkInferenceTargets>
+    <BeforeTargetFrameworkInferenceTargets Condition="Exists('$(PrometheusGlobalProps)')">$(BeforeTargetFrameworkInferenceTargets);$(PrometheusGlobalProps)</BeforeTargetFrameworkInferenceTargets>
+  </PropertyGroup>-->
   
-  <ImportGroup Label="Core Imports" Condition="'$(PrometheusEnabled)' == 'true'">
-    <Import Project="$(PrometheusTestsProps)" Condition="'$(IsTestProject)' == 'true'" />   
+  <ImportGroup Label="Core Imports" 
+               Condition="'$(PrometheusEnabled)' == 'true'"> 
+               <!--AND '$(TargetFramework)' == ''-->
+    <!--<Import Project="$(PrometheusTestsProps)" Condition="'$(IsTestProject)' == 'true'" />-->   
     <Import Project="$(PrometheusGlobalProps)" Condition="Exists('$(PrometheusGlobalProps)')"/>
+    <!--<Import Project="$(PrometheusUsingsTargets)" Condition="Exists('$(PrometheusUsingsTargets)')" />-->
   </ImportGroup>
 
   <Import Project="$(PrometheusRuntimeProps)" Condition="Exists('$(PrometheusRuntimeProps)')" />
-  <ImportGroup Condition="'$(PrometheusEnabled)' == 'true' And '$(PrometheusLoadType)' == 'full'">
-    <!--<Import Project="$(PrometheusDetectFrameworkProps)" Condition="Exists('$(PrometheusDetectFrameworkProps)') And '$(PrometheusDetectionEnabled)' == 'true'" />-->
-    <!--<Import Project="$(PrometheusRuntimeProps)" Condition="Exists('$(PrometheusRuntimeProps)')" />-->
+  <ImportGroup Condition="'$(PrometheusEnabled)' == 'true' 
+               And '$(PrometheusLoadType)' == 'full'">
+    <Import Project="$(PrometheusDetectFrameworkProps)" Condition="Exists('$(PrometheusDetectFrameworkProps)') And '$(PrometheusDetectionEnabled)' == 'true'" />
+    <Import Project="$(PrometheusRuntimeProps)" Condition="Exists('$(PrometheusRuntimeProps)')" />
     <Import Project="$(PrometheusPlatformProps)" 
             Condition="Exists('$(PrometheusPlatformProps)') 
             And '$(PrometheusPlatformEnabled)' == 'true'" />
@@ -91,15 +96,18 @@
   </ImportGroup>
   
   <Import Project="$(PrometheusCommonProps)" Condition="Exists('$(PrometheusCommonProps)')" />
-  
+  <!--<ItemGroup>
+    <PackageReference Include="Prometheus.MSBuild.Tasks" Version="0.2.2-beta.27" PrivateAssets="all" IncludeAssets="all"/>
+  </ItemGroup>
+  <Import Project="$(LocalNugetRepoDirectory)" />-->
   <Target Name="_PrintPrometheusProps" Condition="'$(PrometheusEnabled)' == 'true'">
     <!--<ItemGroup>
       <MSBuildProjectParentDirectory Include="$(MSBuildProjectDirectory)\..\.." />
     </ItemGroup>-->
-    <PropertyGroup Condition="$(RootPath) == '' Or '$(SolutionDir)' == ''">
+    <!--<PropertyGroup Condition="$(RootPath) == '' Or '$(SolutionDir)' == ''">
       <RootPath Condition="$(RootPath) == ''">$(SolutionDir)</RootPath>
-      <SolutionDir Condition="'$(SolutionDir)' == ''">$(RootPath)</SolutionDir>
-    </PropertyGroup>
+      <SolutionDir Condition="'$(SolutionDir)' == ''">$(RootPath)\</SolutionDir>
+    </PropertyGroup>-->
     <PropertyGroup>
       <SectionSymbol>*</SectionSymbol>
     </PropertyGroup>
@@ -112,14 +120,18 @@
                              SectionChar="$(SectionChar)" 
                              HeaderChar="$(HeaderChar)"
                              Condition="'$(PrometheusTasksEnabled)' == 'true'">
+
       <Output TaskParameter="SectionString" PropertyName="SectionString" />
       <Output TaskParameter="HeaderString" PropertyName="HeaderString" />
     </CreateLogFormattingTask>
 
+    <Message Text="|" Importance="high" />
     <Message Text="| $(SectionString)" Importance="high" />
     <Message Text="| []==~ $(MSBuildThisFile) ~==[]" Importance="high" />
-    <Message Text="| []==~- --Setting up Prometheus for $(MSBuildProjectName)-- -~[]" Importance="high" />
+    <Message Text="| []==~- --Setting up Prometheus for $(MSBuildProjectName) $(TargetFramework)-- -~[]" Importance="high" />
     <Message Text="| $(HeaderString)" Importance="high" />
+    
+    <SetupPrometheusTask Condition="'$(PrometheusTasksEnabled)' == 'true'" />
     
     <!--<PropertyGroup Condition="'$(TargetPlatform)' != '' And '$(TargetFramework)' == ''">
       <Array>$(TargetPlatform.Split(`-`))</Array>

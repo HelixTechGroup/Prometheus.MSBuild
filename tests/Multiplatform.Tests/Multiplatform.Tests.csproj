@@ -1,15 +1,9 @@
-<Project Sdk="Microsoft.NET.Sdk">
-  <PropertyGroup>
-    <RootDirectory>$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), README.md))</RootDirectory>
-    <PrometheusDirectory>$(RootDirectory)\src\Prometheus.MSBuild</PrometheusDirectory>
-  </PropertyGroup>
-
+<Project>
   <Import Project="..\..\src\Prometheus.MSBuild\Sdk\Sdk.props" />
   <PropertyGroup>
     <LangVersion>latest</LangVersion>
     <ProductName>Multiplatform.Tests</ProductName>
-    <TargetFrameworks>net6.0;net5.0;net48</TargetFrameworks>
-    <IsTestProject>True</IsTestProject>
+    <TargetPlatforms>net8.0;net6.0;</TargetPlatforms>
     <IsLibraryProject>True</IsLibraryProject>
   </PropertyGroup>
   <Import Project="..\..\src\Prometheus.MSBuild\Sdk\Sdk.targets" />

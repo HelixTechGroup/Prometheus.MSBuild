@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.Build.Execution;
-using Microsoft.Build.Framework;
+﻿using System.Collections.Generic;
 
-namespace Prometheus.MSBuild.Tasks
+using Microsoft.Build.Execution;
+
+namespace Prometheus.MSBuild.Tasks.Settings
 {
-    public class PropertySearchOptions : PrometheusTaskOptions
+    public class PropertySearchSettings : PrometheusTaskSettings
     {
         protected string m_propertyName = @"*";
         protected bool m_localOnly = true;

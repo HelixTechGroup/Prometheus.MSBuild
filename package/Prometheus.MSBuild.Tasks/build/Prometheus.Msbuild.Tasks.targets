@@ -1,0 +1,30 @@
+<Project InitialTargets="_PrintPrometheusTasksUsings">
+  <PropertyGroup>
+    <PrometheusTasksEnabled Condition="'$(PrometheusTasksEnabled)' == ''">true</PrometheusTasksEnabled>
+    <!--<PrometheusTaskRootDirectory Condition="'$(NuGetPackageRoot)' != ''">$(NuGetPackageRoot)prometheus.msbuild.tasks</PrometheusTaskRootDirectory>
+    <PrometheusTaskRootDirectory Condition="'$(PrometheusTaskRootDirectory)' == ''">$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), Usings.Build.targets))</PrometheusTaskRootDirectory>
+    <PrometheusLibDirectory Condition="'$(PrometheusTaskRootDirectory)' != ''">$(PrometheusTaskRootDirectory)\lib</PrometheusLibDirectory>
+    <PrometheusTaskUsingTargets Condition="'$(PrometheusLibDirectory)' != ''">$(PrometheusTaskRootDirectory)\Usings.Build.targets</PrometheusTaskUsingTargets>
+    <PrometheusTaskBuildProps Condition="'$(PrometheusTaskRootDirectory)' != ''">$(PrometheusTaskRootDirectory)\Prometheus.MSBuild.Tasks.props</PrometheusTaskBuildProps>
+    <PrometheusTaskBuildTargets Condition="'$(PrometheusTaskRootDirectory)' != ''">$(PrometheusTaskRootDirectory)\Prometheus.MSBuild.Tasks.targets</PrometheusTaskBuildTargets>-->
+  </PropertyGroup>
+  
+  <Import Project="$(PrometheusTaskBuildProps)" Condition="'$(PrometheusTaskBuildPropsLoaded)' != 'true'"/>
+  <Import Project="$(PrometheusTaskUsingTargets)" Condition="Exists('$(PrometheusTaskUsingTargets)')" />
+
+  <Target Name="_PrintPrometheusTasksUsings">
+    <PropertyGroup>
+      <SectionSymbol>%</SectionSymbol>
+    </PropertyGroup>
+
+    <Message Text="| $(SectionString)" Importance="high" />
+    <Message Text="| []==~ $(MSBuildThisFile) ~==[]" Importance="high" />
+    <Message Text="| $(HeaderString)" Importance="high" />
+
+    <Message Text="| $(SectionSymbol) MSBuildRuntimeType: $(MSBuildRuntimeType)" Importance="high" />
+    <Message Text="| $(SectionSymbol) PrometheusLibDirectory: $(PrometheusLibDirectory)" Importance="high" />
+    <Message Text="| $(SectionSymbol) PrometheusLibFramework: $(PrometheusLibFramework)" Importance="high" />
+    <Message Text="| $(SectionSymbol) PrometheusTasksUsingsLoaded: $(PrometheusTasksUsingsLoaded)" Importance="high" />
+    <Message Text="| $(SectionSymbol) PrometheusTaskAssembly: $(PrometheusTaskAssembly)" Importance="high" />
+  </Target>
+</Project>

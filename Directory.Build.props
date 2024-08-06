@@ -1,9 +1,11 @@
 <Project>
   <PropertyGroup>
+    <SolutionDir Condition="'$(SolutionDir)' == ''">$(MSBuildThisFileDirectory)</SolutionDir>
+    <RootDirectory>$(MSBuildThisFileDirectory)</RootDirectory>
     <SectionSymbol>@</SectionSymbol>
-    <LocalNugetRepo>D:\Users\Bryan\Documents\Projects\HelixTechGroup\local-nuget</LocalNugetRepo>
-    <IsLibraryProject>true</IsLibraryProject>
-    <IsPackable>true</IsPackable>
+    <LocalNugetRepoDirectory>D:\Users\Bryan\Documents\Projects\HelixTechGroup\local-nuget</LocalNugetRepoDirectory>
+    <!--<IsLibraryProject>true</IsLibraryProject>
+    <IsPackable>true</IsPackable>-->
     <RepositoryHttpUrl>https://github.com/HelixTechGroup/Prometheus.MSBuild</RepositoryHttpUrl>
     <UseGitHub>True</UseGitHub>
   </PropertyGroup>

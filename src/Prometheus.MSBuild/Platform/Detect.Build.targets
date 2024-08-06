@@ -17,7 +17,7 @@
     <Array>$(TargetPlatform.Split(`-`))</Array>
     <RuntimeId>$(TargetPlatform.Split(`-`)[0])</RuntimeId>
     <PlatformId Condition="$(Array.Contains(`;`))">$(TargetPlatform.Split(`-`)[1])</PlatformId>
-    <TargetFrameworks Condition="'$(TargetPlatforms)' != ''">$(TargetPlatforms)</TargetFrameworks>
+    <!--<TargetFrameworks Condition="'$(TargetPlatforms)' != ''">$(TargetPlatforms)</TargetFrameworks>-->
     <HasWindows>$(PlatformId.Contains(`windows`))</HasWindows>
     <HasAndroid>$(PlatformId.Contains(`android`))</HasAndroid>
     <HasLinux>$(PlatformId.Contains(`linux`))</HasLinux>

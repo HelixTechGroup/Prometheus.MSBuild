@@ -30,18 +30,18 @@
   </PropertyGroup>-->
   
   <ImportGroup Label="Core Imports" Condition="'$(PrometheusEnabled)' == 'true'">
-    <Import Project="$(PrometheusTestsTargets)" Condition="'$(IsTestProject)' == 'true'" />
+    <!--<Import Project="$(PrometheusTestsTargets)" Condition="'$(IsTestProject)' == 'true'" />-->
     <Import Project="$(PrometheusCheckTargets)" Condition="Exists('$(PrometheusCheckTargets)')" />
-    <Import Project="$(PrometheusGlobalTargets)" Condition="Exists('$(PrometheusGlobalTargets)')"/>    
-    <Import Project="$(PrometheusUsingsProps)" Condition="Exists('$(PrometheusUsingsProps)')" />
+    <Import Project="$(PrometheusGlobalTargets)" Condition="Exists('$(PrometheusGlobalTargets)')"/>
+    <Import Project="$(PrometheusUsingsTargets)" Condition="Exists('$(PrometheusUsingsTargets)')" />
   </ImportGroup>
 
-  <Import Project="$(PrometheusRuntimeTargets)" Condition="Exists('$(PrometheusRuntimeTargets)')" />
+  <!--<Import Project="$(PrometheusRuntimeTargets)" Condition="Exists('$(PrometheusRuntimeTargets)')" />-->
   
   <ImportGroup Condition="'$(PrometheusEnabled)' == 'true' And '$(PrometheusLoadType)' == 'full'">    
-    <!--<Import Project="$(PrometheusDetectFrameworkTargets)" Condition="Exists('$(PrometheusDetectFrameworkTargets)') And '$(PrometheusDetectionEnabled)' == 'true'" />-->
-    <!--<Import Project="$(PrometheusRuntimeTargets)" Condition="Exists('$(PrometheusRuntimeTargets)')" />-->        
-    <Import Project="$(PrometheusPlatformTargets)" Condition="Exists('$(PrometheusPlatformTargets)') And '$(PrometheusPlatformEnabled)' == 'true'" />    
+    <Import Project="$(PrometheusDetectFrameworkTargets)" Condition="Exists('$(PrometheusDetectFrameworkTargets)') And '$(PrometheusDetectionEnabled)' == 'true'" />
+    <Import Project="$(PrometheusRuntimeTargets)" Condition="Exists('$(PrometheusRuntimeTargets)')" />        
+    <Import Project="$(PrometheusPlatformTargets)" Condition="Exists('$(PrometheusPlatformTargets)')" />    
   </ImportGroup>
   
   <ImportGroup Condition="'$(PrometheusEnabled)' == 'true' And '$(PrometheusLoadType)' == 'lite'">
@@ -55,14 +55,19 @@
           And '$(PrometheusImportEnabled)' == 'true' 
           And Exists('$(PrometheusImportertargets)')"/>
   </ImportGroup>
+
+  <ItemGroup Condition="'$(IsPackageOnlyProject)' == 'true'">
+    <!--<PackageReference Update="@(PackageReference)" PrivateAssets="all" />-->
+    <!--<Compile Remove="*" />-->
+  </ItemGroup>
   
   <Target Name="_PrintPrometheusTargets" Outputs="$(SharedImports)">
-    <PropertyGroup Condition="$(RootPath) == '' Or '$(SolutionDir)' == ''">
-      <!--<RootPath Condition="$(RootPath) == ''">@(MSBuildProjectParentDirectory.FullPath)</RootPath>-->
-      <!--<RootPath Condition="$(RootPath) == ''">$([System.IO.Path]::GetFullPath($(MSBuildProjectParentDirectory)))</RootPath>-->
+    <!--<PropertyGroup Condition="$(RootPath) == '' Or '$(SolutionDir)' == ''">
+      --><!--<RootPath Condition="$(RootPath) == ''">@(MSBuildProjectParentDirectory.FullPath)</RootPath>--><!--
+      --><!--<RootPath Condition="$(RootPath) == ''">$([System.IO.Path]::GetFullPath($(MSBuildProjectParentDirectory)))</RootPath>--><!--
       <RootPath Condition="$(RootPath) == ''">$(SolutionDir)</RootPath>
       <SolutionDir Condition="'$(SolutionDir)' == ''">$(RootPath)</SolutionDir>
-    </PropertyGroup>
+    </PropertyGroup>-->
     <PropertyGroup>
       <SectionSymbol>*</SectionSymbol>
     </PropertyGroup>

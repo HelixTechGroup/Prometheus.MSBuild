@@ -13,16 +13,16 @@ using System.Security;
 using Microsoft.Build.Construction;
 using Microsoft.Build.Execution;
 using Prometheus.MSBuild.Tasks.Extension;
+using Prometheus.MSBuild.Tasks.Settings;
 
 namespace Prometheus.MSBuild.Tasks
 {
-    public class CreateLogFormattingTask : BuildUtil.Task
+    public class CreateLogFormattingTask : PrometheusTask<PropertySearchSettings>
     {
         protected StringExtensions m_headerChar = new StringExtensions(@"~");
         protected StringExtensions m_sectionChar = new StringExtensions(@"=");
         protected string m_headerString = string.Empty;
         protected string m_sectionString = string.Empty;
-        protected PrometheusTaskOptions m_options = new PrometheusTaskOptions();
         protected string m_sectionPrefix = @"[]";
         protected string m_headerPrefix = @"[]";
         protected string m_sectionPostfix = @"[]";
@@ -63,8 +63,8 @@ namespace Prometheus.MSBuild.Tasks
 
         public string SectionSymbol
         {
-            get { return m_options.SectionSymbol; }
-            set { m_options.SectionSymbol = value; }
+            get { return m_settings.SectionSymbol; }
+            set { m_settings.SectionSymbol = value; }
         }
 
         public string SectionPrefix
@@ -111,17 +111,17 @@ namespace Prometheus.MSBuild.Tasks
             Log.LogMessage(MessageImportance.High, $"| {m_sectionPrefix}{m_sectionString}");
             Log.LogMessage(MessageImportance.High, $"| {m_headerPrefix}==~- --Setting Prometheus Log Format for {name}-- -~=={m_headerPostfix}");
             Log.LogMessage(MessageImportance.High, $"| {m_sectionPrefix}{m_headerString}");
-            Log.LogMessage(MessageImportance.High, $"| {m_options.SectionSymbol} SectionLength: {SectionLength}");
-            Log.LogMessage(MessageImportance.High, $"| {m_options.SectionSymbol} HeaderLength: {HeaderLength}");
-            Log.LogMessage(MessageImportance.High, $"| {m_options.SectionSymbol} SectionChar: {m_sectionChar}");
-            Log.LogMessage(MessageImportance.High, $"| {m_options.SectionSymbol} HeaderChar: {m_headerChar}");
-            Log.LogMessage(MessageImportance.High, $"| {m_options.SectionSymbol} SectionPrefix: {m_sectionPrefix}");
-            Log.LogMessage(MessageImportance.High, $"| {m_options.SectionSymbol} HeaderPrefix: {m_headerPrefix}");
-            Log.LogMessage(MessageImportance.High, $"| {m_options.SectionSymbol} SectionPostfix: {m_sectionPostfix}");
-            Log.LogMessage(MessageImportance.High, $"| {m_options.SectionSymbol} HeaderPostfix: {m_headerPostfix}");
+            Log.LogMessage(MessageImportance.High, $"| {m_settings.SectionSymbol} SectionLength: {SectionLength}");
+            Log.LogMessage(MessageImportance.High, $"| {m_settings.SectionSymbol} HeaderLength: {HeaderLength}");
+            Log.LogMessage(MessageImportance.High, $"| {m_settings.SectionSymbol} SectionChar: {m_sectionChar}");
+            Log.LogMessage(MessageImportance.High, $"| {m_settings.SectionSymbol} HeaderChar: {m_headerChar}");
+            Log.LogMessage(MessageImportance.High, $"| {m_settings.SectionSymbol} SectionPrefix: {m_sectionPrefix}");
+            Log.LogMessage(MessageImportance.High, $"| {m_settings.SectionSymbol} HeaderPrefix: {m_headerPrefix}");
+            Log.LogMessage(MessageImportance.High, $"| {m_settings.SectionSymbol} SectionPostfix: {m_sectionPostfix}");
+            Log.LogMessage(MessageImportance.High, $"| {m_settings.SectionSymbol} HeaderPostfix: {m_headerPostfix}");
 
-            Log.LogMessage(MessageImportance.High, $"| {m_options.SectionSymbol} Formatted SectionString: {m_sectionString}");
-            Log.LogMessage(MessageImportance.High, $"| {m_options.SectionSymbol} Formatted HeaderString: {m_headerString}");
+            Log.LogMessage(MessageImportance.High, $"| {m_settings.SectionSymbol} Formatted SectionString: {m_sectionString}");
+            Log.LogMessage(MessageImportance.High, $"| {m_settings.SectionSymbol} Formatted HeaderString: {m_headerString}");
             return true;
         }
     }

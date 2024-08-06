@@ -1,0 +1,40 @@
+<Project InitialTargets="_PrintTestsTargets">
+  <PropertyGroup>
+    <TestsDirectory Condition="'$(TestsDirectory)' == ''">$(SolutionDir)tests</TestsDirectory>
+  </PropertyGroup>  
+  <PropertyGroup Condition="'$(IsTestProject)' == 'true'">
+    <IsPackable></IsPackable>
+    <MergeBinary></MergeBinary>
+    <!--<PrometheusLibDirectory>$(BuildDirectory)\$(Configuration)\Prometheus.MSBuild.Tasks</PrometheusLibDirectory>-->
+    <!--<PrometheusLibDirectory>$(TestsDirectory)\lib\$(Configuration)\Prometheus.MSBuild.Tasks</PrometheusLibDirectory>-->
+  </PropertyGroup>
+  <ItemGroup Condition="'$(UseMSTest)' == 'true'">
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.*" />
+    <PackageReference Include="MSTest.TestAdapter" Version="3.*" />
+    <PackageReference Include="MSTest.TestFramework" Version="3.*" />
+    <PackageReference Include="coverlet.collector" Version="6.*">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+  <ItemGroup Condition="'$(HasTests)' == 'true' And Exists('$(TestsDirectory)$(AssemblyName).MSTest')">
+    <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
+      <_Parameter1>$(AssemblyName).MSTest</_Parameter1>
+    </AssemblyAttribute>
+  </ItemGroup>
+  
+  <Target Name="_PrintTestsTargets">
+    <PropertyGroup>
+      <SectionSymbol>&lt;*&gt;</SectionSymbol>
+    </PropertyGroup>
+
+    <Message Text="| $(SectionString)" Importance="high" />
+    <Message Text="| []==~ $(MSBuildThisFile) ~==[]" Importance="high" />
+    <Message Text="| $(HeaderString)" Importance="high" />
+
+    <Message Text="| $(SectionSymbol) IsTestProject: $(IsTestProject)" Importance="high" />
+    <Message Text="| $(SectionSymbol) TestsDirectory: $(TestsDirectory)" Importance="high" />
+    <Message Text="| $(SectionSymbol) HasTests: $(HasTests)" Importance="high" />
+    <Message Text="| $(SectionSymbol) UseMSTest: $(UseMSTest)" Importance="high" />
+  </Target>
+</Project>

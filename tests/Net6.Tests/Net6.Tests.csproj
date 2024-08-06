@@ -1,11 +1,11 @@
-<Project Sdk="Microsoft.NET.Sdk">
-  <Import Project="..\..\src\Prometheus.MSBuild\Sdk\Sdk.props" />
+﻿<Project Sdk="Prometheus.MSBuild.Sdk/0.2.2-beta.31">
+  <!--<Import Project="..\..\src\Prometheus.MSBuild\Sdk\Sdk.props" />-->
   <PropertyGroup>
     <ProductName>Net6.Tests</ProductName>
-    <TargetPlatform>net6.0</TargetPlatform>
-    <IsTestProject>True</IsTestProject>
-    <IsLibraryProject>True</IsLibraryProject>
-    <IsPackable>False</IsPackable>
+    <TargetPlatform>net8.0</TargetPlatform>
+    <!--<IsTestProject>True</IsTestProject>-->
+    <IsLibraryProject>True</IsLibraryProject>   
+    <!--<PrometheusTasksEnabled>false</PrometheusTasksEnabled>-->
   </PropertyGroup>
-  <Import Project="..\..\src\Prometheus.MSBuild\Sdk\Sdk.targets" />
+  <!--k<Import Project="..\..\src\Prometheus.MSBuild\Sdk\Sdk.targets" />-->
 </Project>

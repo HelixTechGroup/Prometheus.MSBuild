@@ -1,61 +1,70 @@
-<Project InitialTargets="PrintPrometheusGlobals">
+<Project InitialTargets="_PrintPrometheusGlobals">
   <!--<PropertyGroup>
     <MSBuildProjectParentDirectory>$(MSBuildProjectDirectory)\..</MSBuildProjectParentDirectory>
   </PropertyGroup>-->
-  <PropertyGroup Condition="$(SolutionDir) != ''">
-    <!--<SolutionDir>$(SolutionDir.TrimEnd('\'))</SolutionDir>-->
-    <SourceDirectory Condition=" '$(SourceDirectory)' == '' ">$(SolutionDir)src</SourceDirectory>
-    <ThirdPartyDirectory Condition=" '$(ThirdPartyDirectory)' == '' ">$(SolutionDir)third-party</ThirdPartyDirectory>
-    <BuildDirectory Condition="'$(BuildDirectory)' == ''">$(SolutionDir)build</BuildDirectory>
-    <!--<PrometheusDirectory Condition=" '$(PrometheusDirectory)' == '' ">$(PrometheusDirectory)\Prometheus</PrometheusDirectory>-->
-    <OutputDirectory Condition="'$(OutputDirectory)' == ''">$(BuildDirectory)\$(Configuration)\$(AssemblyName)</OutputDirectory>
-    <OutputPath Condition=" '$(OutputPath)' == '' ">$(OutputDirectory)</OutputPath>
-    <!--<BaseIntermediateOutputPath>$(SolutionDir)\build\obj\$(Configuration)\$(AssemblyName)</BaseIntermediateOutputPath>-->
-    <SolutionProps Condition=" '$(SolutionProps)' == '' ">$(SolutionDir)Solution.Build.props</SolutionProps>
-    <UserProps Condition=" '$(UserProps)' == '' ">$(SolutionDir)User.Build.props</UserProps>
-    <SolutionImportProps Condition="'$(SolutionImportProps)' == ''">$(SolutionDir)Imports.Build.props</SolutionImportProps>
-  </PropertyGroup>
   
   <PropertyGroup>
-    <ProductName Condition=" '$(ProductName)' == '' ">My Application</ProductName>
+    <!--<Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>-->
+    <!--<ProductName Condition=" '$(ProductName)' == '' ">My Application</ProductName>
     <CompanyName Condition=" '$(CompanyName)' == '' ">My Company</CompanyName>
     <AuthorName Condition=" '$(AuthorName)' == '' ">$(UserName)</AuthorName>
     <ProductVersion Condition=" '$(ProductVersion)' == '' ">0.0.1</ProductVersion>
     <IsSharedProject Condition=" '$(IsSharedProject)' == '' ">$(MSBuildProjectExtension.Contains('shproj'))</IsSharedProject>
     <IsTestProject Condition=" '$(IsTestProject)' == '' ">False</IsTestProject>
-    <IsLibraryProject Condition=" '$(IsLibraryProject)' == '' ">False</IsLibraryProject>
-    <MergeBinary Condition=" '$(MergeBinary)' == '' ">True</MergeBinary>
+    <IsLibraryProject Condition=" '$(IsLibraryProject)' == '' "></IsLibraryProject>
+    <MergeBinary Condition=" '$(MergeBinary)' == '' "></MergeBinary>
     <UseGitHub Condition="'$(UseGitHub)' == ''">False</UseGitHub>
     <FirstTimeLoading Condition=" '$(FirstTimeLoading)' == '' ">True</FirstTimeLoading>
-    <!--<IsPackable Condition="'$(IsPackable)' == ''">False</IsPackable>-->
+    <IsPackable Condition="'$(IsPackable)' == ''">False</IsPackable>
     <EnableNETAnalyzers Condition="'$(EnableNETAnalyzers)' == ''">True</EnableNETAnalyzers>
     <SetupCompleted Condition=" '$(SetupCompleted)' == '' ">False</SetupCompleted>
-    <!--<TargetPlatform Condition=" '$(TargetPlatform)' == '' And '$(TargetPlatforms)' != ''">net6.0</TargetPlatform>-->
-    <!--<PlatformId Condition=" '$(PlatformId)' == '' ">None</PlatformId>-->
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <TargetPlatform Condition=" '$(TargetPlatform)' == '' And '$(TargetPlatforms)' != ''">net6.0</TargetPlatform>
+    <PlatformId Condition=" '$(PlatformId)' == '' ">None</PlatformId>
     <Description Condition="'$(Description)' == ''">Description</Description>
-    <IsPackageOnlyProject Condition="'$(IsPackageOnlyProject)' == ''">False</IsPackageOnlyProject>
+    <IsPackageOnlyProject Condition="'$(IsPackageOnlyProject)' == ''"></IsPackageOnlyProject>
     <UseImportCache Condition="'$(UseImportCache)' == ''">True</UseImportCache>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <HasTests Condition="'$(HasTests)' == ''">False</HasTests>
-    <!--<DisableExtraReferences>true</DisableExtraReferences>-->
+    <DisableExtraReferences>true</DisableExtraReferences>-->
   </PropertyGroup>
 
+  <PropertyGroup Condition="$(SolutionDir) != ''">
+    <!--<SolutionDir>$(SolutionDir.TrimEnd('\'))</SolutionDir>-->
+    <SourceDirectory Condition=" '$(SourceDirectory)' == '' ">$(SolutionDir)src</SourceDirectory>
+    <ThirdPartyDirectory Condition=" '$(ThirdPartyDirectory)' == '' ">$(SolutionDir)third-party</ThirdPartyDirectory>
+    <BuildDirectory Condition="'$(BuildDirectory)' == ''">$(SolutionDir)build</BuildDirectory>
+    <PackageDirectory Condition="'$(PackageDirectory)' == ''">$(SolutionDir)package</PackageDirectory>
+    <PrometheusDirectory Condition=" '$(PrometheusDirectory)' == '' ">$(PrometheusDirectory)\Prometheus</PrometheusDirectory>
+    <OutputDirectory>$(BuildDirectory)\bin\$(Configuration)\$(AssemblyName)</OutputDirectory>
+    <OutputPath>$(OutputDirectory)</OutputPath>
+    <BaseIntermediateOutputPath Condition="'$(BuildDirectory)' != ''
+        And '$(Configuration)' != ''
+        And '$(AssemblyName)' != ''">$(BuildDirectory)\obj\$(Configuration)\$(AssemblyName)</BaseIntermediateOutputPath>
+    <SolutionProps Condition=" '$(SolutionProps)' == '' ">$(SolutionDir)Solution.Build.props</SolutionProps>
+    <UserProps Condition=" '$(UserProps)' == '' ">$(SolutionDir)User.Build.props</UserProps>
+    <SolutionImportProps Condition="'$(SolutionImportProps)' == ''">$(SolutionDir)Imports.Build.props</SolutionImportProps>
+  </PropertyGroup>
+  
   <PropertyGroup Condition="'$(IsPackageOnlyProject)' == 'true'">
-    <EnableDefaultItems>False</EnableDefaultItems>
-    <GenerateAssemblyInfo>False</GenerateAssemblyInfo>
-    <IncludeBuildOutput>False</IncludeBuildOutput>
-    <IncludeSymbols>false</IncludeSymbols>
+    <!--<EnableDefaultItems>false</EnableDefaultItems>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <IncludeBuildOutput>false</IncludeBuildOutput>
+    <IncludeSymbols>false</IncludeSymbols>-->
     <NoWarn>$(NoWarn);2008;8021</NoWarn>
+    <IncludeBuildOutput>false</IncludeBuildOutput>
     <!--<NuspecFile>$(MSBuildThisFileDirectory)templates.nuspec</NuspecFile>-->
-    <CopyBuildOutputToOutputDirectory>false</CopyBuildOutputToOutputDirectory>
-    <CopyOutputSymbolsToOutputDirectory>false</CopyOutputSymbolsToOutputDirectory>
-    <IsProjectReferenceProvider>false</IsProjectReferenceProvider>
-    <MergeBinary>False</MergeBinary>
-    <IsPackable>True</IsPackable>
+    <!--<CopyBuildOutputToOutputDirectory></CopyBuildOutputToOutputDirectory>
+    <CopyOutputSymbolsToOutputDirectory></CopyOutputSymbolsToOutputDirectory>
+    <IsProjectReferenceProvider></IsProjectReferenceProvider>-->
+    <MergeBinary>false</MergeBinary>
+    <IsPackable>true</IsPackable>
+    <EnableNETAnalyzers>false</EnableNETAnalyzers>
+    <EnableShinFramework>false</EnableShinFramework>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(IsPackable)' == 'true'">
+  <PropertyGroup Condition="'$(IsPackable)' == 'true' 
+      Or '$(ForcePack)' == 'true'">
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
   </PropertyGroup>
 
@@ -63,8 +72,14 @@
 
   <Import Project="$(SolutionProps)" Condition="Exists($(SolutionProps))"/>
   <Import Project="$(UserProps)" Condition="Exists($(UserProps))" />
+  <!--<Import Project="($(PrometheusTestsProps)" Condition="('$(IsTestProject)' == 'true' Or '$(HasTests)' == 'true') 
+      And Exists($(PrometheusTestsProps))" />-->
 
-  <Target Name="PrintPrometheusGlobals">
+  <PropertyGroup>
+    <PrometheusGlobalPropsLoaded>true</PrometheusGlobalPropsLoaded>
+  </PropertyGroup>
+  
+  <Target Name="_PrintPrometheusGlobals">
     <PropertyGroup>
       <SectionSymbol>%</SectionSymbol>
     </PropertyGroup>
@@ -108,6 +123,7 @@
     <Message Text="| $(SectionSymbol) MSBuildProjectExtension: $(MSBuildProjectExtension)" Importance="high" />
     <Message Text="| $(SectionSymbol) MSBuildThisFileDirectory: $(MSBuildThisFileDirectory)" Importance="high" />
     <Message Text="| $(SectionSymbol) OutputDirectory: $(OutputDirectory)" Importance="high" />
+    <Message Text="| $(SectionSymbol) BaseIntermediateOutputPath: $(BaseIntermediateOutputPath)" Importance="high" />
     <Message Text="| $(SectionSymbol) TestsDirectory: $(TestsDirectory)" Importance="high" />
     <Message Text="| $(SectionSymbol) SharedImports: $(SharedImports)" Importance="high" />
   </Target>

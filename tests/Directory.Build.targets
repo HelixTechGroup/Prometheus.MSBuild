@@ -1,0 +1,14 @@
+<Project>
+  <!--<PropertyGroup>
+    <IsTestProject>True</IsTestProject>
+    <PrometheusLoadType>full</PrometheusLoadType>
+    <PrometheusPlatformEnabled>True</PrometheusPlatformEnabled>
+    <PrometheusTasksEnabled>True</PrometheusTasksEnabled>
+    <PrometheusEnabled>True</PrometheusEnabled>
+    <IsPackable>False</IsPackable>
+  </PropertyGroup>
+  <PropertyGroup>
+    <PrometheusDirectory>$(SolutionDir)src\Prometheus.MSBuild</PrometheusDirectory>
+    --><!--<PrometheusLibDirectory>$(SolutionDir)build\$(Configuration)\Prometheus.MSBuild.Tasks</PrometheusLibDirectory>--><!--
+  </PropertyGroup>-->
+</Project>

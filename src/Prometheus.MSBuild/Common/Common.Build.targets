@@ -34,14 +34,96 @@
       <IncludeAssets>compile; runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
   </ItemGroup>
+  
+  <ItemGroup Condition="'$(EnableShinFramework)' == 'true'">
+    <PackageReference Include="Shin.Framework" Version="0.1.6-beta.18" />
+    <!--<Using Include="Shin" Alias="$(RootNamespace)" Condition="'$(RootNamespace)' != ''"/>-->
+    <Using Include="Shin" />
+  </ItemGroup>
+  
+  <Choose>
+    <When Condition="'$(IsMSBuildTaskLibraryProject)' == 'true'">
+      <PropertyGroup>
+        <GenerateDependencyFile>true</GenerateDependencyFile>
+      </PropertyGroup>
+      
+      <Choose>
+        <When Condition="'$(TargetFramework)' == 'netstandard2.0'">
+          <ItemGroup>
+            <PackageReference Include="Microsoft.Build" 
+                              Version="15.9.20" 
+                              ExcludeAssets="runtime" 
+                              PrivateAssets="all"
+                              IncludeAssets="compile; build; native; contentfiles; analyzers; buildtransitive" />
+          </ItemGroup>
+        </When>
+        <Otherwise>
+          <ItemGroup>
+            <PackageReference Include="Microsoft.Build" Version="17.10.4" 
+                              ExcludeAssets="runtime" 
+                              PrivateAssets="all"
+                              IncludeAssets="compile; build; native; contentfiles; analyzers; buildtransitive" />
+          </ItemGroup>
+        </Otherwise>
+      </Choose>
+      
+      <ItemGroup>
+        <PackageReference Include="Microsoft.Build.Framework" Version="17.10.4" ExcludeAssets="runtime" PrivateAssets="all"
+                          IncludeAssets="compile; build; native; contentfiles; analyzers; buildtransitive" />
+        <PackageReference Include="Microsoft.Build.Tasks.Core" Version="17.10.4" ExcludeAssets="runtime"
+                          PrivateAssets="all"
+                          IncludeAssets="compile; build; native; contentfiles; analyzers; buildtransitive" />
+        <PackageReference Include="Microsoft.Build.Utilities.Core" Version="17.10.4" ExcludeAssets="runtime"
+                          PrivateAssets="all"
+                          IncludeAssets="compile; build; native; contentfiles; analyzers; buildtransitive" />
+        <!--<PackageReference Include="Microsoft.Build.Engine" Version="17.10.4" ExcludeAssets="runtime" 
+                          PrivateAssets="All"
+                          IncludeAssets="compile; build; native; contentfiles; analyzers; buildtransitive" />-->
+        <PackageReference Include="System.Text.Json" Version="8.0.4" PrivateAssets="all" />
+        <!--<PackageReference Include="Shin.Framework" Version="0.1.6-beta.18" />-->
+        <PackageReference Include="Microsoft.Build.Locator" Version="1.7.8" ExcludeAssets="runtime" PrivateAssets="all"
+                          IncludeAssets="compile; build; native; contentfiles; analyzers; buildtransitive" />
+      </ItemGroup>
+    </When>
+  </Choose>
 
-  <Target Name="_SetPrometheusFirstTimeLoading" Condition="'$(FirstTimeLoading)' != 'false'">
+  <Target Name="AddBuildDependencyFileToBuiltProjectOutputGroupOutput" BeforeTargets="BuiltProjectOutputGroup"
+          Condition="'$(IsMSBuildTaskLibraryProject)' == 'true'">
+
+    <ItemGroup>
+      <BuiltProjectOutputGroupOutput Include="$(ProjectDepsFilePath)" TargetPath="$(ProjectDepsFileName)"
+                                     FinalOutputPath="$(ProjectDepsFilePath)" />
+    </ItemGroup>
+  </Target>
+
+  <Target Name="CopyProjectReferencesToPackage" DependsOnTargets="ResolveReferences"
+          Condition="'$(IsMSBuildTaskLibraryProject)' == 'true'">
+    <ItemGroup>
+      <!-- The TargetPath is the path inside the package that the source file will be placed. This is already precomputed in the ReferenceCopyLocalPaths items' DestinationSubPath, so reuse it here. -->
+      <BuildOutputInPackage Include="@(ReferenceCopyLocalPaths)"
+                            TargetPath="%(ReferenceCopyLocalPaths.DestinationSubPath)" />
+    </ItemGroup>
+  </Target>
+  
+  <Target Name="_SetPrometheusFirstTimeLoading" Condition="'$(FirstTimeLoading)' != ''">
     <PropertyGroup>
-      <FirstTimeLoading>false</FirstTimeLoading>
+      <FirstTimeLoading></FirstTimeLoading>
     </PropertyGroup>
   </Target>
   
-  <Target Name="SetupPrometheus" BeforeTargets="Build" Condition="$(PrometheusEnabled) == 'true'">
+  <Target Name="_SetupPrometheusSingleTarget" BeforeTargets="PreBuildEvent" 
+          Condition="'$(PrometheusEnabled)' == 'true' 
+          AND '$(TargetFramework)' != ''">
+    <CallTarget Targets="SetupPrometheus"/>
+  </Target>
+
+  <Target Name="_SetupPrometheusMultiTarget" BeforeTargets="DispatchToInnerBuilds"
+          Condition="'$(PrometheusEnabled)' == 'true' 
+          AND '$(TargetFrameworks)' != ''">
+    <CallTarget Targets="SetupPrometheus" />
+  </Target>
+  
+  <Target Name="SetupPrometheus" Condition="'$(PrometheusEnabled)' == 'true'">
     <Message Text="| $(SectionString)" Importance="high" />
     <Message Text="| [*] $~- --Setting up Prometheus for $(MSBuildProjectName)-- -~$" Importance="high" />
     <Message Text="| [*] " Importance="high" />
@@ -53,7 +135,7 @@
     </PropertyGroup>
   </Target>
 
-  <Target Name="PostSetupPrometheus" AfterTargets="Build" Condition="$(PrometheusEnabled) == 'true'">
+  <Target Name="PostSetupPrometheus"  Condition="$(PrometheusEnabled) == 'true'">
     <Message Text="| $(SectionString)" Importance="high" />
     <Message Text="| [*] $~- --Post Setting up Prometheus for $(MSBuildProjectName)-- -~$" Importance="high" />
     <Message Text="| $(HeaderString)" Importance="high" />
@@ -101,7 +183,7 @@
     <Message Text="$~====== Finishing Initializing Framework for $(MSBuildProjectName) ======~$" Importance="high" />
     <Message Text="| $(HeaderString)" Importance="high" />
     <CallTarget Targets="PrintProps;PrintImports;" />
-    <CallTarget Targets="RunNuGetRestore;" Condition="'$(IsPackable)' == 'true'" />
+    <!--<CallTarget Targets="RunNuGetRestore;" Condition="'$(IsPackable)' == 'true'" />-->
   </Target>
 
   <Target Name="InitializeEnvironment">
@@ -123,25 +205,66 @@
 
   <Target Name="InitializeFramework" />
   
-  <Target Name="CopyToLocalNuGetRepo" Condition="Exists('$(LocalNugetRepo)') And '$(IsPackable)' == 'true'">
+  <Target Name="CopyToLocalNuGetRepo" Condition="Exists('$(LocalNugetRepoDirectory)') And '$(IsPackable)' == 'true'">
     <PropertyGroup>
       <SectionSymbol>$$</SectionSymbol>
+      
     </PropertyGroup>
+    
     <Message Text="| $(SectionString)" Importance="high" />
     <Message Text="$~------ Copying NuGet packages to local repo for $(MSBuildProjectName) ------~$" Importance="high" />
     <Message Text="| $(HeaderString)" Importance="high" />
-    <Message Text="| $(SectionSymbol) LocalNugetRepo: $(LocalNugetRepo)" Importance="high" />
+    <Message Text="| $(SectionSymbol) LocalNugetRepoDirectory: $(LocalNugetRepoDirectory)" Importance="high" />
     <Message Text="| $(SectionSymbol) IsPackable: $(IsPackable)" Importance="high" />
+    <Message Text="| $(SectionSymbol) ForcePack: $(ForcePack)" Importance="high" />
     <Message Text="| $(SectionSymbol) PackageId: $(PackageId)" Importance="high" />
     <Message Text="| $(SectionSymbol) PackageVersion: $(PackageVersion)" Importance="high" />
     <Message Text="| $(SectionSymbol) NuGetPackageName: $(NugetPackageName)" Importance="high" />
+    <Message Text="| $(SectionSymbol) NuGetSymbolPackageName: $(NugetSymbolPackageName)" Importance="high" />
     
-    <Error Condition="'$(NugetPackageName)' == ''" Text="NugetPackageName is not set." />
-    <Warning Condition="Exists('$(OutputDirectory)\$(NugetPackageName)')  == 'false'" Text="| $(SectionSymbol) Package Does not exist: '$(OutputDirectory)\$(NugetPackageName)'"/>
-    <Message Condition="Exists('$(OutputDirectory)\$(NugetPackageName)')" Text="| $(SectionSymbol) Package Location: $(OutputDirectory)\$(NugetPackageName)" Importance="high" />
-    <Copy Condition="Exists('$(OutputDirectory)\$(NugetPackageName)') And Exists('$(LocalNugetRepo)')" DestinationFolder="$(LocalNugetRepo)" SourceFiles="$(OutputDirectory)\$(NugetPackageName)"/>
+    <Error Condition="'$(NugetPackageName)' == ''" 
+           Text="NugetPackageName is not set." />
+    <Error Condition="'$(LocalNugetRepoDirectory)' == '' Or !Exists('$(LocalNugetRepoDirectory)')" 
+           Text="NugetPackageName is not set or does not exists" />
+    <Error Condition="Exists('$(PackageOutputPath)\$(NugetPackageName)')  == 'false'" 
+             Text="| $(SectionSymbol) Package Does not exist: '$(PackageOutputPath)\$(NugetPackageName)'"/>
+    
+    <Message Text="| $(SectionSymbol) Package Location: $(PackageOutputPath)\$(NugetPackageName)" Importance="high" />
+    <Copy Condition="Exists('$(PackageOutputPath)\$(NugetPackageName)') And Exists('$(LocalNugetRepoDirectory)')" DestinationFolder="$(LocalNugetRepoDirectory)" SourceFiles="$(PackageOutputPath)\$(NugetPackageName);$(PackageOutputPath)\$(NugetSymbolPackageName)"/>
   </Target>
 
+  <Target Name="PublishToLocalNugetCache" AfterTargets="CopyToLocalNuGetRepo">
+    <PropertyGroup>
+      <SectionSymbol>$$@</SectionSymbol>
+      <CliParameters>--no-service-endpoint</CliParameters>
+    </PropertyGroup>
+    <Message Text="| $(SectionString)" Importance="high" />
+    <Message Text="$~------ Publishing Package to Local NuGet Cache for $(MSBuildProjectName) ------~$" Importance="high" />
+    <Message Text="| $(HeaderString)" Importance="high" />
+    <Message Text="| $(SectionSymbol) LocalNugetCacheDirectory: $(LocalNugetCacheDirectory)" Importance="high" />
+    <Message Text="| $(SectionSymbol) LocalNugetCachePath: $(LocalNugetCachePath)" Importance="high" />
+    <Message Text="| $(SectionSymbol) LocalNugetRepoDirectory: $(LocalNugetRepoDirectory)" Importance="high" />
+    <Message Text="| $(SectionSymbol) LocalNugetRepoPath: $(LocalNugetRepoPath)" Importance="high" />
+    <Message Text="| $(SectionSymbol) PackageId: $(PackageId)" Importance="high" />
+    <Message Text="| $(SectionSymbol) PackageVersion: $(PackageVersion)" Importance="high" />
+
+    <Error Condition="'$(LocalNugetRepoPath)' == '' Or !Exists('$(LocalNugetRepoPath)')"
+           Text="NugetPackageName is not set or does not exists" />
+    <Warning Condition="'$(LocalNugetCachePath)' == '' 
+        Or !Exists('$(LocalNugetCachePath)')" 
+           Text="LocalNugetCache could not be set. Please Make sure that PackageId and PackageVersion are set." />
+    <!--<Delete Files="$(LocalNugetCache)\**\*.*" DeletedFiles="DList" />-->
+    <!--<Warning Condition="$(DList.Length) &lt; 0" Text="No Files in LocalNugetCache were removed."/>-->
+    <Exec
+      Command="dotnet nuget delete --source $(LocalNugetCacheDirectory) $(PackageId) $(PackageVersion) --non-interactive $(CliParameters)"
+      ContinueOnError="WarnAndContinue" 
+      />
+    <Exec
+      Command="dotnet nuget push --source $(LocalNugetCacheDirectory) $(LocalNugetRepoPath) $(CliParameters)" />
+  </Target>
+  
+  <Target Name="Build" Condition="'$(IsPackageOnlyProject)' == 'true'" />
+  
   <Target Name="PrintPlatform">
     <PropertyGroup>
       <SectionSymbol>@</SectionSymbol>
@@ -286,7 +409,7 @@
     <!--<MSBuild Projects="$(MSBuildProjectDirectory)\$(MSBuildProjectName)$(MSBuildProjectExtension)" Targets="Restore" BuildInParallel="true" />-->
     <!--<MSBuild Projects="$(SolutionDir)\$(SolutionName).sln" Targets="GenerateRestoreGraphFile" Properties="" />-->
     <!--<MSBuild Projects="$(SolutionDir)\NuGet.Restore.targets" Targets="RestorePackages2" />-->
-    <Exec ContinueOnError="true" ConsoleToMSBuild="true" Command="$(NuspecDirectory)\nuget.exe restore $(SolutionDir)\$(SolutionName).sln" />
+    <!--<Exec ContinueOnError="true" ConsoleToMSBuild="true" Command="$(NuspecDirectory)\nuget.exe restore $(SolutionDir)\$(SolutionName).sln" />-->
   </Target>
 
   <Target Name="PrintPlatformProps">

@@ -11,17 +11,16 @@ using System.Reflection;
 using Microsoft.Build.Construction;
 using Microsoft.Build.Execution;
 using Prometheus.MSBuild.Tasks.Platform;
+using Prometheus.MSBuild.Tasks.Settings;
 
 namespace Prometheus.MSBuild.Tasks
 {
-    public class DetectPlatformTask : BuildUtil.Task
+    public class DetectPlatformTask : PrometheusTask<PrometheusTaskSettings>
     {
-        protected PrometheusTaskOptions m_options = new PrometheusTaskOptions();
-
         [Required]
         public string TargetPlatform { get; set; }
 
-        [Output] 
+        [Output]
         public bool RuntimeDetected { get; set; }
 
         [Output]
@@ -33,22 +32,22 @@ namespace Prometheus.MSBuild.Tasks
         [Output]
         public string PlatformId { get; set; }
 
-        [Output] 
+        [Output]
         public string PlatformVersion { get; set; }
 
         [Output]
         public bool IsCoreRuntime { get; set; }
 
         [Output]
-        public string RuntimeVersion    { get; set; }
+        public string RuntimeVersion { get; set; }
 
         [Output]
         public string RuntimeTargetFramework { get; set; }
 
         public string SectionSymbol
         {
-            get { return m_options.SectionSymbol; }
-            set { m_options.SectionSymbol = value; }
+            get { return m_settings.SectionSymbol; }
+            set { m_settings.SectionSymbol = value; }
         }
 
         /// <inheritdoc />
@@ -122,14 +121,14 @@ namespace Prometheus.MSBuild.Tasks
                 }
             }
 
-            Log.LogMessage(MessageImportance.High, $"| {m_options.SectionSymbol} Platform Detected: {PlatformDetected}");
-            Log.LogMessage(MessageImportance.High, $"| {m_options.SectionSymbol} Runtime Detected: {RuntimeDetected}");
-            Log.LogMessage(MessageImportance.High, $"| {m_options.SectionSymbol} RuntimeId: {RuntimeId}");
-            Log.LogMessage(MessageImportance.High, $"| {m_options.SectionSymbol} RuntimeVersion: {RuntimeVersion}");
-            Log.LogMessage(MessageImportance.High, $"| {m_options.SectionSymbol} RuntimeTargetFramework: {RuntimeTargetFramework}");
-            Log.LogMessage(MessageImportance.High, $"| {m_options.SectionSymbol} IsCoreRuntime: {IsCoreRuntime}");
-            Log.LogMessage(MessageImportance.High, $"| {m_options.SectionSymbol} PlatformId: {PlatformId}");
-            Log.LogMessage(MessageImportance.High, $"| {m_options.SectionSymbol} PlatformVersion: {PlatformVersion}");
+            Log.LogMessage(MessageImportance.High, $"| {m_settings.SectionSymbol} Platform Detected: {PlatformDetected}");
+            Log.LogMessage(MessageImportance.High, $"| {m_settings.SectionSymbol} Runtime Detected: {RuntimeDetected}");
+            Log.LogMessage(MessageImportance.High, $"| {m_settings.SectionSymbol} RuntimeId: {RuntimeId}");
+            Log.LogMessage(MessageImportance.High, $"| {m_settings.SectionSymbol} RuntimeVersion: {RuntimeVersion}");
+            Log.LogMessage(MessageImportance.High, $"| {m_settings.SectionSymbol} RuntimeTargetFramework: {RuntimeTargetFramework}");
+            Log.LogMessage(MessageImportance.High, $"| {m_settings.SectionSymbol} IsCoreRuntime: {IsCoreRuntime}");
+            Log.LogMessage(MessageImportance.High, $"| {m_settings.SectionSymbol} PlatformId: {PlatformId}");
+            Log.LogMessage(MessageImportance.High, $"| {m_settings.SectionSymbol} PlatformVersion: {PlatformVersion}");
 
             return true;
         }

@@ -10,6 +10,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)AttachDebuggerTask.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)AutoVersioningTask.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Caching\ImportCacheItem.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Caching\ImportCacheResult.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Converters\ImportCacheItemJsonConverter.cs" />
@@ -19,14 +20,19 @@
     <Compile Include="$(MSBuildThisFileDirectory)Extension\MSBuildHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extension\StreamExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extension\StringExtensions.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)ImportFileOptions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Settings\ImportFileSettings.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ImportFileTask.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)LogPropertyTask.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MSBuildHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Platform\AndroidSdkVersion.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)ProjectInstanceExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Extension\ProjectInstanceExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)SetupPrometheusTask.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)PrometheusTask.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)PrometheusTaskOptions.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)PropertySearchOptions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Settings\PrometheusTaskSettings.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Settings\PropertySearchSettings.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ReplaceFileTokenTask.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="$(MSBuildThisFileDirectory)Settings\" />
   </ItemGroup>
 </Project>

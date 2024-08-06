@@ -1,0 +1,11 @@
+<Project>
+  <PropertyGroup>
+    <PrometheusDirectory
+      Condition="'$(PrometheusDirectory)' == ''">$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), Prometheus.Build.props))</PrometheusDirectory>
+    <PrometheusProps>$(PrometheusDirectory)\Prometheus.Build.props</PrometheusProps>
+    <PrometheusTargets>$(PrometheusDirectory)\Prometheus.Build.targets</PrometheusTargets>
+  </PropertyGroup>
+
+  <Import Project="$(PrometheusProps)" Condition="Exists('$(PrometheusProps)')"/>
+          <!--Condition="'$(PrometheusEnabled)' == 'true' And '$(PrometheusAutoLoad)' == 'true' And Exists('$(PrometheusProps)')" />-->
+</Project>

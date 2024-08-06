@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Text.Json.Serialization;
+
 using Microsoft.Build.Construction;
+
 using Prometheus.MSBuild.Tasks.Converters;
 
 namespace Prometheus.MSBuild.Tasks.Caching

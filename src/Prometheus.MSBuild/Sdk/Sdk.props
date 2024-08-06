@@ -1,12 +1,23 @@
 <Project>
-  <!--<Import Project="Sdk.props" Sdk="Microsoft.NET.Sdk" />-->
-  <ItemGroup>
-    <MSBuildProjectParentDirectory Include="$(MSBuildThisFileDirectory)\..\" />
-  </ItemGroup>
   <PropertyGroup>
-    <PrometheusDirectory>$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), Prometheus.Build.props))</PrometheusDirectory>
-    <PrometheusProps>$(PrometheusDirectory)\Prometheus.Build.props</PrometheusProps>
-    <PrometheusTargets>$(PrometheusDirectory)\Prometheus.Build.targets</PrometheusTargets>
+    <PrometheusEnabled Condition="'$(PrometheusEnabled)' == ''" >True</PrometheusEnabled>
+    <PrometheusAutoLoad Condition="'$(PrometheusAutoLoad)' == ''">True</PrometheusAutoLoad>
+  </PropertyGroup>
+  
+  <PropertyGroup Condition="'$(PrometheusEnabled)' == 'true'">
+    <PrometheusLoadType Condition="'$(PrometheusLoadType)' == ''">Full</PrometheusLoadType>
+    <!--<PrometheusTasksEnabled Condition="'$(PrometheusTasksEnabled)' == ''">True</PrometheusTasksEnabled>-->
+  </PropertyGroup>
+  
+  <!--<Import Project="Sdk.props" Sdk="Microsoft.NET.Sdk" />-->
+  <!--<ItemGroup>
+    <MSBuildProjectParentDirectory Include="$(MSBuildThisFileDirectory)\..\" />
+  </ItemGroup>--> 
+  <PropertyGroup>
+    <PrometheusDirectory Condition="'$(PrometheusDirectory)' == '' 
+                         And '$(IsTestProject)' != 'true'">$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), Prometheus.Build.props))</PrometheusDirectory>
+    <PrometheusProps Condition="'$(PrometheusProps)' == ''">$(PrometheusDirectory)\Prometheus.Build.props</PrometheusProps>
+    <PrometheusTargets Condition="'$(PrometheusTargets)' == ''">$(PrometheusDirectory)\Prometheus.Build.targets</PrometheusTargets>
   </PropertyGroup>
   <!--<PropertyGroup Condition="'$(TargetPlatform)' != ''">
     <Array>$(TargetPlatform.Split(`-`))</Array>
@@ -21,5 +32,13 @@
   <!--<ImportGroup Condition="'$(PrometheusLoadType)' != 'lite'">
     <Import Project="Sdk.props" Sdk="Microsoft.NET.Sdk" />
   </ImportGroup>-->
-  <Import Project="$(PrometheusProps)"  />
+  
+  <Import Project="$(PrometheusProps)" />
+  <ImportGroup>
+    <Import Project="Sdk.props" Sdk="Microsoft.NET.Sdk" Condition="'$(IsPackageOnlyProject)' != 'true'" />
+    <Import Project="Sdk.props" Sdk="Microsoft.Build.NoTargets" Version="3.7.56" Condition="'$(IsPackageOnlyProject)' == 'true'" />
+    <!--<Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets"
+          Condition="'$(PlatformId)' == 'android' And '$(RuntimeVersion)' &lt;= '5.0'" />-->
+    <!--<Import Project="Sdk.targets" Sdk="Microsoft.NET.Sdk" />-->
+  </ImportGroup>
 </Project>

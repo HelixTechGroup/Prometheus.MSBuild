@@ -1,0 +1,69 @@
+﻿<Project InitialTargets="PrintNuget2" Condition="'$(IsPackable)' == 'true'">
+  <!--<Import Project="$(PrometheusGlobalDirectory)\NuGet.Build.props" Condition="'$(NuGetPropsLoaded)' != 'true'" />-->
+
+  <PropertyGroup>
+    <PackageId Condition="'$(PackageId)' == ''
+        And '$(ProductName)' != ''">$(ProductName)</PackageId>
+    <PackageVersion Condition="'$(PackageVersion)' == ''
+        And '$(ProductVersion)' != ''">$(ProductVersion)</PackageVersion>
+    <PackageLicenseExpression Condition="'$(PackageLicenseExpression)' == ''">GPL-3.0-or-later</PackageLicenseExpression>
+    <PublishRepositoryUrl Condition="'$(PublishRepositoryUrl)' == ''">true</PublishRepositoryUrl>
+    <EmbedUntrackedSources Condition="'$(EmbedUntrackedSources)' == ''">true</EmbedUntrackedSources>
+    <IncludeSymbols Condition="'$(IncludeSymbols)' == ''">true</IncludeSymbols>
+    <SymbolPackageFormat Condition="'$(SymbolPackageFormat)' == ''">snupkg</SymbolPackageFormat>
+    <Deterministic Condition="'$(Deterministic)' == ''">true</Deterministic>
+    <NuspecDirectory Condition=" '$(NuspecDirectory)' == '' ">$(SolutionDir)nuspecs</NuspecDirectory>
+    <PackageOutputPath Condition=" '$(PackageOutputPath)' == '' ">$(BuildDirectory)\packages\$(Configuration)\$(AssemblyName)</PackageOutputPath>
+    <!--<PackageTags></PackageTags>-->
+    <PackageFormat Condition="'$(PackageFormat)' == ''">nupkg</PackageFormat>
+    <PackageReadmeFile>readme.md</PackageReadmeFile>
+    <NuGetTargetsLoaded>true</NuGetTargetsLoaded>
+    <EnablePackageValidation Condition="'$(EnablePackageValidation)' == ''
+        And '$(Configuration)' == 'debug'">true</EnablePackageValidation>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(PackageId)' != ''
+      And '$(PackageVersion)' != ''">
+    <NugetPackageName>$(PackageId).$(PackageVersion).$(PackageFormat)</NugetPackageName>
+    <NugetSymbolPackageName Condition="'$(SymbolPackageFormat)' != ''">$(PackageId).$(PackageVersion).$(SymbolPackageFormat)</NugetSymbolPackageName>
+    <LocalNugetCacheDirectory>$(USERPROFILE)\.nuget\packages</LocalNugetCacheDirectory>
+    <LocalNugetCachePath>$(LocalNugetCacheDirectory)\$(PackageId.ToLower())\$(PackageVersion)</LocalNugetCachePath>
+    <LocalNugetRepoPath>$(LocalNugetRepoDirectory)\$(NugetPackageName)</LocalNugetRepoPath>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="$(SolutionDir)\$(PackageReadmeFile)" 
+          Pack="true" 
+          PackagePath="\" 
+          Condition="Exists('$(SolutionDir)\$(PackageReadmeFile)')"/>
+  </ItemGroup>
+  
+  <Import Project="$(PrometheusGlobalDirectory)\GitHub.Build.targets" Condition="'$(UseGitHub)' == 'true'" />
+  
+  <Target Name="PrintNuget2">
+    <PropertyGroup>
+      <SectionSymbol>*^</SectionSymbol>
+    </PropertyGroup>
+
+    <Message Text="| $(SectionString)" Importance="high" />
+    <Message Text="| []==~ $(MSBuildThisFile) ~==[]" Importance="high" />
+    <Message Text="| $(HeaderString)" Importance="high" />
+    <LogPropertyTask ProjectFiles="$(MSBuildThisFileFullPath)" SectionSymbol="$(SectionSymbol)"
+                     Condition="'$(PrometheusTasksEnabled)' == 'true'" />
+    <Message Text="| $(SectionSymbol) Title: $(Title)" Importance="high" />
+    <Message Text="| $(SectionSymbol) IsPackable: $(IsPackable)" Importance="high" />
+    <Message Text="| $(SectionSymbol) ForcePack: $(ForcePack)" Importance="high" />
+    <Message Text="| $(SectionSymbol) PackageId: $(PackageId)" Importance="high" />
+    <Message Text="| $(SectionSymbol) PackageVersion: $(PackageVersion)" Importance="high" />
+    <Message Text="| $(SectionSymbol) NuGetPackageName: $(NugetPackageName)" Importance="high" />
+    <Message Text="| $(SectionSymbol) NuGetSymbolPackageName: $(NugetSymbolPackageName)" Importance="high" />
+    <Message Text="| $(SectionSymbol) PackageLicenseExpression: $(PackageLicenseExpression)" Importance="high" />
+    <Message Text="| $(SectionSymbol) PublishRepositoryUrl: $(PublishRepositoryUrl)" Importance="high" />
+    <Message Text="| $(SectionSymbol) EmbedUntrackedSources: $(EmbedUntrackedSources)" Importance="high" />
+    <Message Text="| $(SectionSymbol) UseGitHub: $(UseGitHub)" Importance="high" />
+    <Message Text="| $(SectionSymbol) PackageTags: $(PackageTags)" Importance="high" />
+    <Message Text="| $(SectionSymbol) PackageOutputPath: $(PackageOutputPath)" Importance="high" />
+    <!--<Message Text="| $(SectionSymbol) Content: @(Content)" Importance="high" />-->
+    <Message Text="| $(SectionSymbol) ---------------------------------------" Importance="high" />
+  </Target>
+</Project>

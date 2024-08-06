@@ -1,0 +1,86 @@
+<Project InitialTargets="PrintUsings">
+  <PropertyGroup>
+    <!--<PrometheusLibDirectory Condition="'$(PrometheusLibDirectory)' == ''
+                            And '$(IsTestProject)' != 'true'">$(PrometheusDirectory)\lib</PrometheusLibDirectory>
+    <PrometheusLibFramework Condition="'$(PrometheusLibFramework)' == ''">netstandard2.0</PrometheusLibFramework>-->
+    <UsingsLoaded>True</UsingsLoaded>
+  </PropertyGroup>
+
+  <!--<ItemGroup>
+    --><!--<PackageReference Include="Prometheus.MSBuild.Tasks" Version="0.2.2-beta.27">
+      <PrivateAssets>all</PrivateAssets>   
+    </PackageReference>--><!--
+    <PackageReference Include="Prometheus.MSBuild.Tasks" Version="0.2.2-beta.27" PrivateAssets="all" />
+  </ItemGroup>-->
+
+  <ItemGroup Condition="'$(PrometheusSDKTaskBuilder)' != 'true' 
+      And '$(IsPackageOnlyProject)' != 'true'">
+    <PackageReference Include="Prometheus.MSBuild.Tasks" 
+                      Version="0.2.2-beta.27" 
+                      PrivateAssets="all" 
+                      IncludeAssets="runtime; build; native; contentfiles; analyzers; buildtransitive"/>
+    <!--<ProjectReference Include="$(PackageDirectory)\Prometheus.MSBuild.Tasks\Prometheus.MSBuild.Tasks.csproj" 
+                      IncludeAssets="runtime; build; native; contentfiles; analyzers"
+                      Version="0.2.2-beta.15" Condition="'$(PrometheusSDKTaskTester)' == 'true'" />-->
+    <!--Condition="'$(PrometheusSDKTaskTester)' == 'true'"-->
+    <!--IncludeAssets="runtime; build; native; contentfiles; analyzers"-->
+    <!--<PackageReference Include="Prometheus.MSBuild.Tasks" Version="0.2.2-beta.23" IncludeAssets="all" PrivateAssets="all"/>-->
+    <!--<PackageReference Include="Prometheus.MSBuild.Tasks" Version="0.2.2-beta.27">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReaFFFfefrence>-->
+    <!--<PackageReference Include="Prometheus.MSBuild.Tasks" Version="0.2.2-beta.27" />-->
+  </ItemGroup>
+  <!--<Import Project="$(PrometheusTaskBuildTargets)" Condition="Exists('$(PrometheusTaskBuildTargets)')" />-->
+  <!--<Import Project="$(PrometheusTaskBuildTargets)" Condition="'$(PrometheusTasksEnabled)' == 'true'" />-->
+      <!--And Exists('$(PrometheusTaskBuildTargets)')" />-->
+  <!--<Import Project="$(LocalNugetRepoDirectory)" />-->
+  <!--<Import Project="$(NuGetPackageRoot)\prometheus.msbuild.tasks\0.2.2-beta.23\build\Prometheus.MSBuild.Tasks.props" />
+  <Import Project="$(NuGetPackageRoot)\prometheus.msbuild.tasks\0.2.2-beta.23\build\Prometheus.MSBuild.Tasks.targets" />-->
+  <!--<Import Project="$(LocalNugetRepoDirectory)" 
+          Condition="'$(PrometheusTasksEnabled)' == 'true' And Exists('$(LocalNugetRepoDirectory)')"/>-->
+  
+  <!--<PropertyGroup>
+    <PrometheusLibFramework Condition="'$(TargetFramework)' == ''">$(TargetFramework)</PrometheusLibFramework>
+  </PropertyGroup>
+  
+  <PropertyGroup>
+    <PrometheusTaskAssembly>$(PrometheusLibDirectory)\$(PrometheusLibFramework)\Prometheus.MSBuild.Tasks.dll</PrometheusTaskAssembly>
+  </PropertyGroup>
+
+  <UsingTask TaskName="Prometheus.MSBuild.Tasks.AttachDebuggerTask"
+             AssemblyFile="$(PrometheusTaskAssembly)"
+             Condition="'$(PrometheusTasksEnabled)' == 'true' And '$(Configuration)' == 'debug'" />
+
+  <UsingTask TaskName="Prometheus.MSBuild.Tasks.LogPropertyTask"
+             AssemblyFile="$(PrometheusTaskAssembly)"
+             Condition="'$(PrometheusTasksEnabled)' == 'true'" />
+
+  <UsingTask TaskName="Prometheus.MSBuild.Tasks.DetectPlatformTask"
+             AssemblyFile="$(PrometheusTaskAssembly)"
+             Condition="'$(PrometheusTasksEnabled)' == 'true'" />
+
+  <UsingTask TaskName="Prometheus.MSBuild.Tasks.CreateLogFormattingTask"
+             AssemblyFile="$(PrometheusTaskAssembly)"
+             Condition="'$(PrometheusTasksEnabled)' == 'true'" />
+
+  <UsingTask TaskName="Prometheus.MSBuild.Tasks.ImportFileTask"
+             AssemblyFile="$(PrometheusTaskAssembly)"
+             Condition="'$(PrometheusTasksEnabled)' == 'true'" />-->
+
+  <Target Name="PrintUsings">
+    <PropertyGroup>
+      <SectionSymbol>%</SectionSymbol>
+    </PropertyGroup>
+
+    <Message Text="| $(SectionString)" Importance="high" />
+    <Message Text="| []==~ $(MSBuildThisFile) ~==[]" Importance="high" />
+    <Message Text="| $(HeaderString)" Importance="high" />
+    
+    <Message Text="| $(SectionSymbol) MSBuildRuntimeType: $(MSBuildRuntimeType)" Importance="high" />
+    <Message Text="| $(SectionSymbol) PrometheusLibDirectory: $(PrometheusLibDirectory)" Importance="high" />
+    <Message Text="| $(SectionSymbol) PrometheusLibFramework: $(PrometheusLibFramework)" Importance="high" />
+    <Message Text="| $(SectionSymbol) PrometheusUsingsLoaded: $(PrometheusUsingsLoaded)" Importance="high" />
+    <Message Text="| $(SectionSymbol) PrometheusTaskAssembly: $(PrometheusTaskAssembly)" Importance="high" />
+  </Target>
+</Project>

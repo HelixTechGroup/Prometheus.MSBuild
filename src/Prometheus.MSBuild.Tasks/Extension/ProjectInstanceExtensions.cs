@@ -6,11 +6,12 @@ using System.Reflection;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+
 using Microsoft.Build.Evaluation;
 using Microsoft.Build.Execution;
 using Microsoft.Build.Framework;
 
-namespace Prometheus.MSBuild.Tasks
+namespace Prometheus.MSBuild.Tasks.Extension
 {
     public static class ProjectInstanceExtensions
     {

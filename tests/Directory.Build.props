@@ -1,15 +1,18 @@
 <Project>
   <PropertyGroup>
-    <RootDirectory>$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), README.md))</RootDirectory>
-    <PrometheusDirectory>$(RootDirectory)\src\Prometheus.MSBuild</PrometheusDirectory>
-    <!--<PrometheusLibDirectory>$(RootDirectory)\build\Debug\Prometheus.MSBuild.Tasks</PrometheusLibDirectory>-->
-    <!--<PrometheusLibDirectory>$(MSBuildProjectDirectory)\lib\Debug\Prometheus.MSBuild.Tasks\net48</PrometheusLibDirectory>-->
-    <!--<PrometheusLibDirectory>$(RootDirectory)\tests\lib\Debug\Prometheus.MSBuild.Tasks</PrometheusLibDirectory>-->
+    <DirectoryBuildFileAbove>[MSBuild]::GetPathOfFileAbove('$(MSBuildThisFile)', '$(MSBuildThisFileDirectory)../')</DirectoryBuildFileAbove>
+  </PropertyGroup>
+  <Import Project="$(DirectoryBuildFileAbove)" Condition="Exists('$(DirectoryBuildFileAbove)')" />
+  <PropertyGroup>
     <IsTestProject>True</IsTestProject>
-    <!--<IsLibraryProject>True</IsLibraryProject>-->
     <PrometheusLoadType>full</PrometheusLoadType>
     <PrometheusPlatformEnabled>True</PrometheusPlatformEnabled>
-    <PrometheusTasksEnabled>True</PrometheusTasksEnabled>
+    <!--<PrometheusTasksEnabled>True</PrometheusTasksEnabled>-->
     <PrometheusEnabled>True</PrometheusEnabled>
+    <IsPackable>False</IsPackable>
+  </PropertyGroup>
+  <PropertyGroup>
+    <PrometheusDirectory>$(SolutionDir)src\Prometheus.MSBuild</PrometheusDirectory>
+    <!--<PrometheusLibDirectory>$(SolutionDir)build\$(Configuration)\Prometheus.MSBuild.Tasks</PrometheusLibDirectory>-->
   </PropertyGroup>
 </Project>

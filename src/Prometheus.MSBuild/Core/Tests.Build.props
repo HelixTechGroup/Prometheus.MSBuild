@@ -1,8 +1,11 @@
 <Project InitialTargets="_PrintTestsProps">
   <PropertyGroup>
-    <IsPackable>False</IsPackable>
     <TestsDirectory Condition="'$(TestsDirectory)' == ''">$(SolutionDir)tests</TestsDirectory>
-    <PrometheusLibDirectory>$(BuildDirectory)\$(Configuration)\Prometheus.MSBuild.Tasks</PrometheusLibDirectory>
+  </PropertyGroup> 
+  <PropertyGroup Condition="'$(IsTestProject)' == 'true'">
+    <IsPackable>False</IsPackable>
+    <!--<TestsDirectory Condition="'$(TestsDirectory)' == ''">$(SolutionDir)tests</TestsDirectory>-->
+    <!--<PrometheusLibDirectory>$(BuildDirectory)\$(Configuration)\Prometheus.MSBuild.Tasks</PrometheusLibDirectory>-->
   </PropertyGroup>
   
   <Target Name="_PrintTestsProps">
@@ -16,5 +19,7 @@
 
     <Message Text="| $(SectionSymbol) IsTestProject: $(IsTestProject)" Importance="high" />
     <Message Text="| $(SectionSymbol) TestsDirectory: $(TestsDirectory)" Importance="high" />
+    <Message Text="| $(SectionSymbol) HasTests: $(HasTests)" Importance="high" />
+    <Message Text="| $(SectionSymbol) UseMSTest: $(UseMSTest)" Importance="high" />
   </Target>
 </Project>
