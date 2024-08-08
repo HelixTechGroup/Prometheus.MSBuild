@@ -2,7 +2,7 @@
   <Import Project="..\Sdk.Build.props" />
   <Import Project="..\..\src\Prometheus.MSBuild\Sdk\Sdk.props" />
   <!--<Sdk Name="Microsoft.Build.NoTargets" Version="3.7.56" />-->
-  <!--<Import Project="$(PrometheusGlobalProps)" />-->
+  <!--<Import Project="$(PrometheusCoreProps)" />-->
   <!--<Import Project="..\..\src\Prometheus.MSBuild\build\Prometheus.MSBuild.props" />-->
   <PropertyGroup>
     <ProductName>Prometheus.MSBuild.Sdk</ProductName>
@@ -17,7 +17,7 @@
     <Content Include="..\..\src\Prometheus.MSBuild\*.props" Pack="True" PackagePath="\" />
     <Content Include="..\..\src\Prometheus.MSBuild\*.targets" Pack="True" PackagePath="\" />
     <Content Include="..\..\src\Prometheus.MSBuild\Platform\**" Pack="True" PackagePath="Platform\" Link="Platform\%(RecursiveDir)%(Filename)%(Extension)" />
-    <Content Include="..\..\src\Prometheus.MSBuild\Globals\**" Pack="True" PackagePath="Globals\" Link="Globals\%(RecursiveDir)%(Filename)%(Extension)" />
+    <Content Include="..\..\src\Prometheus.MSBuild\Core\**" Pack="True" PackagePath="Core\" Link="Core\%(RecursiveDir)%(Filename)%(Extension)" />
     <Content Include="..\..\src\Prometheus.MSBuild\Common\**" Pack="True" PackagePath="Common\" Link="Common\%(RecursiveDir)%(Filename)%(Extension)" />
     <Content Include="..\..\src\Prometheus.MSBuild\Sdk\**" Pack="True" PackagePath="Sdk\" Link="Sdk\%(RecursiveDir)%(Filename)%(Extension)" />
     <!--<Content Include="..\..\src\Prometheus.MSBuild\lib\**" PackagePath="lib\" Link="lib\%(RecursiveDir)%(Filename)%(Extension)"/>-->

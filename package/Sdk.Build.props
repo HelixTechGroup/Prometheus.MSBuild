@@ -3,7 +3,7 @@
     <SectionSymbol>@</SectionSymbol>
     <CompanyName>HelixTechGroup,llc</CompanyName>
     <AuthorName>Bryan M. Longacre</AuthorName>
-    <ProductVersion>0.2.2-beta.31</ProductVersion>
+    <ProductVersion>0.3.0-beta.1</ProductVersion>
     <CopyrightStartYear>2017</CopyrightStartYear>
     <Targetframework>net8.0</Targetframework>
     <!--<TargetFrameworks>

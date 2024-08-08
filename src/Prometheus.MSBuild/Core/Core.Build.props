@@ -1,0 +1,6 @@
+<Project InitialTargets="TemplateName">
+
+  <Target Name="TemplateName">
+
+  </Target>
+</Project>

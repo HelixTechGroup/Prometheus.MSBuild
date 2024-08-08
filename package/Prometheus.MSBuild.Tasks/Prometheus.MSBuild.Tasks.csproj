@@ -6,7 +6,7 @@
   <!--<Import Project=".\build\Prometheus.MSBuild.Tasks.props" />-->
   <Import Project="..\..\src\Prometheus.MSBuild\Sdk\Sdk.props" />
   <!--<Import Project="build\Prometheus.MSBuild.Tasks.props" />-->
-  <!--<Import Project="$(PrometheusGlobalProps)" />-->
+  <!--<Import Project="$(PrometheusCoreProps)" />-->
   <PropertyGroup>
     <ProductName>Prometheus.MSBuild.Tasks</ProductName>
     <ProductVersion>0.2.2-beta.27</ProductVersion>

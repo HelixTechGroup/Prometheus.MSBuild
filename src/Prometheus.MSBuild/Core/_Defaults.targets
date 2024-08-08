@@ -1,6 +1,6 @@
 <Project InitialTargets="_PrintPrometheusGlobals">
-  <!--<Import Project="$(PrometheusGlobalProps)" Condition="Exists('$(PrometheusGlobalProps)')
-      And '$(PrometheusGlobalPropsLoaded)' != 'true'" />-->
+  <!--<Import Project="$(PrometheusCoreProps)" Condition="Exists('$(PrometheusCoreProps)')
+      And '$(PrometheusCorePropsLoaded)' != 'true'" />-->
   <Import Project="$(SolutionProps)" Condition="Exists($(SolutionProps))"/>
   <Import Project="$(UserProps)" Condition="Exists($(UserProps))" />
   <!--<Import Project="($(PrometheusTestsTargets)" Condition="('$(IsTestProject)' == 'true' 
