@@ -16,15 +16,15 @@
     <PrometheusCommonProps>$(PrometheusCommonDirectory)\Common.Build.props</PrometheusCommonProps>
     <PrometheusImportertargets>$(PrometheusCommonDirectory)\Importer.Build.targets</PrometheusImportertargets>
     <PrometheusCoreDirectory>$(PrometheusDirectory)\Core</PrometheusCoreDirectory>
-    <PrometheusCoreProps>$(PrometheusCoreDirectory)\Core.Build.props</PrometheusCoreProps>
-    <PrometheusGlobalTargets>$(PrometheusCoreDirectory)\Core.Build.targets</PrometheusGlobalTargets>
+    <PrometheusGlobalProps>$(PrometheusCoreDirectory)\Globals.Build.props</PrometheusGlobalProps>
+    <PrometheusGlobalTargets>$(PrometheusCoreDirectory)\Globals.Build.targets</PrometheusGlobalTargets>
     <PrometheusReleaseTargets>$(PrometheusCoreDirectory)\Release.Build.targets</PrometheusReleaseTargets>
     <PrometheusDebugTargets>$(PrometheusCoreDirectory)\Debug.Build.targets</PrometheusDebugTargets>
     <!---->
-    <PrometheusTestsProps>$(PrometheusCoreDirectory)\_Testing.props</PrometheusTestsProps>
-    <PrometheusTestsTargets>$(PrometheusCoreDirectory)\_Testing.targets</PrometheusTestsTargets>
-    <PrometheusCheckTargets>$(PrometheusDirectory)\_Check.targets</PrometheusCheckTargets>
-    <PrometheusUsingsTargets>$(PrometheusDirectory)\_Usings.targets</PrometheusUsingsTargets>
+    <PrometheusTestsProps>$(PrometheusCoreDirectory)\Tests.Build.props</PrometheusTestsProps>
+    <PrometheusTestsTargets>$(PrometheusCoreDirectory)\Tests.Build.targets</PrometheusTestsTargets>
+    <PrometheusCheckTargets>$(PrometheusDirectory)\Check.Build.targets</PrometheusCheckTargets>
+    <PrometheusUsingsTargets>$(PrometheusDirectory)\Usings.Build.targets</PrometheusUsingsTargets>
   </PropertyGroup>
 
   <Choose>
@@ -70,14 +70,14 @@
   </PropertyGroup>-->
   <!--<PropertyGroup Condition="'$(PrometheusEnabled)' == 'true'">
     <BeforeTargetFrameworkInferenceTargets Condition="'$(IsTestProject)' == 'true'">$(BeforeTargetFrameworkInferenceTargets);$(PrometheusTestsProps)</BeforeTargetFrameworkInferenceTargets>
-    <BeforeTargetFrameworkInferenceTargets Condition="Exists('$(PrometheusCoreProps)')">$(BeforeTargetFrameworkInferenceTargets);$(PrometheusCoreProps)</BeforeTargetFrameworkInferenceTargets>
+    <BeforeTargetFrameworkInferenceTargets Condition="Exists('$(PrometheusGlobalProps)')">$(BeforeTargetFrameworkInferenceTargets);$(PrometheusGlobalProps)</BeforeTargetFrameworkInferenceTargets>
   </PropertyGroup>-->
   
   <ImportGroup Label="Core Imports" 
                Condition="'$(PrometheusEnabled)' == 'true'"> 
                <!--AND '$(TargetFramework)' == ''-->
     <!--<Import Project="$(PrometheusTestsProps)" Condition="'$(IsTestProject)' == 'true'" />-->   
-    <Import Project="$(PrometheusCoreProps)" Condition="Exists('$(PrometheusCoreProps)')"/>
+    <Import Project="$(PrometheusGlobalProps)" Condition="Exists('$(PrometheusGlobalProps)')"/>
     <!--<Import Project="$(PrometheusUsingsTargets)" Condition="Exists('$(PrometheusUsingsTargets)')" />-->
   </ImportGroup>
 

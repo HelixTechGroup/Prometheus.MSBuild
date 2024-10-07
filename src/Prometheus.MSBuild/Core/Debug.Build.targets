@@ -2,7 +2,6 @@
   <PropertyGroup Condition="'$(Configuration)' == 'debug'">
     <MergeBinary>false</MergeBinary>
     <IsPackable Condition="'$(ForcePack)' == 'true'">true</IsPackable>
-    <ProductVersion>$(ProductVersion).beta.$([System.DateTime]::Now.ToString('yyyymmdd.hh')</ProductVersion>
   </PropertyGroup>
 
   <Target Name="PrintPrometheusDebug">

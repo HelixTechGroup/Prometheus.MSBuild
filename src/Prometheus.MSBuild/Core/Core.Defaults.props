@@ -76,7 +76,7 @@
       And Exists($(PrometheusTestsProps))" />-->
 
   <PropertyGroup>
-    <PrometheusCorePropsLoaded>true</PrometheusCorePropsLoaded>
+    <PrometheusGlobalPropsLoaded>true</PrometheusGlobalPropsLoaded>
   </PropertyGroup>
   
   <Target Name="_PrintPrometheusGlobals">

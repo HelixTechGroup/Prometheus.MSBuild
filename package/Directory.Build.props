@@ -25,7 +25,7 @@
     <!--<PrometheusDirectory>$(RootDirectory)\src\Prometheus.MSBuild</PrometheusDirectory>-->
     <!--<PrometheusLibDirectory>$(RootDirectory)\build\Debug\Prometheus.MSBuild.Tasks</PrometheusLibDirectory>-->
     <!--<PrometheusCoreDirectory>$(PrometheusDirectory)\Globals</PrometheusCoreDirectory>
-    <PrometheusCoreProps>$(PrometheusCoreDirectory)\Globals.Build.props</PrometheusCoreProps>
+    <PrometheusGlobalProps>$(PrometheusCoreDirectory)\Globals.Build.props</PrometheusGlobalProps>
     <PrometheusGlobalTargets>$(PrometheusCoreDirectory)\Globals.Build.targets</PrometheusGlobalTargets>-->
     <PrometheusLoadType>Lite</PrometheusLoadType>
     <PrometheusPlatformEnabled>False</PrometheusPlatformEnabled>
