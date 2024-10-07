@@ -57,7 +57,7 @@
     <MergeBinary>false</MergeBinary>
     <IsPackable>true</IsPackable>
     <EnableNETAnalyzers>false</EnableNETAnalyzers>
-    <EnableShinFramework>false</EnableShinFramework>
+    <!--<EnableShinFramework>false</EnableShinFramework>-->
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(IsPackable)' == 'true' 

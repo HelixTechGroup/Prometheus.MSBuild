@@ -11,35 +11,39 @@
   <ItemGroup>
     <None Include="Build\Prometheus.MSBuild.props" />
     <None Include="Build\Prometheus.MSBuild.targets" />
-    <None Include="_Check.targets" />
-    <None Include="Common\Common.Build.props" />
-    <None Include="Common\Common.Build.targets" />
-    <None Include="Common\Importer.Build.targets" />
-    <None Include="Core\_Debug.targets" />
-    <None Include="Core\Packaging\Nuget\GitHub.Build.props" />
-    <None Include="Core\Packaging\Nuget\GitHub.Build.targets" />
-    <None Include="Core\_Defaults.props" />
-    <None Include="Core\_Defaults.targets" />
-    <None Include="Core\Packaging\Nuget\NuGet.Build.props" />
-    <None Include="Core\Packaging\Nuget\NuGet.Build.targets" />
-    <None Include="Core\Core.Build.props" />
-    <None Include="Core\Packaging\Packaging.Build.props" />
-    <None Include="Core\_Testing.targets" />
-    <None Include="Core\_Testing.props" />
+    <None Include="Core\Core.Platform.props" />
+    <None Include="Core\Core.Build.targets" />
+    <None Include="Core\Core.Platform.targets" />
+    <None Include="Core\Packaging\Nuget\Packaging.Build.props" />
     <None Include="Core\Platform\Android\Platform.Build.props" />
     <None Include="Core\Platform\Android\Platform.Build.targets" />
-    <None Include="Core\Platform\_Detect.props" />
-    <None Include="Core\Platform\_Detect.targets" />
     <None Include="Core\Platform\Linux\Platform.Build.props" />
     <None Include="Core\Platform\Linux\Platform.Build.targets" />
     <None Include="Core\Platform\None\Platform.Build.props" />
     <None Include="Core\Platform\None\Platform.Build.targets" />
     <None Include="Core\Platform\Platform.Build.props" />
     <None Include="Core\Platform\Platform.Build.targets" />
-    <None Include="Core\Platform\_Runtime.props" />
-    <None Include="Core\Platform\_Runtime.targets" />
     <None Include="Core\Platform\Windows\Platform.Build.props" />
     <None Include="Core\Platform\Windows\Platform.Build.targets" />
+    <None Include="Resolvers\Resolvers.Build.props" />
+    <None Include="Common\_Check.targets" />
+    <None Include="Common\Common.Build.props" />
+    <None Include="Common\Common.Build.targets" />
+    <None Include="Common\_Importer.targets" />
+    <None Include="Core\_Debug.targets" />
+    <None Include="Core\Packaging\Nuget\_GitHub.props" />
+    <None Include="Core\Packaging\Nuget\_GitHub.targets" />
+    <None Include="Core\_Defaults.props" />
+    <None Include="Core\_Defaults.targets" />
+    <None Include="Core\Packaging\Nuget\_NuGet.props" />
+    <None Include="Core\Packaging\Nuget\_NuGet.targets" />
+    <None Include="Core\Core.Build.props" />
+    <None Include="Core\_Testing.targets" />
+    <None Include="Core\_Testing.props" />
+    <None Include="Core\Platform\_Detect.props" />
+    <None Include="Core\Platform\_Detect.targets" />
+    <None Include="Core\Platform\_Runtime.props" />
+    <None Include="Core\Platform\_Runtime.targets" />
     <None Include="Prometheus.Build.props" />
     <None Include="Prometheus.Build.targets" />
     <None Include="Resolvers\_PackagingResolver.props" />
@@ -48,7 +52,11 @@
     <None Include="Resolvers\_PlatformResolver.props" />
     <None Include="Sdk\Sdk.props" />
     <None Include="Sdk\Sdk.targets" />
-    <None Include="_Usings.targets" />
+    <None Include="Common\_Usings.targets" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="BuildMultiTargeting\" />
+    <Folder Include="Core\Framework\" />
   </ItemGroup>
   <Import Project="Prometheus.MSBuild.1.projitems" Label="Shared" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\CodeSharing\Microsoft.CodeSharing.CSharp.targets" />

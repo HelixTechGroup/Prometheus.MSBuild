@@ -27,6 +27,14 @@
     </Content>-->
   </ItemGroup>
   <ItemGroup>
+    <Content Remove="..\..\src\Prometheus.MSBuild\Core\Packaging\Nuget\Packaging.Build.props" />
+    <Content Remove="..\..\src\Prometheus.MSBuild\Core\Packaging\Nuget\_GitHub.props" />
+    <Content Remove="..\..\src\Prometheus.MSBuild\Core\Packaging\Nuget\_GitHub.targets" />
+    <Content Remove="..\..\src\Prometheus.MSBuild\Core\Packaging\Nuget\_NuGet.props" />
+    <Content Remove="..\..\src\Prometheus.MSBuild\Core\Packaging\Nuget\_NuGet.targets" />
+    <Content Remove="..\..\src\Prometheus.MSBuild\Core\Packaging\Packaging.Build.props" />
+  </ItemGroup>
+  <ItemGroup>
     <PackageReference Update="Prometheus.MSBuild.Tasks">
       <PrivateAssets></PrivateAssets>
     </PackageReference>
@@ -36,5 +44,5 @@
   <!--<Target Name="test" AfterTargets="Build">
     <Message Importance="high" Text="| $(SectionSymbol) Prometheus Directory: $(PrometheusDirectory)" />
   </Target>-->
-  <!--<Import Project="$(PrometheusGlobalTargets)" Condition="Exists('$(PrometheusGlobalTargets)')" />-->
+  <!--<Import Project="$(PrometheusCoreTargets)" Condition="Exists('$(PrometheusCoreTargets)')" />-->
 </Project>

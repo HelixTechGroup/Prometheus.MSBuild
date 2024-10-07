@@ -1,0 +1,69 @@
+<Project>
+  <PropertyGroup>
+    <PrometheusPlatformDirectory Condition="'$(PrometheusPlatformDirectory)' == ''">$(MSBuildThisFileDirectory)</PrometheusPlatformDirectory>
+    <PrometheusPlatformEnabled Condition="'$(PrometheusPlatformEnabled)' == ''">True</PrometheusPlatformEnabled>
+    <PrometheusPlatformTasksEnabled Condition="'$(PrometheusTasksEnabled)' != 'true'">False</PrometheusPlatformTasksEnabled>
+    <PrometheusDetectionEnabled Condition="'$(PrometheusDetectionEnabled)' == ''">True</PrometheusDetectionEnabled>
+    <PrometheusRuntimeProps>$(PrometheusPlatformDirectory)\_Runtime.props</PrometheusRuntimeProps>
+    <PrometheusRuntimetargets>$(PrometheusPlatformDirectory)\_Runtime.Build.targets</PrometheusRuntimetargets>
+    <PrometheusDetectFrameworkProps>$(PrometheusPlatformDirectory)\_Detect.Build.props</PrometheusDetectFrameworkProps>
+    <PrometheusDetectFrameworkTargets>$(PrometheusPlatformDirectory)\_Detect.Build.targets</PrometheusDetectFrameworkTargets>
+  </PropertyGroup>
+  
+  <ItemGroup Condition="'$(PrometheusPlatformDirectory)' != '' And
+      Exists('$(PrometheusPlatformDirectory)')">
+    <PlatformFolders Include="$([System.IO.Directory]::GetDirectories($(PrometheusPlatformDirectory)))" />
+  </ItemGroup>
+
+  <PropertyGroup Label="Set the platform if the directory exists for PlatformId"
+                 Condition="Exists('$(PrometheusPlatformDirectory)') And
+                 '$(PlatformId)' != ''">
+    <PlatformPropsPath>$(PrometheusPlatformDirectory)\$(PlatformId)\Platform.Build.Props</PlatformPropsPath>
+    <PlatformTargetsPath>$(PrometheusPlatformDirectory)\$(PlatformId)\Platform.Build.Targets</PlatformTargetsPath>
+  </PropertyGroup>
+
+  <Import Project="$(PrometheusRuntimeProps)" 
+          Condition="Exists('$(PrometheusRuntimeProps)')" />
+  <Import Project="$(PrometheusDetectFrameworkProps)"
+          Condition="Exists('$(PrometheusDetectFrameworkProps)') And 
+          '$(PrometheusDetectionEnabled)' == 'true'" />
+  
+  <Target Name="_PrintPrometheusPlatform">
+    <PropertyGroup>
+      <SectionSymbol>@</SectionSymbol>
+    </PropertyGroup>
+
+    <Message Text="| $(SectionString)" Importance="high" />
+    <Message Text="| []==~ $(MSBuildThisFile) ~==[]" Importance="high" />
+    <Message Text="| $(HeaderString)" Importance="high" />
+    
+    <CallTarget Targets="ExtraPlatformProps" Condition="Exists(ExtraPlatformProps)" />
+
+    <Message Text="| $(SectionSymbol) IsValidPlatform: $(IsValidPlatform)" Importance="high" />
+    <Message Text="| $(SectionSymbol) RuntimeId: $(RuntimeId)" Importance="high" />
+    <Message Text="| $(SectionSymbol) RuntimeVersion: $(RuntimeVersion)" Importance="high" />
+    <Message Text="| $(SectionSymbol) PlatformId: $(PlatformId)" Importance="high" />
+    <Message Text="| $(SectionSymbol) PlatformType: $(PlatformType)" Importance="high" />
+    <Message Text="| $(SectionSymbol) PlatformVersion: $(PlatformVersion)" Importance="high" />
+    <Message Text="| $(SectionSymbol) PlatformPropsPath: $(PlatformPropsPath)" Importance="high" />
+    <Message Text="| $(SectionSymbol) RuntimeTargetFramework: $(RuntimeTargetFramework)" Importance="high" />
+    <Message Text="| $(SectionSymbol) TargetPlatform: $(TargetPlatform)" Importance="high" />
+    <Message Text="| $(SectionSymbol) TargetPlatforms: $(TargetPlatforms)" Importance="high" />
+    <Message Text="| $(SectionSymbol) TargetFramework: $(TargetFramework)" Importance="high" />
+    <Message Text="| $(SectionSymbol) TargetFrameworks: $(TargetFrameworks)" Importance="high" />
+    <Message Text="| $(SectionSymbol) TargetFrameworkVersion: $(TargetFrameworkVersion)" Importance="high" />
+    <Message Text="| $(SectionSymbol) TargetFrameworkIdentifier: $(TargetFrameworkIdentifier)" Importance="high" />
+    <Message Text="| $(SectionSymbol) TargetFrameworkProfile: $(TargetFrameworkProfile)" Importance="high" />
+    <Message Text="| $(SectionSymbol) SupportedOSPlatformVersion: $(SupportedOSPlatformVersion)" Importance="high" />
+    <Message Text="| $(SectionSymbol) IsCoreVersion: $(IsCoreRuntime)" Importance="high" />
+    <Message Text="| $(SectionSymbol) IsSdkVersion: $(IsSdkVersion)" Importance="high" />
+    <Message Text="| $(SectionSymbol) HasWindows: $(HasWindows)" Importance="high" />
+    <Message Text="| $(SectionSymbol) HasLinux: $(HasLinux)" Importance="high" />
+    <Message Text="| $(SectionSymbol) HasAndroid: $(HasAndroid)" Importance="high" />
+    <Message Text="| $(SectionSymbol) HasXamarin: $(HasXamarin)" Importance="high" />
+    <Message Text="| $(SectionSymbol) UseAndroidX: $(UseAndroidX)" Importance="high" />
+    <Message Text="| $(SectionSymbol) ---------------------------------------" Importance="high" />
+
+    <!--<LogPropertyTask ProjectFiles="$(MSBuildThisFileFullPath)"/>-->
+  </Target>
+</Project>

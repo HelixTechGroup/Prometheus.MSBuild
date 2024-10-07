@@ -1,6 +1,45 @@
-<Project InitialTargets="TemplateName">
+<Project>
+  <PropertyGroup>
+    <PrometheusCoreDirectory Condition="'$(PrometheusCoreDirectory)' == ''">$(MSBuildThisFileDirectory)</PrometheusCoreDirectory>
+    <_DefaultsProps>$(PrometheusCoreDirectory)\_Defaults.props</_DefaultsProps>
+    <_DefaultsTargets>$(PrometheusCoreDirectory)\_Defaults.targets</_DefaultsTargets>
+    <_ReleaseProps>$(PrometheusCoreDirectory)\_Release.props</_ReleaseProps>
+    <_ReleaseTargets>$(PrometheusCoreDirectory)\_Release.targets</_ReleaseTargets>
+    <_DebugProps>$(PrometheusCoreDirectory)\_Debug.props</_DebugProps>
+    <_DebugTargets>$(PrometheusCoreDirectory)\_Debug.targets</_DebugTargets>
+  </PropertyGroup>
+  
+  <Choose>
+    <When Condition="'$(PrometheusLoadType)' == 'full'">
+      <PropertyGroup>
+        <_TestingProps>$(PrometheusCoreDirectory)\_Testing.props</_TestingProps>
+        <_TestingTargets>$(PrometheusCoreDirectory)\_Testing.targets</_TestingTargets>
+        <_CorePlatformProps>$(PrometheusCoreDirectory)\Core.Platform.props</_CorePlatformProps>
+        <_CorePlatformTargets>$(PrometheusCoreDirectory)\Core.Platform.targets</_CorePlatformTargets>
+      </PropertyGroup>
+    </When>
+    <When Condition="'$(PrometheusLoadType)' == 'lite'">
+    </When>
+    <Otherwise>
+    </Otherwise>
+  </Choose>
 
-  <Target Name="TemplateName">
+  <ImportGroup>
+    <Import Project="$(PrometheusDetectFrameworkProps)"
+            Condition="Exists('$(PrometheusDetectFrameworkProps)') And 
+            '$(PrometheusDetectionEnabled)' == 'true'" />
+    <Import Project="$(PrometheusRuntimeProps)" Condition="Exists('$(PrometheusRuntimeProps)')" />
+    <Import Project="$(_CorePlatformProps)"
+            Condition="Exists('$(_CorePlatformProps)') 
+            And '$(PrometheusPlatformEnabled)' == 'true'" />
+  </ImportGroup>
 
-  </Target>
+  <ImportGroup Condition="'$(PrometheusEnabled)' == 'true' And 
+      '$(PrometheusLoadType)' == 'lite'">
+
+  </ImportGroup>
+  
+  <PropertyGroup>
+    <_CorePropsLoaded>True</_CorePropsLoaded>
+  </PropertyGroup>
 </Project>

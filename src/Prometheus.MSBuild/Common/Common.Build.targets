@@ -12,6 +12,9 @@
       $(ResolveReferencesDependsOn);
       _SetPrometheusFirstTimeLoading;
     </ResolveReferencesDependsOn>
+    <EnableShinFramework Condition="'$(EnableShinFramework)' == ''">true</EnableShinFramework>
+    <PrometheusImporterEnabled Condition="'$(PrometheusImporterEnabled)' == ''">True</PrometheusImporterEnabled>
+    <PrometheusImporterEnabled Condition="'$(PrometheusTasksEnabled)' != 'true'">False</PrometheusImporterEnabled>
   </PropertyGroup>
   <PropertyGroup>
     <SolutionImportProps Condition="'$(SolutionImportProps)' == ''">$(SolutionDir)\Imports.Build.props</SolutionImportProps>
@@ -277,7 +280,7 @@
     <!--<CallTarget Targets="$(PlatformId)" />
     <CallTarget Targets="ExtraPlatformProps" Condition="Exists(ExtraPlatformProps)" />-->
 
-    <!--<LogPropertyTask ProjectFiles="$(PrometheusPlatformProps);$(PrometheusPlatformTargets)" 
+    <!--<LogPropertyTask ProjectFiles="$(_CorePlatformProps);$(_CorePlatformTargets)" 
                      SectionSymbol="$(SectionSymbol)" 
                      Condition="'$(PrometheusTasksEnabled)' == 'true'" />-->
 
@@ -335,10 +338,10 @@
 
     <!--<CallTarget Targets="PrintRootDirectory;PrintGlobals;PrintPlatform"/>-->
     <Message Text="| $(SectionString)" Importance="high" />
-    <!--<LogPropertyTask ProjectFiles="$(MSBuildProjectFullPath);$(PrometheusCommonProps);$(PrometheusCoreProps);$(PrometheusGlobalTargets)" 
+    <!--<LogPropertyTask ProjectFiles="$(MSBuildProjectFullPath);$(PrometheusCommonProps);$(PrometheusCoreProps);$(PrometheusCoreTargets)" 
                      SectionSymbol="$(SectionSymbol)" 
                      Condition="'$(PrometheusTasksEnabled)' == 'true'" />-->
-    <!--<LogPropertyTask ProjectFiles="$(PrometheusPlatformProps);$(PrometheusPlatformTargets)" SectionSymbol="$(SectionSymbol)"
+    <!--<LogPropertyTask ProjectFiles="$(_CorePlatformProps);$(_CorePlatformTargets)" SectionSymbol="$(SectionSymbol)"
                      Condition="'$(PrometheusPlatformEnabled)' == 'true'" />-->
     <!--<LogPropertyTask ProjectFile="$(PrometheusCommonTargets)" SectionSymbol="$(SectionSymbol)" />-->
   </Target>
@@ -351,7 +354,7 @@
     <Message Text="| $(SectionString)" Importance="high" />
     <Message Text="$~----- Getting Global Variables for $(MSBuildProjectName) ------~$" Importance="high" />
     <Message Text="| $(HeaderString)" Importance="high" />
-    <LogPropertyTask ProjectFiles="$(PrometheusCoreProps);$(PrometheusGlobalTargets)" 
+    <LogPropertyTask ProjectFiles="$(PrometheusCoreProps);$(PrometheusCoreTargets)" 
                      SectionSymbol="$(SectionSymbol)" 
                      Condition="'$(PrometheusTasksEnabled)' == 'true'"/>
 
@@ -394,7 +397,7 @@
     <Message Text="| $(HeaderString)" Importance="high" />
     <Message Text="| $(SectionSymbol) CommonTargets: $(PrometheusCommonTargets)" Importance="high" />
     <Message Text="| $(SectionSymbol) CommonProps: $(PrometheusCommonProps)" Importance="high" />
-    <Message Text="| $(SectionSymbol) CommonPlatformProps: $(PrometheusPlatformProps)" Importance="high" />
+    <Message Text="| $(SectionSymbol) CommonPlatformProps: $(_CorePlatformProps)" Importance="high" />
   </Target>
 
   <Target Name="RunNuGetRestore">

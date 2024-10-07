@@ -1,0 +1,33 @@
+<Project>
+  <Import Project="Core.Build.props" 
+          Condition="'$(_CorePropsLoaded)' != 'true' And
+          Exists('$(PrometheusCoreProps)')" />
+  
+  <!--<PropertyGroup>
+    <PrometheusCoreDirectory Condition="'$(PrometheusCoreDirectory)' == ''">$(MSBuildThisFileDirectory)</PrometheusCoreDirectory>
+    <_DefaultsProps></_DefaultsProps>
+    <_DefaultsTargets></_DefaultsTargets>
+    <_ReleaseTargets>$(PrometheusCoreDirectory)\Release.Build.targets</_ReleaseTargets>
+    <_DebugProps>$(PrometheusCoreDirectory)\_Debug.targets</_DebugProps>
+    <_DebugTargets>$(PrometheusCoreDirectory)\_Debug.targets</_DebugTargets>
+  </PropertyGroup>
+  
+  <Choose>
+    <When Condition="'$(PrometheusLoadType)' == 'full'">
+      <PropertyGroup>
+        <_TestingProps>$(PrometheusCoreDirectory)\_Testing.props</_TestingProps>
+        <_TestingTargets>$(PrometheusCoreDirectory)\_Testing.targets</_TestingTargets>
+        <_CorePlatformProps>$(PrometheusCoreDirectory)\Core.Platform.props</_CorePlatformProps>
+        <_CorePlatformTargets>$(PrometheusCoreDirectory)\Core.Platform.targets</_CorePlatformTargets>
+      </PropertyGroup>
+    </When>
+    <When Condition="'$(PrometheusLoadType)' == 'lite'">
+
+    </When>
+    <Otherwise>
+
+    </Otherwise>
+  </Choose>-->
+
+  
+</Project>

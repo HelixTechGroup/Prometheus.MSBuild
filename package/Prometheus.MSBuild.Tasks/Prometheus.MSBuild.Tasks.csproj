@@ -81,7 +81,7 @@
     <Copy SourceFiles="@(LibFiles)" DestinationFiles="@(LibFiles->'$(PrometheusLibDirectory)\%(RecursiveDir)/%(Filename)%(Extension)')"/>
   </Target>-->
   
-  <!--<Import Project="$(PrometheusGlobalTargets)" Condition="Exists('$(PrometheusGlobalTargets)')" />-->
+  <!--<Import Project="$(PrometheusCoreTargets)" Condition="Exists('$(PrometheusCoreTargets)')" />-->
   <!--<Import Project=".\build\Prometheus.MSBuild.Tasks.targets" />-->
   <!--<Import Project="build\Prometheus.MSBuild.Tasks.targets" />-->
   <Import Project="..\..\src\Prometheus.MSBuild\Sdk\Sdk.targets" />

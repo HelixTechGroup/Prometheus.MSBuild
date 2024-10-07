@@ -31,5 +31,5 @@
 
   <!--<Import Project="..\..\src\Prometheus.MSBuild\Prometheus.projitems" Label="Shared" />-->
   <Import Project="..\..\src\Prometheus.MSBuild\build\Prometheus.MSBuild.targets" />
-  <!--<Import Project="$(PrometheusGlobalTargets)" Condition="Exists('$(PrometheusGlobalTargets)')" />-->
+  <!--<Import Project="$(PrometheusCoreTargets)" Condition="Exists('$(PrometheusCoreTargets)')" />-->
 </Project>

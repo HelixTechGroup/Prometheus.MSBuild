@@ -1,5 +1,12 @@
 <Project InitialTargets="PrintPrometheusPlatform">
   <ItemGroup>
+    <PrometheusPlatformEnabled Condition="'$(PrometheusPlatformEnabled)' == ''">True</PrometheusPlatformEnabled>
+    <PrometheusDetectionEnabled Condition="'$(PrometheusDetectionEnabled)' == ''">True</PrometheusDetectionEnabled>
+    <PrometheusPlatformTasksEnabled Condition="'$(PrometheusTasksEnabled)' != 'true'">False</PrometheusPlatformTasksEnabled>
+    <PrometheusRuntimeProps>$(PrometheusPlatformDirectory)\_Runtime.props</PrometheusRuntimeProps>
+    <PrometheusRuntimetargets>$(PrometheusPlatformDirectory)\_Runtime.Build.targets</PrometheusRuntimetargets>
+    <PrometheusDetectFrameworkProps>$(PrometheusPlatformDirectory)\_Detect.Build.props</PrometheusDetectFrameworkProps>
+    <PrometheusDetectFrameworkTargets>$(PrometheusPlatformDirectory)\_Detect.Build.targets</PrometheusDetectFrameworkTargets>
     <PlatformFolders Include="$([System.IO.Directory]::GetDirectories($(PrometheusPlatformDirectory)))" />
   </ItemGroup>
 
@@ -30,13 +37,13 @@
     <!--<RuntimeId Condition="'$(RuntimeId)' == ''">None</RuntimeId>-->
     <!--<PlatformId Condition="'$(PlatformId)' == ''">None</PlatformId>-->
     <!--<RuntimeTargetFramework Condition="'$(RuntimeTargetFramework)' == ''">None</RuntimeTargetFramework>-->
-    <PlatformVersion Condition="'$(PlatformVersion)' == ''">0.0</PlatformVersion>
-    <RuntimeVersion Condition="'$(RuntimeVersion)' == ''">0.0</RuntimeVersion>
+    <!--<PlatformVersion Condition="'$(PlatformVersion)' == ''">0.0</PlatformVersion>
+    <RuntimeVersion Condition="'$(RuntimeVersion)' == ''">0.0</RuntimeVersion>-->
   </PropertyGroup>
   
   <!--<Import Project="$(PrometheusPlatformDirectory)\*\**\*.props" />-->
   <!--<ItemGroup>
-    <PTArray Include="$(PrometheusPlatformDirectory)\**\*.props" Exclude="$(PrometheusPlatformProps)" />
+    <PTArray Include="$(PrometheusPlatformDirectory)\**\*.props" Exclude="$(_CorePlatformProps)" />
   </ItemGroup>-->
   <PropertyGroup>
     <!--<TargetPlatform Condition=" '$(TargetPlatform)' == '' ">net5.0-none</TargetPlatform>-->

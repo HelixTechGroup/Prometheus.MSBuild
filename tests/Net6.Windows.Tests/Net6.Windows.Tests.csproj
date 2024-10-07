@@ -10,7 +10,7 @@
     <IsLibraryProject>True</IsLibraryProject>
     <IsPackable>False</IsPackable>
     <PrometheusSDKTaskTester>true</PrometheusSDKTaskTester>
-    <PrometheusTasksEnabled>false</PrometheusTasksEnabled>
+    <!--<PrometheusTasksEnabled>false</PrometheusTasksEnabled>-->
   </PropertyGroup>
   <!--<ItemGroup>
     <PackageReference Include="Prometheus.MSBuild.Tasks" Version="0.2.2-beta.27" PrivateAssets="all"/>
