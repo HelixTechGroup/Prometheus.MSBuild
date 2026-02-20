@@ -1,9 +1,9 @@
-<Project>
+﻿<Project>
   <Import Project="..\..\src\Prometheus.MSBuild\Sdk\Sdk.props" />
   <PropertyGroup>
     <LangVersion>latest</LangVersion>
     <ProductName>Multiplatform.Tests</ProductName>
-    <TargetPlatforms>net8.0;net6.0;</TargetPlatforms>
+    <TargetPlatforms>net8.0;net48;</TargetPlatforms>
     <IsLibraryProject>True</IsLibraryProject>
   </PropertyGroup>
   <Import Project="..\..\src\Prometheus.MSBuild\Sdk\Sdk.targets" />

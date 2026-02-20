@@ -16,7 +16,7 @@
   <ItemGroup Condition="'$(PrometheusSDKTaskBuilder)' != 'true' 
       And '$(IsPackageOnlyProject)' != 'true'">
     <PackageReference Include="Prometheus.MSBuild.Tasks" 
-                      Version="0.2.2-beta.27" 
+                      Version="0.2.3-beta.1" 
                       PrivateAssets="all" 
                       IncludeAssets="runtime; build; native; contentfiles; analyzers; buildtransitive"/>
     <!--<ProjectReference Include="$(PackageDirectory)\Prometheus.MSBuild.Tasks\Prometheus.MSBuild.Tasks.csproj" 

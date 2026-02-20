@@ -1,0 +1,64 @@
+<Project>
+  <PropertyGroup>
+    <EnableShinFramework Condition="'$(EnableShinFramework)' == ''">true</EnableShinFramework>
+  </PropertyGroup>
+  
+  <ItemGroup Condition="$(MergeBinary) == 'true'">
+    <PackageReference Include="Costura.Fody" Version="5.8.0-alpha0098">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>compile; runtime; build; native; contentfiles; analyzers</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+  
+  <ItemGroup Condition="'$(EnableShinFramework)' != 'false'">
+    <PackageReference Include="Shin.Framework" Version="0.2.0-beta.1" />
+    <!--<Using Include="Shin" Alias="$(RootNamespace)" Condition="'$(RootNamespace)' != ''"/>-->
+    <Using Include="Shin" />
+  </ItemGroup>
+  
+  <Choose>
+    <When Condition="'$(IsMSBuildTaskLibraryProject)' == 'true'">
+      <PropertyGroup>
+        <GenerateDependencyFile>true</GenerateDependencyFile>
+      </PropertyGroup>
+      
+      <Choose>
+        <When Condition="'$(TargetFramework)' == 'netstandard2.0'">
+          <ItemGroup>
+            <PackageReference Include="Microsoft.Build" 
+                              Version="15.9.20" 
+                              ExcludeAssets="runtime" 
+                              PrivateAssets="all"
+                              IncludeAssets="compile; build; native; contentfiles; analyzers; buildtransitive" />
+          </ItemGroup>
+        </When>
+        <Otherwise>
+          <ItemGroup>
+            <PackageReference Include="Microsoft.Build" Version="17.11.4" 
+                              ExcludeAssets="runtime" 
+                              PrivateAssets="all"
+                              IncludeAssets="compile; build; native; contentfiles; analyzers; buildtransitive" />
+          </ItemGroup>
+        </Otherwise>
+      </Choose>
+      
+      <ItemGroup>
+        <PackageReference Include="Microsoft.Build.Framework" Version="17.11.4" ExcludeAssets="runtime" PrivateAssets="all"
+                          IncludeAssets="compile; build; native; contentfiles; analyzers; buildtransitive" />
+        <PackageReference Include="Microsoft.Build.Tasks.Core" Version="17.11.4" ExcludeAssets="runtime"
+                          PrivateAssets="all"
+                          IncludeAssets="compile; build; native; contentfiles; analyzers; buildtransitive" />
+        <PackageReference Include="Microsoft.Build.Utilities.Core" Version="17.11.4" ExcludeAssets="runtime"
+                          PrivateAssets="all"
+                          IncludeAssets="compile; build; native; contentfiles; analyzers; buildtransitive" />
+        <!--<PackageReference Include="Microsoft.Build.Engine" Version="17.10.4" ExcludeAssets="runtime" 
+                          PrivateAssets="All"
+                          IncludeAssets="compile; build; native; contentfiles; analyzers; buildtransitive" />-->
+        <PackageReference Include="System.Text.Json" Version="8.0.5" PrivateAssets="all" />
+        <!--<PackageReference Include="Shin.Framework" Version="0.1.6-beta.18" />-->
+        <PackageReference Include="Microsoft.Build.Locator" Version="1.7.8" ExcludeAssets="runtime" PrivateAssets="all"
+                          IncludeAssets="compile; build; native; contentfiles; analyzers; buildtransitive" />
+      </ItemGroup>
+    </When>
+  </Choose>
+</Project>

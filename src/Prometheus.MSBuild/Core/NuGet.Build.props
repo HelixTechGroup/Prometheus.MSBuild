@@ -1,5 +1,10 @@
-﻿<Project InitialTargets="PrintNuget" Condition="'$(IsPackable)' == 'true'">
-  <Import Project="$(PrometheusGlobalDirectory)\GitHub.Build.props" Condition="'$(UseGitHub)' == 'true'" />
+﻿<Project InitialTargets="PrintNuget">
+  <PropertyGroup>
+    <LocalNugetCacheDirectory>$(USERPROFILE)\.nuget\packages</LocalNugetCacheDirectory>
+    <CorePackagingNuGetPropsLoaded>true</CorePackagingNuGetPropsLoaded>
+  </PropertyGroup>
+  
+  <Import Project="$(PrometheusCoreDirectory)\GitHub.Build.props" Condition="'$(UseGitHub)' == 'true'" />
 
   <Target Name="PrintNuget">
     <PropertyGroup>

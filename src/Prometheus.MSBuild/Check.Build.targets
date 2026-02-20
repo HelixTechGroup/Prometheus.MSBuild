@@ -54,7 +54,7 @@
   <Target Name="CheckEnvironment" AfterTargets="InitializeEnvironment">
     <Message Text="$~%%%%%% Checking Environment for $(MSBuildProjectName) %%%%%%~$" Importance="high" />
     <!--And ($(SuppressCommonPropsImportError) != 'true'-->
-    <Error Condition=" '$(GlobalsSet)' != 'true' "
-           Text="CheckEnvironment: $(DefaultMessage)" />
+    <!--<Error Condition=" '$(GlobalsSet)' != 'true' "
+           Text="CheckEnvironment: $(DefaultMessage)" />-->
   </Target>
 </Project>

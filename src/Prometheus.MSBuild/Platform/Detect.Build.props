@@ -7,7 +7,14 @@
     <PlatformVersion Condition="'$(PlatformVersion)' == ''">0.0</PlatformVersion>
     <RuntimeVersion Condition="'$(RuntimeVersion)' == ''">0.0</RuntimeVersion>-->
   </PropertyGroup>
-
+  
+  <PropertyGroup>
+    <TargetFrameworks Condition="'$(TargetPlatforms)' != ''
+        And '$(TargetFrameworks)' == ''">
+      $(TargetPlatforms)
+    </TargetFrameworks>
+  </PropertyGroup>
+  
   <!--<PropertyGroup Condition="'$(PrometheusTasksEnabled)' != 'true'">
     <RuntimeId>$(TargetFramework)</RuntimeId>
     <PlatformId>None</PlatformId>

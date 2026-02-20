@@ -1,12 +1,12 @@
-﻿<Project SDK="Microsoft.NET.Sdk">
+﻿<Project>
   <PropertyGroup>
     <PrometheusTasksEnabled>False</PrometheusTasksEnabled>
     <!--<PrometheusLibDirectory>$(BuildDirectory)\$(Configuration)</PrometheusLibDirectory>-->
   </PropertyGroup>
   <!--<Sdk Name="Microsoft.Build.NoTargets" Version="2.0.1" /> Microsoft.NET.Sdk  MSBuild.Sdk.Extras/3.0.22-->
   <Import Project="..\Sdk.Build.props" />
-  <!--<Import Project="$(PrometheusGlobalProps)" />-->
-  <Import Project="..\..\src\Prometheus.MSBuild\build\Prometheus.MSBuild.props" />
+  <!--<Import Project="$(PrometheusCoreDefaultsProps)" />-->
+  <Import Project="..\..\src\Prometheus.MSBuild\Sdk\Sdk.props" />
   <PropertyGroup>
     <ProductName>Prometheus.MSBuild</ProductName>
     <!--<PrometheusPlatformEnabled>False</PrometheusPlatformEnabled>-->
@@ -30,6 +30,6 @@
   </ItemGroup>
 
   <!--<Import Project="..\..\src\Prometheus.MSBuild\Prometheus.projitems" Label="Shared" />-->
-  <Import Project="..\..\src\Prometheus.MSBuild\build\Prometheus.MSBuild.targets" />
-  <!--<Import Project="$(PrometheusGlobalTargets)" Condition="Exists('$(PrometheusGlobalTargets)')" />-->
+  <Import Project="..\..\src\Prometheus.MSBuild\\Sdk\Sdk.targets" />
+  <!--<Import Project="$(PrometheusCoreDefaultsTargets)" Condition="Exists('$(PrometheusCoreDefaultsTargets)')" />-->
 </Project>

@@ -28,15 +28,44 @@
     <HasXamarin>$(RuntimeId.Contains(`xamarin`))</HasXamarin>
     <HasPlatform>True</HasPlatform>
   </PropertyGroup>-->
+
+  <PropertyGroup
+    Condition="'$(TargetPlatforms)' == ''
+        And '$(UseDefaultMultiFramework)' == 'True'">
+    <TargetPlatforms>$(NetFrameworksLts)</TargetPlatforms>
+    <TargetFrameworks>$(TargetPlatforms)</TargetFrameworks>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(TargetFrameworks)' == ''
+        And '$(TargetPlatforms)' != ''">
+    <TargetFrameworks>$(TargetPlatforms)</TargetFrameworks>
+  </PropertyGroup>
+  
+  <!--'$(TargetFramework)' == '' 
+        And '$(TargetPlatform)' == ''-->
+  
+  <PropertyGroup Condition="'$(UseDefaultFramework)' == 'True'
+      And '$(TargetPlatforms)' == ''
+      And '$(TargetPlatform)' == ''">
+    <TargetPlatform>$(NetFrameworkLts)</TargetPlatform>
+    <TargetFramework>$(TargetPlatform)</TargetFramework>
+  </PropertyGroup>
+  
+  <PropertyGroup Condition="'$(TargetFramework)' == '' 
+        And '$(TargetPlatform)' != ''">
+    <TargetFramework>$(TargetPlatform)</TargetFramework>
+  </PropertyGroup>
   
   <ImportGroup Label="Core Imports" Condition="'$(PrometheusEnabled)' == 'true'">
     <!--<Import Project="$(PrometheusTestsTargets)" Condition="'$(IsTestProject)' == 'true'" />-->
-    <Import Project="$(PrometheusCheckTargets)" Condition="Exists('$(PrometheusCheckTargets)')" />
-    <Import Project="$(PrometheusGlobalTargets)" Condition="Exists('$(PrometheusGlobalTargets)')"/>
     <Import Project="$(PrometheusUsingsTargets)" Condition="Exists('$(PrometheusUsingsTargets)')" />
+    <Import Project="$(PrometheusCheckTargets)" Condition="Exists('$(PrometheusCheckTargets)')" />
+    <Import Project="$(PrometheusCoreDefaultsTargets)" 
+            Condition="Exists('$(PrometheusCoreDefaultsTargets)')"/>
+    <Import Project="$(PrometheusCorePackageTargets)"
+            Condition="'$(IsPackable)' == 'true' 
+            And Exists('$(PrometheusCorePackageTargets)')" />
   </ImportGroup>
-
-  <!--<Import Project="$(PrometheusRuntimeTargets)" Condition="Exists('$(PrometheusRuntimeTargets)')" />-->
   
   <ImportGroup Condition="'$(PrometheusEnabled)' == 'true' And '$(PrometheusLoadType)' == 'full'">    
     <Import Project="$(PrometheusDetectFrameworkTargets)" Condition="Exists('$(PrometheusDetectFrameworkTargets)') And '$(PrometheusDetectionEnabled)' == 'true'" />
@@ -50,16 +79,18 @@
   
   <ImportGroup Condition="'$(PrometheusEnabled)' == 'true'">
     <Import Project="$(PrometheusCommonTargets)" Condition="Exists('$(PrometheusCommonTargets)')" />
-    <Import Project="$(PrometheusImportertargets)" 
+    <Import Project="$(PrometheusCommonPackagesTargets)" Condition="Exists('$(PrometheusCommonPackagesTargets)')" />
+    
+    <!--<Import Project="$(PrometheusImportertargets)" 
           Condition="'$(PrometheusLoadType)' == 'full' 
           And '$(PrometheusImportEnabled)' == 'true' 
-          And Exists('$(PrometheusImportertargets)')"/>
+          And Exists('$(PrometheusImportertargets)')"/>-->
   </ImportGroup>
 
-  <ItemGroup Condition="'$(IsPackageOnlyProject)' == 'true'">
-    <!--<PackageReference Update="@(PackageReference)" PrivateAssets="all" />-->
-    <!--<Compile Remove="*" />-->
-  </ItemGroup>
+ <!-- <ItemGroup Condition="'$(IsPackageOnlyProject)' == 'true'">
+    --><!--<PackageReference Update="@(PackageReference)" PrivateAssets="all" />--><!--
+    --><!--<Compile Remove="*" />--><!--
+  </ItemGroup>-->
   
   <Target Name="_PrintPrometheusTargets" Outputs="$(SharedImports)">
     <!--<PropertyGroup Condition="$(RootPath) == '' Or '$(SolutionDir)' == ''">

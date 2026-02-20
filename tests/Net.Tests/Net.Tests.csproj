@@ -1,0 +1,11 @@
+﻿<Project>
+  <Import Project="..\..\src\Prometheus.MSBuild\Sdk\Sdk.props" />
+  <PropertyGroup>
+    <ProductName>Net.Tests</ProductName>
+    <!--<TargetPlatform>net10.0</TargetPlatform>-->
+    <!--<IsTestProject>True</IsTestProject>-->
+    <IsLibraryProject>True</IsLibraryProject>   
+    <!--<PrometheusTasksEnabled>false</PrometheusTasksEnabled>-->
+  </PropertyGroup>
+  <Import Project="..\..\src\Prometheus.MSBuild\Sdk\Sdk.targets" />
+</Project>

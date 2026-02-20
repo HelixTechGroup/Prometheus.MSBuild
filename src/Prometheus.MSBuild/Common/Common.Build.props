@@ -1,8 +1,8 @@
 <Project InitialTargets="PrintPrometheusCommon">
   <Target Name="PrintImports"/>
-  <PropertyGroup>
+  <!--<PropertyGroup>
     <EnableShinFramework Condition="'$(EnableShinFramework)' == ''">true</EnableShinFramework>
-  </PropertyGroup>
+  </PropertyGroup>-->
   <!--<Target Name="PrintImports" Outputs="@(Imports)">
     <PropertyGroup>
       <SectionSymbol>**</SectionSymbol>

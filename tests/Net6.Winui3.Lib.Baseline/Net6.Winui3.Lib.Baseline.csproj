@@ -9,20 +9,17 @@
   </PropertyGroup>
 
   <ItemGroup>
-      <PackageReference Include="Microsoft.ProjectReunion" Version="0.8.6" />
-      <PackageReference Include="Microsoft.ProjectReunion.Foundation" Version="0.8.6" />
-      <PackageReference Include="Microsoft.ProjectReunion.WinUI" Version="0.8.6" />
+      <PackageReference Include="Microsoft.ProjectReunion" Version="0.8.12" />
+      <PackageReference Include="Microsoft.ProjectReunion.Foundation" Version="0.8.12" />
+      <PackageReference Include="Microsoft.ProjectReunion.WinUI" Version="0.8.12" />
 
-      <PackageReference Include="Prometheus.MSBuild.Tasks" 
-                        Version="0.2.2-beta.27" 
-                        PrivateAssets="all"/>
+      <PackageReference Include="Prometheus.MSBuild.Tasks" Version="0.2.2-beta.27" PrivateAssets="all" />
   </ItemGroup>
   <!--<Import Project="$(PrometheusTaskBuildTargets)"
           Condition="Exists('$(PrometheusTaskBuildTargets)')" />-->
   
   <Target Name="test">
-    <CreateLogFormattingTask SectionSymbol="$(SectionSymbol)" SectionLength="$(SectionLength)" HeaderLength="$(HeaderLength)" SectionChar="$(SectionChar)" HeaderChar="$(HeaderChar)" 
-                             Condition="'$(PrometheusTasksEnabled)' == 'true'">
+    <CreateLogFormattingTask SectionSymbol="$(SectionSymbol)" SectionLength="$(SectionLength)" HeaderLength="$(HeaderLength)" SectionChar="$(SectionChar)" HeaderChar="$(HeaderChar)" Condition="'$(PrometheusTasksEnabled)' == 'true'">
       <Output TaskParameter="SectionString" PropertyName="SectionString" />
       <Output TaskParameter="HeaderString" PropertyName="HeaderString" />
     </CreateLogFormattingTask>

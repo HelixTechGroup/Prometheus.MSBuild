@@ -13,6 +13,13 @@
     <RuntimeTargetFramework>$(TargetFramework)</RuntimeTargetFramework>-->
   </PropertyGroup>
 
+  <PropertyGroup>
+    <TargetFrameworks Condition="'$(TargetPlatforms)' != ''
+        And '$(TargetFrameworks)' == ''">
+      $(TargetPlatforms)
+    </TargetFrameworks>
+  </PropertyGroup>
+  
   <PropertyGroup Condition="'$(TargetPlatform)' != ''">
     <Array>$(TargetPlatform.Split(`-`))</Array>
     <RuntimeId>$(TargetPlatform.Split(`-`)[0])</RuntimeId>

@@ -1,5 +1,5 @@
-<Project InitialTargets="PrintGitHub" Condition="'$(UseGitHub)' == 'true'">
-  <Choose>
+<Project InitialTargets="PrintGitHub">
+  <!--<Choose>
     <When Condition="'$(RepositoryHttpUrl)' != ''">
       <PropertyGroup>
         <GitHubOrg>$([System.Text.RegularExpressions.Regex]::Match($(RepositoryHttpUrl), `https://github.com/([^/]*)/([^/]*)`).Groups[1].Value)</GitHubOrg>
@@ -18,7 +18,7 @@
         <GitHubProject>$(SafeProductName)</GitHubProject>
       </PropertyGroup>
     </Otherwise>
-  </Choose>
+  </Choose>-->
 
   <!--<PropertyGroup Label="Enable SourceLink Support">
     <PublishRepositoryUrl>true</PublishRepositoryUrl>

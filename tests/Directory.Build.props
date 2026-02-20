@@ -1,9 +1,10 @@
 <Project>
-  <PropertyGroup>
+  <!--<PropertyGroup>
     <DirectoryBuildFileAbove>[MSBuild]::GetPathOfFileAbove('$(MSBuildThisFile)', '$(MSBuildThisFileDirectory)../')</DirectoryBuildFileAbove>
   </PropertyGroup>
-  <Import Project="$(DirectoryBuildFileAbove)" Condition="Exists('$(DirectoryBuildFileAbove)')" />
+  <Import Project="$(DirectoryBuildFileAbove)" Condition="Exists('$(DirectoryBuildFileAbove)')" />-->
   <PropertyGroup>
+    <LocalNugetRepoDirectory>D:\Users\Bryan\Documents\Projects\HelixTechGroup\local-nuget</LocalNugetRepoDirectory>
     <IsTestProject>True</IsTestProject>
     <PrometheusLoadType>full</PrometheusLoadType>
     <PrometheusPlatformEnabled>True</PrometheusPlatformEnabled>

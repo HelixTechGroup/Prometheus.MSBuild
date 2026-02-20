@@ -9,7 +9,7 @@
     <PrometheusTaskBuildTargets Condition="'$(PrometheusTaskRootDirectory)' != ''">$(PrometheusTaskRootDirectory)\Prometheus.MSBuild.Tasks.targets</PrometheusTaskBuildTargets>-->
   </PropertyGroup>
   
-  <Import Project="$(PrometheusTaskBuildProps)" Condition="'$(PrometheusTaskBuildPropsLoaded)' != 'true'"/>
+  <Import Project=".\Prometheus.MSBuild.Tasks.props" Condition="'$(PrometheusTaskBuildPropsLoaded)' != 'true'"/>
   <Import Project="$(PrometheusTaskUsingTargets)" Condition="Exists('$(PrometheusTaskUsingTargets)')" />
 
   <Target Name="_PrintPrometheusTasksUsings">

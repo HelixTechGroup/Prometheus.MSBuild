@@ -1,23 +1,23 @@
 
 <p align="center">
-    <img src="https://placeholder.pics/svg/500x200/DEDEDE/555555/Prometheus%20Framework"
-        height="130">
+	<img src="https://placeholder.pics/svg/500x200/DEDEDE/555555/Prometheus%20Framework"
+		height="130">
 </p>
 <p align="center">
-    <a href="https://github.com/%USER%/%ProjectName%/graphs/contributors" alt="Contributors">
-        <img src="https://img.shields.io/github/contributors/%USER%/%ProjectName%" /></a>
-    <a href="#backers" alt="Backers on Open Collective">
-        <img src="https://img.shields.io/opencollective/backers/%ProjectName%" /></a>
-    <a href="#sponsors" alt="Sponsors on Open Collective">
-        <img src="https://img.shields.io/opencollective/sponsors/%ProjectName%" /></a>
-    <a href="https://github.com/badges/shields/pulse" alt="Activity">
-        <img src="https://img.shields.io/github/commit-activity/m/%USER%/%ProjectName%" /></a>
-            <a href="#">
-            <img src="https://img.shields.io/github/last-commit/%USER%/%ProjectName%"></a>
-            <a href="https://github.com/%USER%/%ProjectName%/releases">
-           <img src="https://img.shields.io/github/v/release/%USER%/%ProjectName%"></a>
-      <a href="#">
-	      <img src="https://img.shields.io/github/release-date/%USER%/%ProjectName%?label=last release date"></a>
+	<a href="https://github.com/%USER%/%ProjectName%/graphs/contributors" alt="Contributors">
+		<img src="https://img.shields.io/github/contributors/%USER%/%ProjectName%" /></a>
+	<a href="#backers" alt="Backers on Open Collective">
+		<img src="https://img.shields.io/opencollective/backers/%ProjectName%" /></a>
+	<a href="#sponsors" alt="Sponsors on Open Collective">
+		<img src="https://img.shields.io/opencollective/sponsors/%ProjectName%" /></a>
+	<a href="https://github.com/badges/shields/pulse" alt="Activity">
+		<img src="https://img.shields.io/github/commit-activity/m/%USER%/%ProjectName%" /></a>
+			<a href="#">
+			<img src="https://img.shields.io/github/last-commit/%USER%/%ProjectName%"></a>
+			<a href="https://github.com/%USER%/%ProjectName%/releases">
+		   <img src="https://img.shields.io/github/v/release/%USER%/%ProjectName%"></a>
+	  <a href="#">
+		  <img src="https://img.shields.io/github/release-date/%USER%/%ProjectName%?label=last release date"></a>
 </p>
 
 The Prometheus Framework is a set of msbuild targets and properties that automate the creation of creation of cross-platform or platform specific projects

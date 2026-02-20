@@ -6,8 +6,54 @@
     <SharedGUID>825f8d5d-ed23-401d-ba04-6a9200dc3f9f</SharedGUID>
   </PropertyGroup>
   <PropertyGroup Label="Configuration">
-    <Import_RootNamespace>Prometheus.MSBuild.1</Import_RootNamespace>
+    <Import_RootNamespace>Prometheus.MSBuild</Import_RootNamespace>
   </PropertyGroup>
+  <PropertyGroup />
+  <ItemGroup>
+    <None Include="Build\Prometheus.MSBuild.props" />
+    <None Include="Build\Prometheus.MSBuild.targets" />
+    <None Include="Check.Build.targets" />
+    <None Include="Common\Common.Build.props" />
+    <None Include="Common\Common.Build.targets" />
+    <None Include="Common\Importer.Build.targets" />
+    <None Include="Common\Common.Packages.targets" />
+    <None Include="Core\Core.Packaging.targets" />
+    <None Include="Core\Core.Packaging.props" />
+    <None Include="Core\Debug.Build.targets" />
+    <None Include="Core\GitHub.Build.props" />
+    <None Include="Core\GitHub.Build.targets" />
+    <None Include="Core\Core.Defaults.props" />
+    <None Include="Core\Core.Defaults.targets" />
+    <None Include="Core\NuGet.Build.targets" />
+    <None Include="Core\NuGet.Build.props" />
+    <None Include="Core\Tests.Build.targets" />
+    <None Include="Core\Tests.Build.props" />
+    <None Include="Platform\Android\Platform.Build.props" />
+    <None Include="Platform\Android\Platform.Build.targets" />
+    <None Include="Platform\Detect.Build.props" />
+    <None Include="Platform\Detect.Build.targets" />
+    <None Include="Platform\Linux\Platform.Build.props" />
+    <None Include="Platform\Linux\Platform.Build.targets" />
+    <None Include="Platform\None\Platform.Build.props" />
+    <None Include="Platform\None\Platform.Build.targets" />
+    <None Include="Platform\Platform.Build.props" />
+    <None Include="Platform\Platform.Build.targets" />
+    <None Include="Platform\Runtime.Build.props" />
+    <None Include="Platform\Runtime.Build.targets" />
+    <None Include="Platform\Windows\Platform.Build.props" />
+    <None Include="Platform\Windows\Platform.Build.targets" />
+    <None Include="Prometheus.Build.props" />
+    <None Include="Prometheus.Build.targets" />
+    <None Include="$(MSBuildThisFileDirectory)Prometheus.Defaults.props" />
+    <None Include="Resolvers\Prometheus.PlatformResolver.targets" />
+    <None Include="Resolvers\Prometheus.PlatformResolver.props" />
+    <None Include="Sdk\Sdk.props" />
+    <None Include="Sdk\Sdk.targets" />
+    <None Include="Usings.Build.targets" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="BuildMultiTargeting\" />
+  </ItemGroup>
   <ItemGroup>
   </ItemGroup>
 </Project>

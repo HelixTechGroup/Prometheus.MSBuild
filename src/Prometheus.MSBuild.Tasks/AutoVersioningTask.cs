@@ -15,7 +15,6 @@ namespace Prometheus.MSBuild.Tasks
         /// <inheritdoc />
         public override bool Execute()
         {
-
             return true;
         }
     }

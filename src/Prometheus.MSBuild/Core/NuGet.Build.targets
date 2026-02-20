@@ -1,5 +1,6 @@
-﻿<Project InitialTargets="PrintNuget2" Condition="'$(IsPackable)' == 'true'">
-  <!--<Import Project="$(PrometheusGlobalDirectory)\NuGet.Build.props" Condition="'$(NuGetPropsLoaded)' != 'true'" />-->
+﻿<Project InitialTargets="PrintNuget2">
+  <Import Project=".\NuGet.Build.props" Condition="'$(CorePackagingNuGetPropsLoaded)' != 'true'
+      And Exists('.\NuGet.Build.props')" />
 
   <PropertyGroup>
     <PackageId Condition="'$(PackageId)' == ''
@@ -14,7 +15,7 @@
     <Deterministic Condition="'$(Deterministic)' == ''">true</Deterministic>
     <NuspecDirectory Condition=" '$(NuspecDirectory)' == '' ">$(SolutionDir)nuspecs</NuspecDirectory>
     <PackageOutputPath Condition=" '$(PackageOutputPath)' == '' ">$(BuildDirectory)\packages\$(Configuration)\$(AssemblyName)</PackageOutputPath>
-    <!--<PackageTags></PackageTags>-->
+    <PackageTags></PackageTags>
     <PackageFormat Condition="'$(PackageFormat)' == ''">nupkg</PackageFormat>
     <PackageReadmeFile>readme.md</PackageReadmeFile>
     <NuGetTargetsLoaded>true</NuGetTargetsLoaded>
@@ -26,9 +27,8 @@
       And '$(PackageVersion)' != ''">
     <NugetPackageName>$(PackageId).$(PackageVersion).$(PackageFormat)</NugetPackageName>
     <NugetSymbolPackageName Condition="'$(SymbolPackageFormat)' != ''">$(PackageId).$(PackageVersion).$(SymbolPackageFormat)</NugetSymbolPackageName>
-    <LocalNugetCacheDirectory>$(USERPROFILE)\.nuget\packages</LocalNugetCacheDirectory>
-    <LocalNugetCachePath>$(LocalNugetCacheDirectory)\$(PackageId.ToLower())\$(PackageVersion)</LocalNugetCachePath>
-    <LocalNugetRepoPath>$(LocalNugetRepoDirectory)\$(NugetPackageName)</LocalNugetRepoPath>
+    <LocalNugetPackageCachePath Condition="Exists('$(LocalNugetCacheDirectory)')">$(LocalNugetCacheDirectory)\$(PackageId.ToLower())\$(PackageVersion)</LocalNugetPackageCachePath>
+    <LocalNugetPackageRepoPath Condition="Exists('$(LocalNugetRepoDirectory)')">$(LocalNugetRepoDirectory)\$(NugetPackageName)</LocalNugetPackageRepoPath>
   </PropertyGroup>
 
   <ItemGroup>
@@ -38,7 +38,7 @@
           Condition="Exists('$(SolutionDir)\$(PackageReadmeFile)')"/>
   </ItemGroup>
   
-  <Import Project="$(PrometheusGlobalDirectory)\GitHub.Build.targets" Condition="'$(UseGitHub)' == 'true'" />
+  <!--<Import Project="$(PrometheusCoreDirectory)\GitHub.Build.targets" Condition="'$(UseGitHub)' == 'true'" />-->
   
   <Target Name="PrintNuget2">
     <PropertyGroup>
@@ -63,6 +63,11 @@
     <Message Text="| $(SectionSymbol) UseGitHub: $(UseGitHub)" Importance="high" />
     <Message Text="| $(SectionSymbol) PackageTags: $(PackageTags)" Importance="high" />
     <Message Text="| $(SectionSymbol) PackageOutputPath: $(PackageOutputPath)" Importance="high" />
+
+    <Message Text="| $(SectionSymbol) LocalNugetCacheDirectory: $(LocalNugetCacheDirectory)" Importance="high" />
+    <Message Text="| $(SectionSymbol) LocalNugetPackageCachePath: $(LocalNugetPackageCachePath)" Importance="high" />
+    <Message Text="| $(SectionSymbol) LocalNugetRepoDirectory: $(LocalNugetRepoDirectory)" Importance="high" />
+    <Message Text="| $(SectionSymbol) LocalNugetPackageRepoPath: $(LocalNugetPackageRepoPath)" Importance="high" />
     <!--<Message Text="| $(SectionSymbol) Content: @(Content)" Importance="high" />-->
     <Message Text="| $(SectionSymbol) ---------------------------------------" Importance="high" />
   </Target>

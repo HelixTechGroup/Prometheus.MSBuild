@@ -2,11 +2,11 @@
   <PropertyGroup>
     <TestsDirectory Condition="'$(TestsDirectory)' == ''">$(SolutionDir)tests</TestsDirectory>
   </PropertyGroup> 
-  <PropertyGroup Condition="'$(IsTestProject)' == 'true'">
+  <!--<PropertyGroup Condition="'$(IsTestProject)' == 'true'">
     <IsPackable>False</IsPackable>
-    <!--<TestsDirectory Condition="'$(TestsDirectory)' == ''">$(SolutionDir)tests</TestsDirectory>-->
-    <!--<PrometheusLibDirectory>$(BuildDirectory)\$(Configuration)\Prometheus.MSBuild.Tasks</PrometheusLibDirectory>-->
-  </PropertyGroup>
+    --><!--<TestsDirectory Condition="'$(TestsDirectory)' == ''">$(SolutionDir)tests</TestsDirectory>--><!--
+    --><!--<PrometheusLibDirectory>$(BuildDirectory)\$(Configuration)\Prometheus.MSBuild.Tasks</PrometheusLibDirectory>--><!--
+  </PropertyGroup>-->
   
   <Target Name="_PrintTestsProps">
     <PropertyGroup>

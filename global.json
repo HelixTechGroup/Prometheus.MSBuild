@@ -1,6 +1,6 @@
 {
   "msbuild-sdks": {
     "Microsoft.Build.NoTargets": "3.7.56",
-    "Prometheus.MSBuild.Sdk": "0.2.2-beta.30"
+    "Prometheus.MSBuild.Sdk": "0.3.0-beta.7"
   }
 }

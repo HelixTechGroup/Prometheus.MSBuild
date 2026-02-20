@@ -6,19 +6,23 @@
   <!--<Import Project=".\build\Prometheus.MSBuild.Tasks.props" />-->
   <Import Project="..\..\src\Prometheus.MSBuild\Sdk\Sdk.props" />
   <!--<Import Project="build\Prometheus.MSBuild.Tasks.props" />-->
-  <!--<Import Project="$(PrometheusGlobalProps)" />-->
+  <!--<Import Project="$(PrometheusCoreDefaultsProps)" />-->
   <PropertyGroup>
     <ProductName>Prometheus.MSBuild.Tasks</ProductName>
-    <ProductVersion>0.2.2-beta.27</ProductVersion>
+    <ProductVersion>0.2.3-beta.1</ProductVersion>
     <IsMSBuildTaskLibraryProject>true</IsMSBuildTaskLibraryProject>
-    <!--<TargetFramework>net48</TargetFramework>-->
+    <UseDefaultMultiFramework>True</UseDefaultMultiFramework>
+    <TargetFrameworks>
+      net48;
+      net10.0;
+    </TargetFrameworks>
     <!--<TargetPlatform>net60</TargetPlatform>-->
-    <!--<TargetPlatform>net48</TargetPlatform>-->
-    <!--<TargetPlatforms>net6.0;net48</TargetPlatforms>-->
-    <TargetPlatforms>
+    <TargetPlatform>net48</TargetPlatform>
+    <!--<TargetPlatforms>
       net48;
       net8.0;
-    </TargetPlatforms>
+      net10.0;
+    </TargetPlatforms>-->
     <!--<IncludeBuildOutput>True</IncludeBuildOutput>-->
     <!--<OutputType>Library</OutputType>-->
     <!--<MergeBinary>false</MergeBinary>-->
@@ -48,15 +52,31 @@
   
   <ItemGroup>
     <PackageReference Update="@(PackageReference)" PrivateAssets="All" />
-    <Content Include="*.props" Pack="True" PackagePath="\" Exclude="$(BaseIntermediateDirectory)"/>
+    <PackageReference Update="Microsoft.Build" Version="17.14.8">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>compile; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Update="Microsoft.Build.Framework" Version="17.14.8">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>compile; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Update="Microsoft.Build.Locator" Version="1.9.1" />
+    <PackageReference Update="Microsoft.Build.Tasks.Core" Version="17.14.8">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>compile; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Update="Microsoft.Build.Utilities.Core" Version="17.14.8">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>compile; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Update="System.Text.Json" Version="9.0.7" />
+    <Content Include="*.props" Pack="True" PackagePath="\" Exclude="$(BaseIntermediateDirectory)" />
     <Content Include="*.targets" Pack="True" PackagePath="\" />
-    <Content Include="build\*.*" Pack="True" PackagePath="build\"
-             Link="build\%(RecursiveDir)%(Filename)%(Extension)" />
+    <Content Include="build\*.*" Pack="True" PackagePath="build\" Link="build\%(RecursiveDir)%(Filename)%(Extension)" />
     <!--<Content Include=".\build\**" 
              Pack="True"
              PackagePath="buildMultiTargeting\" Link="buildMultiTargeting\%(RecursiveDir)%(Filename)%(Extension)" />-->
-    <Content Include=".\build\*.*" Pack="True" PackagePath="buildTransitive\" 
-             Link="buildTrasitive\%(RecursiveDir)%(Filename)%(Extension)" />
+    <Content Include=".\build\*.*" Pack="True" PackagePath="buildTransitive\" Link="buildTrasitive\%(RecursiveDir)%(Filename)%(Extension)" />
     <!--<Content Include="$(OutputDirectory)\*.*" Pack="True" PackagePath="lib\" Link="lib\%(RecursiveDir)%(Filename)%(Extension)" />-->
     <!--<Content Include="Usings.Build.props" Pack="True" PackagePath="\" />-->
     <!--<Content Include="build\Prometheus.Msbuild.Tasks.props" Pack="True" PackagePath="build\" />
@@ -81,7 +101,7 @@
     <Copy SourceFiles="@(LibFiles)" DestinationFiles="@(LibFiles->'$(PrometheusLibDirectory)\%(RecursiveDir)/%(Filename)%(Extension)')"/>
   </Target>-->
   
-  <!--<Import Project="$(PrometheusGlobalTargets)" Condition="Exists('$(PrometheusGlobalTargets)')" />-->
+  <!--<Import Project="$(PrometheusCoreDefaultsTargets)" Condition="Exists('$(PrometheusCoreDefaultsTargets)')" />-->
   <!--<Import Project=".\build\Prometheus.MSBuild.Tasks.targets" />-->
   <!--<Import Project="build\Prometheus.MSBuild.Tasks.targets" />-->
   <Import Project="..\..\src\Prometheus.MSBuild\Sdk\Sdk.targets" />

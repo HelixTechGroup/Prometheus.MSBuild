@@ -1,8 +1,8 @@
-﻿<Project Sdk="Prometheus.MSBuild.Sdk/0.2.2-beta.31">
+﻿<Project Sdk="Prometheus.MSBuild.Sdk/0.3.1-beta.1">
   <!--<Import Project="..\..\src\Prometheus.MSBuild\Sdk\Sdk.props" />-->
   <PropertyGroup>
-    <ProductName>Net6.Tests</ProductName>
-    <TargetPlatform>net8.0</TargetPlatform>
+    <ProductName>Net.Tests</ProductName>
+    <TargetPlatform>net10.0</TargetPlatform>
     <!--<IsTestProject>True</IsTestProject>-->
     <IsLibraryProject>True</IsLibraryProject>   
     <!--<PrometheusTasksEnabled>false</PrometheusTasksEnabled>-->

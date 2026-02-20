@@ -6,7 +6,7 @@
     <PlatformId Condition="'$(PlatformId)' == ''" >None</PlatformId>
     <RuntimeTargetFramework Condition="'$(PlatformId)' != ''">$(RuntimeId)-$(PlatformId)</RuntimeTargetFramework>
     <RuntimeTargetFramework Condition="'$(PlatformId)' == '' Or '$(PlatformId)' == 'none'">$(RuntimeId)</RuntimeTargetFramework>
-    <TargetFrameworks Condition="'$(TargetPlatforms)' != ''">$(TargetPlatforms)</TargetFrameworks>
+    <!--<TargetFrameworks Condition="'$(TargetPlatforms)' != ''">$(TargetPlatforms)</TargetFrameworks>-->
   </PropertyGroup>
     
   <PropertyGroup Condition="'$(PlatformId)' == 'none'">
@@ -57,7 +57,8 @@
   <!--<Import Project="$(PlatformPropsPath)" Condition="Exists('$(PlatformPropsPath)')"/>-->
   <Import Project="$(PlatformPropsPath)" Condition="Exists('$(PlatformPropsPath)')" />
   <PropertyGroup>
-    <TargetFramework Condition="'$(RuntimeTargetFramework)' != ''">$(RuntimeTargetFramework)</TargetFramework>
+    <TargetFramework Condition="'$(RuntimeTargetFramework)' != ''
+        And '$(TargetFramework)' == ''">$(RuntimeTargetFramework)</TargetFramework>
   </PropertyGroup>
   
   <Target Name="PrintPrometheusPlatform2">
@@ -73,7 +74,10 @@
     <PlatformId Condition="'$(TargetPlatform.Split(`-`).Length)' &gt;= '2'">$(TargetPlatform.Split(`-`)[1])</PlatformId>
     <RuntimeTargetFramework Condition="'$(PlatformId)' != ''">$(RuntimeId)-$(PlatformId)</RuntimeTargetFramework>
     <RuntimeTargetFramework Condition="'$(PlatformId)' == '' Or '$(PlatformId)' == 'none'">$(RuntimeId)</RuntimeTargetFramework>
-    <TargetFrameworks Condition="'$(TargetPlatforms)' != ''">$(TargetPlatforms)</TargetFrameworks>
+    <TargetFrameworks Condition="'$(TargetPlatforms)' != ''
+      And '$(TargetFrameworks)' == ''">
+      $(TargetPlatforms)
+    </TargetFrameworks>
   </PropertyGroup>   
   
   <PropertyGroup Condition=" '$(PlatformId)' != '' And '$(PlatformId)' != 'none'">
@@ -125,13 +129,13 @@
       <TargetFramework>netstandard2.1</TargetFramework>
     </PropertyGroup>-->
 
-    <ItemGroup Condition="'$(TargetFrameworks)' != ''">
+    <!--<ItemGroup Condition="'$(TargetFrameworks)' != ''">
       <TFramworks Include="$(Targetframeworks.Split(`;`))"/>
     </ItemGroup>
     <PropertyGroup Condition="'$(TargetFrameworks)' != ''">
       <TargetFramework>%(TFramworks.Identity)</TargetFramework>
       <RuntimeId>%(TFramworks.Identity)</RuntimeId>
-    </PropertyGroup>
+    </PropertyGroup>-->
 
     <PropertyGroup>
       <PlatformPropsPath>$(PrometheusPlatformDirectory)\$(PlatformId)\Platform.Build.Props</PlatformPropsPath>
@@ -161,9 +165,9 @@
 
     <Warning Condition="'$(PlatformId)' == '' Or '$(PlatformId)' == 'none'" Text="!!! PlatformId is None or Null !!!" />
 
-    <PropertyGroup>
+    <!--<PropertyGroup>
       <TargetFramework Condition="'$(RuntimeTargetFramework)' != ''">$(RuntimeTargetFramework)</TargetFramework>
-    </PropertyGroup>
+    </PropertyGroup>-->
     
     <Message Text="| $(SectionString)" Importance="high" />
     <Message Text="| []==~ $(MSBuildThisFile) ~==[]" Importance="high" />
